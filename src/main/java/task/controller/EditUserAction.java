@@ -1,8 +1,8 @@
 package task.controller;
 
+import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
-import org.apache.log4j.Logger;
 import task.entity.Role;
 import task.entity.User;
 import task.service.UserManager;
@@ -14,34 +14,29 @@ import java.util.List;
  */
 public class EditUserAction extends ActionSupport implements Preparable {
 
-    private static final Logger logger = Logger.getLogger(EditUserAction.class);
-
     private List<User> users;
     private List<Role> roles;
 
     private User user;
-
     private Role role;
 
     private UserManager userManager;
 
-    public String addUser() {
-        userManager.addUser(user, role);
-        return SUCCESS;
-    }
-
     public String listUsers() {
         users = userManager.getAllUsers();
+        DataTableResponse tableResponse = new DataTableResponse();
+        tableResponse.setAaData(users);
+        tableResponse.setiTotalRecords(users.size());
+        tableResponse.setiTotalDisplayRecords(users.size());
+        tableResponse.setsEcho(0);
+        ActionContext.getContext().put("jsonRoot", tableResponse);
         return SUCCESS;
     }
 
     public String deleteUser() {
+        System.out.println(user.getId());
         userManager.deleteUserByID(user.getId());
         return SUCCESS;
-    }
-
-    public String getRolesOfUser(Integer userId){
-        return userManager.getUserRoles(userId).toString();
     }
 
     @Override
@@ -86,4 +81,5 @@ public class EditUserAction extends ActionSupport implements Preparable {
     public void setRoles(List<Role> roles) {
         this.roles = roles;
     }
+
 }

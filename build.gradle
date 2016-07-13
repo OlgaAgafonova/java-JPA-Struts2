@@ -37,10 +37,11 @@ dependencies {
     compile("mysql:mysql-connector-java:5.1.9")
     compile("javassist:javassist:3.12.1.GA")
     compile("taglibs:standard:1.1.2")
+
     compile("commons-dbcp:commons-dbcp:1.4")
+    compile ("org.apache.commons:commons-lang3:3.4")
 
-
-
+    compile("org.apache.struts:struts2-json-plugin:2.3.16.2")
     compile("org.apache.struts:struts2-spring-plugin:2.3.16.2")
 
     compile("org.slf4j:slf4j-log4j12:1.7.21")

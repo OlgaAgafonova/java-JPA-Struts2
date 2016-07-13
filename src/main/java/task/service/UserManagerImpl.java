@@ -8,8 +8,9 @@ import task.entity.Role;
 import task.entity.User;
 import task.entity.UserRoles;
 
-import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Оля on 09.07.2016.
@@ -21,15 +22,16 @@ public class UserManagerImpl implements UserManager {
 
     @Override
     @Transactional
-    public void addUser(User user, Role role) {
-
+    public void addUser(User user, Set<Role> roles) {
         userDAO.addUser(user);
 
-        UserRoles userRoles = new UserRoles();
-        userRoles.setId_user(user.getId());
-        userRoles.setId_role(roleDAO.getRoleByName(role.getName()).getId());
-
-        userRolesDAO.addUserRole(userRoles);
+        Iterator<Role> iterator = roles.iterator();
+        for (int i = 0; i < roles.size(); i++) {
+            UserRoles userRoles = new UserRoles();
+            userRoles.setId_user(user.getId());
+            userRoles.setId_role(roleDAO.getRoleByName(iterator.next().getName()).getId());
+            userRolesDAO.addUserRole(userRoles);
+        }
     }
 
     @Override
@@ -42,26 +44,6 @@ public class UserManagerImpl implements UserManager {
     @Transactional
     public List getRoles() {
         return roleDAO.getAllRoles();
-    }
-
-    @Override
-    @Transactional
-    public List getAllUsersRoles() {
-        return userRolesDAO.getAllUserRoles();
-    }
-
-    @Override
-    @Transactional
-    public List getUserRoles(Integer userId) {
-        List<String> roles = new ArrayList<>();
-        List userRoles = userRolesDAO.getUserRoles(userId);
-        Integer id;
-
-        for (int i = 0; i < userRoles.size(); i++) {
-            id = Integer.valueOf(userRoles.get(i).toString());
-            roles.add(roleDAO.getRoleById(id).getName());
-        }
-        return roles;
     }
 
     @Override

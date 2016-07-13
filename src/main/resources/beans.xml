@@ -13,6 +13,18 @@
         </property>
     </bean>
 
+    <bean name="deleteAction" class="task.controller.DeleteAction" scope="prototype">
+        <property name="userManager">
+            <ref bean="userManager"/>
+        </property>
+    </bean>
+
+    <bean name="addAction" class="task.controller.AddAction" scope="prototype">
+        <property name="userManager">
+            <ref bean="userManager"/>
+        </property>
+    </bean>
+
     <!-- Beans are injected automatically by spring context -->
     <bean id="userDAO" class="task.dao.UserDAOImpl">
         <property name="sessionFactory" ref="sessionFactory"/>

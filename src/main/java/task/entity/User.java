@@ -1,6 +1,8 @@
 package task.entity;
 
 import javax.persistence.*;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * Created by Оля on 09.07.2016.
@@ -20,11 +22,20 @@ public class User {
     @Column(name = "FIRSTNAME")
     private String firstname;
 
-    @Column(name="LASTNAME")
+    @Column(name = "LASTNAME")
     private String lastname;
 
-    @Column(name="EMAIL")
+    @Column(name = "EMAIL")
     private String email;
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
+    @JoinTable(name = "USER_ROLES",
+            joinColumns = @JoinColumn(name = "ID_USER"),
+            inverseJoinColumns = @JoinColumn(name = "ID_ROLE")
+    )
+    private Set<Role> roles = null;
+
+    public User(){}
 
     public Integer getId() {
         return id;
@@ -64,5 +75,25 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", login='" + login + '\'' +
+                ", firstname='" + firstname + '\'' +
+                ", lastname='" + lastname + '\'' +
+                ", email='" + email + '\'' +
+                ", roles=" + roles +
+                '}';
     }
 }

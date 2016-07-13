@@ -14,67 +14,134 @@
             padding: 5px;
         }
     </style>
+
+    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.css">
+    <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+    <script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.js" type="text/javascript" charset="utf8"></script>
+
+    <script>
+        var table;
+        function deleteUser(userId) {
+            jQuery.ajax({
+                type: "POST",
+                url: "http://localhost:8080/delete",
+                data: {"userId": userId},
+                success: function () {
+                    table._fnAjaxUpdate();
+                },
+                error: function () {
+                    // error handler
+                }
+            });
+        }
+
+        function FormToJson(form) {
+            var array = $(form).serializeArray();
+            var json = {};
+            $.each(array, function () {
+                json[this.name] = this.value || '';
+            });
+            return json;
+        }
+
+        function addUser() {
+            var form = $('#formAddUser');
+            var json = FormToJson(form);
+            console.log(json);
+            jQuery.ajax({
+                type: 'post',
+                url: "add",
+                dataType: 'json',
+                data: json,
+                success: function () {
+                    form[0].reset();
+                    table._fnAjaxUpdate();
+                }
+                ,
+                error: function () {
+                    // error handler
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            table = $("#jqueryDataTable").dataTable({
+                "sPaginationType": "full_numbers",
+                "sAjaxSource": "list",
+                "bJQueryUI": true,
+                "aoColumns": [
+                    {"mData": "firstname", sDefaultContent: "n/a"},
+                    {"mDataProp": "lastname", sDefaultContent: "n/a"},
+                    {"mDataProp": "email", sDefaultContent: "n/a"},
+                    {"mDataProp": "login", sDefaultContent: "n/a"},
+                    {"mDataProp": "roles", "render": "[, ].name", sDefaultContent: "n/a"},
+                    {
+                        "mDataProp": "id", "render": function (data, type, full, meta) {
+                        return '<a href="#" onclick="deleteUser(' + data + ')">Delete</a>';
+                    }
+                    }
+                ]
+            });
+        });
+    </script>
+
+
 </head>
 <body>
 
 <h2>User list</h2>
 
-<s:form method="post" action="add">
+<s:form id="formAddUser">
     <table>
         <tr>
-            <td><s:textfield key="label.firstname" name="user.firstname" required="true"/></td>
+            <td><s:textfield key="label.firstname" name="firstname" required="true"/></td>
         </tr>
         <tr>
-            <td><s:textfield key="label.lastname" name="user.lastname" required="true"/></td>
+            <td><s:textfield key="label.lastname" name="lastname" required="true"/></td>
         </tr>
         <tr>
-            <td><s:textfield key="label.email" name="user.email" type="email" required="true"/></td>
+            <td><s:textfield key="label.email" name="email" type="email" required="true"/></td>
         </tr>
         <tr>
-            <td><s:textfield key="label.login" name="user.login" required="true"/></td>
+            <td><s:textfield key="label.login" name="login" required="true"/></td>
         </tr>
         <tr>
             <td><s:select key="label.role"
-                          headerKey="-1" headerValue="----- Select -----"
                           list="roles.{name}"
-                          name="role.name"
-                          required="true"
-            />
+                          name="roles"
+                          requiredLabel="true"
+                          multiple="true"/>
             </td>
         </tr>
 
         <tr>
             <td>
-                <s:submit key="label.add"></s:submit>
+                <input type="button" value="Add user" onclick="addUser()"/>
             </td>
         </tr>
     </table>
 </s:form>
 
-<h3>Users</h3>
-<c:if test="${!empty users}">
-    <table class="list">
-        <tr>
-            <th align="left">Name</th>
-            <th align="left">Email</th>
-            <th align="left">Login</th>
-            <th align="left">Roles</th>
-            <th align="left">Actions</th>
-        </tr>
-        <c:forEach items="${users}" var="user">
+<div id="container">
+    <h1>Users list</h1>
+    <div id="demo_jui">
+        <table class="display" id="jqueryDataTable">
+            <thead>
             <tr>
-                <td>${user.lastname}, ${user.firstname} </td>
-                <td>${user.email}</td>
-                <td>${user.login}</td>
-                <td>
-                    <s:set var="userId">${user.id}</s:set>
-                    <s:property value="getRolesOfUser(#userId)"/>
-                </td>
-                <td><a href="delete/${user.id}">delete</a></td>
+                <th>First name</th>
+                <th>Last name</th>
+                <th>Email</th>
+                <th>Login</th>
+                <th>Roles</th>
+                <th>Action</th>
             </tr>
-        </c:forEach>
-    </table>
-</c:if>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+
 
 </body>
 </html>

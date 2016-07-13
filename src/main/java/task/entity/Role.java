@@ -18,6 +18,8 @@ public class Role {
     @Column(name = "NAME")
     private String name;
 
+    public Role(){}
+
     public Integer getId() {
         return id;
     }
@@ -34,4 +36,8 @@ public class Role {
         this.name = name;
     }
 
+    @Override
+    public String toString() {
+        return name;
+    }
 }

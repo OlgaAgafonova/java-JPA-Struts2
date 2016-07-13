@@ -10,20 +10,35 @@
 
     <!-- Action mappings are defined here -->
     <package name="default" namespace="" extends="struts-default">
-        <action name="list" class="editUserAction" method="listUsers">
-            <result>/view/editUserList.jsp</result>
-        </action>
-        <action name="add" class="editUserAction" method="addUser">
-            <result type="redirect">/list</result>
-            <result name="input">/view/editUserList.jsp</result>
-        </action>
-        <action name="delete/*" class="editUserAction" method="deleteUser">
-            <param name="user.id">{1}</param>
-            <result type="redirect">/list</result>
-        </action>
+
+        <result-types>
+            <result-type name="json" class="org.apache.struts2.json.JSONResult"/>
+        </result-types>
+        <interceptors>
+            <interceptor name="json" class="org.apache.struts2.json.JSONInterceptor"/>
+        </interceptors>
+
+
         <action name="*" class="editUserAction" method="listUsers">
             <result>/view/editUserList.jsp</result>
         </action>
+        <action name="list" class="editUserAction" method="listUsers">
+            <result type="json">
+                <param name="root">jsonRoot</param>
+            </result>
+        </action>
+
+        <action name="delete" class="deleteAction" method="deleteUser">
+            <result type="json"/>
+        </action>
+
+        <action name="add" class="task.controller.AddAction" method="addUser">
+            <result name="input" type="json"/>
+            <result name="success" type="json"/>
+        </action>
+
+
     </package>
+
 
 </struts>
