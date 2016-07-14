@@ -18,10 +18,10 @@
             <interceptor name="json" class="org.apache.struts2.json.JSONInterceptor"/>
         </interceptors>
 
-
-        <action name="*" class="editUserAction" method="listUsers">
-            <result>/view/editUserList.jsp</result>
+        <action name="*" class="editUserAction" method="index">
+            <result>view/editUserList.jsp</result>
         </action>
+
         <action name="list" class="editUserAction" method="listUsers">
             <result type="json">
                 <param name="root">jsonRoot</param>

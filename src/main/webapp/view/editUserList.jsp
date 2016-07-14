@@ -106,11 +106,13 @@
             <td><s:textfield key="label.login" name="login" required="true"/></td>
         </tr>
         <tr>
-            <td><s:select key="label.role"
-                          list="roles.{name}"
-                          name="roles"
-                          requiredLabel="true"
-                          multiple="true"/>
+            <td><select multiple name="roles.id">
+                <s:iterator value="roles" var="role">
+                    <option value="<s:property value="#role.id"/>">
+                        <s:property value="#role.name"/>
+                    </option>
+                </s:iterator>
+            </select>
             </td>
         </tr>
 

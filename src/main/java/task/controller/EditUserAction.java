@@ -22,6 +22,11 @@ public class EditUserAction extends ActionSupport implements Preparable {
 
     private UserManager userManager;
 
+    public String index(){
+        return SUCCESS;
+    }
+
+
     public String listUsers() {
         users = userManager.getAllUsers();
         DataTableResponse tableResponse = new DataTableResponse();
