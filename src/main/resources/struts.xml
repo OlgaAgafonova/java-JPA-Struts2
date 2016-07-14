@@ -28,6 +28,10 @@
             </result>
         </action>
 
+        <action name="edit/roles" class="editUserAction" method="editRolesOfUser">
+            <result type="json"/>
+        </action>
+
         <action name="delete" class="deleteAction" method="deleteUser">
             <result type="json"/>
         </action>

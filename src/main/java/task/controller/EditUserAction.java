@@ -44,6 +44,10 @@ public class EditUserAction extends ActionSupport implements Preparable {
         return SUCCESS;
     }
 
+    public String editRolesOfUser(){
+        return SUCCESS;
+    }
+
     @Override
     public void prepare() throws Exception {
         user = null;

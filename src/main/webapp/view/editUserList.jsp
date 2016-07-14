@@ -16,8 +16,14 @@
     </style>
 
     <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.css">
-    <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
-    <script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.js" type="text/javascript" charset="utf8"></script>
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <script src="http://cdn.datatables.net/1.10.12/js/jquery.dataTables.js" type="text/javascript"
+            charset="utf8"></script>
+    <!-- Подключим jQuery UI -->
+    <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet"
+          type="text/css"/>
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
 
     <script>
         var table;
@@ -76,6 +82,15 @@
             });
         }
 
+        function editUserRoles() {
+            $('#editRolesDialog').dialog("open");
+        }
+
+        function addDataToTable() {
+            $('#editRolesDialog').dialog("close");
+        }
+
+
         $(document).ready(function () {
             table = $("#jqueryDataTable").dataTable({
                 "sPaginationType": "full_numbers",
@@ -83,27 +98,46 @@
                 "bJQueryUI": true,
                 "aoColumns": [
                     {"mData": "firstname", sDefaultContent: "n/a"},
-                    {"mDataProp": "lastname", sDefaultContent: "n/a"},
-                    {"mDataProp": "email", sDefaultContent: "n/a"},
-                    {"mDataProp": "login", sDefaultContent: "n/a"},
-                    {"mDataProp": "roles", "render": "[, ].name", sDefaultContent: "n/a"},
+                    {"mData": "lastname", sDefaultContent: "n/a"},
+                    {"mData": "email", sDefaultContent: "n/a"},
+                    {"mData": "login", sDefaultContent: "n/a"},
                     {
-                        "mDataProp": "id", "render": function (data, type, full, meta) {
+                        "mData": "roles", "render": function (data, type, full, meta) {
+                        var strRoles = "";
+                        for (var i = 0; i < data.length; i++) {
+                            strRoles += data[i].name + " ";
+                        }
+                        return strRoles + " /" + '<a href="#" onclick="editUserRoles()">Edit</a>';
+                    }, sDefaultContent: "n/a"
+                    },
+                    {
+                        "mData": "id", "render": function (data, type, full, meta) {
                         return '<a href="#" onclick="deleteUser(' + data + ')">Delete</a>';
                     }
                     }
                 ]
             });
+
+            $('#editRolesDialog').dialog({
+                buttons: [{text: "OK", click: addDataToTable},
+                    {
+                        text: "CANCEL", click: function () {
+                        $(this).dialog("close")
+                    }
+                    }],
+                modal: true,
+                autoOpen: false
+            });
         });
+
     </script>
 
 
 </head>
 <body>
 
-<h2>User list</h2>
-
 <s:form id="formAddUser">
+    <h3>Add user</h3>
     <table>
         <tr>
             <td><s:textfield key="label.firstname" name="firstname" requiredLabel="true"/></td>
@@ -139,7 +173,6 @@
 </s:form>
 
 <div id="container">
-    <h1>Users list</h1>
     <div id="demo_jui">
         <table class="display" id="jqueryDataTable">
             <thead>
@@ -158,6 +191,9 @@
     </div>
 </div>
 
+<div id="editRolesDialog" title="Edit user's roles">
+    Here you can changed user's roles.
+</div>
 
 </body>
 </html>
