@@ -1,11 +1,10 @@
 package task.controller;
 
 import com.opensymphony.xwork2.ActionSupport;
-import task.entity.Role;
 import task.entity.User;
 import task.service.UserManager;
 
-import java.util.Set;
+import java.util.Arrays;
 
 /**
  * Created by Оля on 12.07.2016.
@@ -17,22 +16,32 @@ public class AddAction extends ActionSupport {
             lastname,
             login,
             email;
-    private Set<Role> roles;
+    private String[] roles;
 
     private User user;
     private UserManager userManager;
 
-    public String addUser(){
+    public String addUser() {
         System.out.println("ADD USER");
         System.out.println(toString());
-        user = new User();
+        System.out.println("roles.length = "+roles.length);
+
+        /*user = new User();
         user.setFirstname(firstname);
         user.setLastname(lastname);
         user.setEmail(email);
         user.setLogin(login);
-        user.setRoles(roles);
+        Role role;
+        Set<Role> roleSet = new HashSet<>();
+
+        for (int i = 0; i < roles.length; i++) {
+            role = userManager.getRoleByID(Integer.valueOf(roles[i]));
+            roleSet.add(role);
+        }
+        user.setRoles(roleSet);
+
         System.out.println(user);
-        userManager.addUser(user, roles);
+        userManager.addUser(user);*/
         return SUCCESS;
     }
 
@@ -68,11 +77,11 @@ public class AddAction extends ActionSupport {
         this.email = email;
     }
 
-    public Set<Role> getRoles() {
+    public String[] getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<Role> roles) {
+    public void setRoles(String[] roles) {
         this.roles = roles;
     }
 
@@ -87,7 +96,7 @@ public class AddAction extends ActionSupport {
                 ", lastname='" + lastname + '\'' +
                 ", login='" + login + '\'' +
                 ", email='" + email + '\'' +
-                ", roles=" + roles +
+                ", roles=" + Arrays.toString(roles) +
                 '}';
     }
 }

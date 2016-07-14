@@ -22,14 +22,16 @@ public class UserManagerImpl implements UserManager {
 
     @Override
     @Transactional
-    public void addUser(User user, Set<Role> roles) {
+    public void addUser(User user) {
         userDAO.addUser(user);
 
+        Set<Role> roles = user.getRoles();
         Iterator<Role> iterator = roles.iterator();
+
         for (int i = 0; i < roles.size(); i++) {
             UserRoles userRoles = new UserRoles();
             userRoles.setId_user(user.getId());
-            userRoles.setId_role(roleDAO.getRoleByName(iterator.next().getName()).getId());
+            userRoles.setId_role(iterator.next().getId());
             userRolesDAO.addUserRole(userRoles);
         }
     }
@@ -44,6 +46,11 @@ public class UserManagerImpl implements UserManager {
     @Transactional
     public List getRoles() {
         return roleDAO.getAllRoles();
+    }
+
+    @Override
+    public Role getRoleByID(Integer roleID) {
+        return roleDAO.getRoleById(roleID);
     }
 
     @Override
