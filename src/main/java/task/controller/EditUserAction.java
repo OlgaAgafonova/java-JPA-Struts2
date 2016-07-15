@@ -7,6 +7,7 @@ import task.entity.Role;
 import task.entity.User;
 import task.service.UserManager;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -19,6 +20,8 @@ public class EditUserAction extends ActionSupport implements Preparable {
 
     private User user;
     private Role role;
+
+    private Integer userId;
 
     private UserManager userManager;
 
@@ -45,6 +48,31 @@ public class EditUserAction extends ActionSupport implements Preparable {
     }
 
     public String editRolesOfUser(){
+        DataTableResponse tableResponse = new DataTableResponse();
+        roles = userManager.getRoles();
+        tableResponse.setAaData(roles);
+        tableResponse.setiTotalRecords(roles.size());
+        tableResponse.setiTotalDisplayRecords(roles.size());
+        tableResponse.setsEcho(0);
+        ActionContext.getContext().put("jsonAllRoles", tableResponse);
+        return SUCCESS;
+    }
+
+    public String getRolesOfUser(){
+        users = userManager.getAllUsers();
+        DataTableResponse tableResponse = new DataTableResponse();
+        for (int i = 0; i < users.size(); i++) {
+            if(users.get(i).getId() == userId){
+                user = users.get(i);
+                break;
+            }
+        }
+        List<Object> rolesList = Arrays.asList(user.getRoles().toArray());
+        tableResponse.setAaData(rolesList);
+        tableResponse.setiTotalRecords(rolesList.size());
+        tableResponse.setiTotalDisplayRecords(rolesList.size());
+        tableResponse.setsEcho(0);
+        ActionContext.getContext().put("jsonUserRoles", tableResponse);
         return SUCCESS;
     }
 
@@ -91,4 +119,11 @@ public class EditUserAction extends ActionSupport implements Preparable {
         this.roles = roles;
     }
 
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
 }

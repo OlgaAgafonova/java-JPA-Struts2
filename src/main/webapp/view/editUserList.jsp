@@ -27,6 +27,9 @@
 
     <script>
         var table;
+        var dialog;
+        var dialogTable;
+        var userRoles;
         function deleteUser(userId) {
             jQuery.ajax({
                 type: "POST",
@@ -67,10 +70,11 @@
             console.log(json);
             jQuery.ajax({
                 type: 'post',
-                url: "add",
+                url: "http://localhost:8080/add",
                 dataType: 'json',
                 data: json,
                 traditional: true,
+                processData: false,
                 success: function () {
                     form[0].reset();
                     table._fnAjaxUpdate();
@@ -82,8 +86,23 @@
             });
         }
 
-        function editUserRoles() {
-            $('#editRolesDialog').dialog("open");
+        function editUserRoles(userId) {
+            jQuery.ajax({
+                type: 'post',
+                url: "http://localhost:8080/get",
+                data: {"userId": userId},
+                traditional: true,
+                cashe: true,
+                success: function (data) {
+                    userRoles = data;
+                    dialogTable._fnAjaxUpdate();
+                },
+                error: function () {
+                    // error handler
+                }
+            });
+            dialogTable.fnUpdate();
+            dialog.dialog("open");
         }
 
         function addDataToTable() {
@@ -107,7 +126,7 @@
                         for (var i = 0; i < data.length; i++) {
                             strRoles += data[i].name + " ";
                         }
-                        return strRoles + " /" + '<a href="#" onclick="editUserRoles()">Edit</a>';
+                        return strRoles + " /" + '<a href="#" onclick="editUserRoles(' + full.id + ')">Edit</a>';
                     }, sDefaultContent: "n/a"
                     },
                     {
@@ -118,7 +137,7 @@
                 ]
             });
 
-            $('#editRolesDialog').dialog({
+            dialog = $('#editRolesDialog').dialog({
                 buttons: [{text: "OK", click: addDataToTable},
                     {
                         text: "CANCEL", click: function () {
@@ -127,6 +146,25 @@
                     }],
                 modal: true,
                 autoOpen: false
+            });
+
+            dialogTable = $("#jqueryEditUserRolesTable").dataTable({
+                "sPaginationType": "full_numbers",
+                "sAjaxSource": "http://localhost:8080/edit/roles",
+                "bJQueryUI": true,
+                "aoColumns": [
+                    {"mData": "name", sDefaultContent: "n/a"},
+                    {
+                        "mData": "name", "render": function (data, type, full, meta) {
+                        var isGranted = false;
+                        for (var i = 0; i < userRoles.aaData.length; i++) {
+                            if (data == userRoles.aaData[i].name) isGranted = true;
+                        }
+                        return '<button>' + (isGranted ? 'Delete' : 'Add') + '</button>';
+
+                    }, sDefaultContent: "n/a"
+                    }
+                ]
             });
         });
 
@@ -193,6 +231,19 @@
 
 <div id="editRolesDialog" title="Edit user's roles">
     Here you can changed user's roles.
+    <div id="dialogcontainer">
+        <table class="display" id="jqueryEditUserRolesTable">
+            <thead>
+            <tr>
+                <th>Roles</th>
+                <th>Select</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+
+    </div>
 </div>
 
 </body>

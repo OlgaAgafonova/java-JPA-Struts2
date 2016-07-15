@@ -49,11 +49,6 @@ public class UserManagerImpl implements UserManager {
     }
 
     @Override
-    public Role getRoleByID(Integer roleID) {
-        return roleDAO.getRoleById(roleID);
-    }
-
-    @Override
     @Transactional
     public void deleteUserByID(Integer userId) {
         userDAO.deleteUserByID(userId);

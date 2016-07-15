@@ -1,6 +1,5 @@
 package task.service;
 
-import task.entity.Role;
 import task.entity.User;
 
 import java.util.List;
@@ -15,8 +14,6 @@ public interface UserManager {
     public List getAllUsers();
 
     public List getRoles();
-
-    public Role getRoleByID(Integer roleID);
 
     public void deleteUserByID(Integer userId);
 }

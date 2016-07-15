@@ -29,7 +29,14 @@
         </action>
 
         <action name="edit/roles" class="editUserAction" method="editRolesOfUser">
-            <result type="json"/>
+            <result type="json">
+                <param name="root">jsonAllRoles</param>
+            </result>
+        </action>
+        <action name="get" class="editUserAction" method="getRolesOfUser">
+            <result type="json">
+                <param name="root">jsonUserRoles</param>
+            </result>
         </action>
 
         <action name="delete" class="deleteAction" method="deleteUser">
