@@ -29,7 +29,8 @@
         var table;
         var dialog;
         var dialogTable;
-        var userRoles;
+        var userRoles = {};
+        var changedUserRoles = {};
         function deleteUser(userId) {
             jQuery.ajax({
                 type: "POST",
@@ -92,10 +93,13 @@
                 url: "http://localhost:8080/get",
                 data: {"userId": userId},
                 traditional: true,
-                cashe: true,
                 success: function (data) {
                     userRoles = data;
                     dialogTable._fnAjaxUpdate();
+                    changedUserRoles = new Array(userRoles.length);
+                    for (var i = 0; i < changedUserRoles.length; i++) {
+                        changedUserRoles[i] = userRoles.aaData[i].id;
+                    }
                 },
                 error: function () {
                     // error handler
@@ -103,10 +107,51 @@
             });
             dialogTable.fnUpdate();
             dialog.dialog("open");
+            document.getElementById("USER_ID").setAttribute("title", userId);
+        }
+
+        function changeRole(roleId) {
+            var isContains = false;
+            var index;
+            for (var i = 0; i < changedUserRoles.length; i++) {
+                if (roleId == changedUserRoles[i]) {
+                    isContains = true;
+                    index = i;
+                }
+            }
+            if (isContains) {
+                changedUserRoles.splice(index, 1);
+            } else {
+                changedUserRoles.splice(0, 0, roleId);
+            }
+            changeButtonOnEditDialog(roleId, isContains);
+        }
+
+        function changeButtonOnEditDialog(roleId, isDelete) {
+            var button = document.getElementById("changeRole_" + roleId);
+            if (isDelete) {
+                button.innerHTML = "Add";
+            } else {
+                button.innerHTML = "Delete";
+            }
         }
 
         function addDataToTable() {
             $('#editRolesDialog').dialog("close");
+            var userId = document.getElementById("USER_ID").getAttribute("title");
+            console.log(userId);
+            jQuery.ajax({
+                type: "POST",
+                url: "http://localhost:8080/edit/user",
+                data:{"userId": userId, "changedRoles": changedUserRoles},
+                traditional: true,
+                success: function () {
+                    table._fnAjaxUpdate();
+                },
+                error: function () {
+                    // error handler
+                }
+            });
         }
 
 
@@ -160,8 +205,7 @@
                         for (var i = 0; i < userRoles.aaData.length; i++) {
                             if (data == userRoles.aaData[i].name) isGranted = true;
                         }
-                        return '<button>' + (isGranted ? 'Delete' : 'Add') + '</button>';
-
+                        return '<button id="changeRole_' + full.id + '" onclick="changeRole(' + full.id + ')">' + (isGranted ? 'Delete' : 'Add') + '</button>';
                     }, sDefaultContent: "n/a"
                     }
                 ]
@@ -230,20 +274,20 @@
 </div>
 
 <div id="editRolesDialog" title="Edit user's roles">
-    Here you can changed user's roles.
-    <div id="dialogcontainer">
+    Click "OK" to save changes.
+    <div id="dialogContainer">
         <table class="display" id="jqueryEditUserRolesTable">
             <thead>
             <tr>
                 <th>Roles</th>
-                <th>Select</th>
+                <th>Action</th>
             </tr>
             </thead>
             <tbody>
             </tbody>
         </table>
-
     </div>
+    <div id="USER_ID" title=""></div>
 </div>
 
 </body>

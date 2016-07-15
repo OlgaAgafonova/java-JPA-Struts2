@@ -22,10 +22,11 @@ public class EditUserAction extends ActionSupport implements Preparable {
     private Role role;
 
     private Integer userId;
+    private String[] changedRoles;
 
     private UserManager userManager;
 
-    public String index(){
+    public String index() {
         return SUCCESS;
     }
 
@@ -47,7 +48,7 @@ public class EditUserAction extends ActionSupport implements Preparable {
         return SUCCESS;
     }
 
-    public String editRolesOfUser(){
+    public String editRolesOfUser() {
         DataTableResponse tableResponse = new DataTableResponse();
         roles = userManager.getRoles();
         tableResponse.setAaData(roles);
@@ -58,11 +59,11 @@ public class EditUserAction extends ActionSupport implements Preparable {
         return SUCCESS;
     }
 
-    public String getRolesOfUser(){
+    public String getRolesOfUser() {
         users = userManager.getAllUsers();
         DataTableResponse tableResponse = new DataTableResponse();
         for (int i = 0; i < users.size(); i++) {
-            if(users.get(i).getId() == userId){
+            if (users.get(i).getId() == userId) {
                 user = users.get(i);
                 break;
             }
@@ -73,6 +74,12 @@ public class EditUserAction extends ActionSupport implements Preparable {
         tableResponse.setiTotalDisplayRecords(rolesList.size());
         tableResponse.setsEcho(0);
         ActionContext.getContext().put("jsonUserRoles", tableResponse);
+        return SUCCESS;
+    }
+
+    public String editUser() {
+        System.out.println("userId = " + userId);
+        System.out.println("changedRoles = " + Arrays.toString(changedRoles));
         return SUCCESS;
     }
 
@@ -125,5 +132,13 @@ public class EditUserAction extends ActionSupport implements Preparable {
 
     public void setUserId(Integer userId) {
         this.userId = userId;
+    }
+
+    public String[] getChangedRoles() {
+        return changedRoles;
+    }
+
+    public void setChangedRoles(String[] changedRoles) {
+        this.changedRoles = changedRoles;
     }
 }

@@ -38,6 +38,10 @@
                 <param name="root">jsonUserRoles</param>
             </result>
         </action>
+        <action name="edit/user" class="editUserAction" method="editUser">
+            <result name="input" type="json"/>
+            <result name="success" type="json"/>
+        </action>
 
         <action name="delete" class="deleteAction" method="deleteUser">
             <result type="json"/>
