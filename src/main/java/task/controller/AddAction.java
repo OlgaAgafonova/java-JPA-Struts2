@@ -24,7 +24,7 @@ public class AddAction extends ActionSupport {
     public String addUser() {
         System.out.println("ADD USER");
         System.out.println(toString());
-        System.out.println("roles.length = "+roles.length);
+        System.out.println("roles.length = "+ roles == null ? "null" : roles.length);
 
         /*user = new User();
         user.setFirstname(firstname);
