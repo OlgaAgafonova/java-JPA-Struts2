@@ -34,7 +34,7 @@
         function deleteUser(userId) {
             jQuery.ajax({
                 type: "POST",
-                url: "http://localhost:8080/delete",
+                url: "delete",
                 data: {"userId": userId},
                 success: function () {
                     table._fnAjaxUpdate();
@@ -71,7 +71,7 @@
             console.log(json);
             jQuery.ajax({
                 type: 'post',
-                url: "http://localhost:8080/add",
+                url: "add",
                 dataType: 'json',
                 data: json,
                 traditional: true,
@@ -90,7 +90,7 @@
         function editUserRoles(userId) {
             jQuery.ajax({
                 type: 'post',
-                url: "http://localhost:8080/get",
+                url: "get",
                 data: {"userId": userId},
                 traditional: true,
                 success: function (data) {
@@ -142,7 +142,7 @@
             console.log(userId);
             jQuery.ajax({
                 type: "POST",
-                url: "http://localhost:8080/edit/user",
+                url: "edit/user",
                 data:{"userId": userId, "changedRoles": changedUserRoles},
                 traditional: true,
                 success: function () {
@@ -195,7 +195,7 @@
 
             dialogTable = $("#jqueryEditUserRolesTable").dataTable({
                 "sPaginationType": "full_numbers",
-                "sAjaxSource": "http://localhost:8080/edit/roles",
+                "sAjaxSource": "edit/roles",
                 "bJQueryUI": true,
                 "aoColumns": [
                     {"mData": "name", sDefaultContent: "n/a"},
