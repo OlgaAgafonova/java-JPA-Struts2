@@ -47,12 +47,13 @@
 
         function FormToJson(form) {
             var array = $(form).serializeArray();
-            var json = {};
+            var json = {}; json.roles = [];
             var roles = {};
             var i = 0;
             $.each(array, function () {
                 if (this.name == 'roles.id') {
-                    roles[i] = this.value || '';
+                    //roles[i] = this.value || '';
+                    json.roles.push(this.value || '');
                     i++;
                 }
             });
@@ -61,7 +62,7 @@
                 if (this.name != 'roles.id')
                     json[this.name] = this.value || '';
             });
-            json['roles'] = roles;
+            //json['roles'] = roles;
             return json;
         }
 
@@ -75,7 +76,6 @@
                 dataType: 'json',
                 data: json,
                 traditional: true,
-                processData: false,
                 success: function () {
                     form[0].reset();
                     table._fnAjaxUpdate();
