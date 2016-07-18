@@ -12,9 +12,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-/**
- * Created by Оля on 09.07.2016.
- */
 public class UserManagerImpl implements UserManager {
     private UserDAO userDAO;
     private RoleDAO roleDAO;
@@ -22,7 +19,7 @@ public class UserManagerImpl implements UserManager {
 
     @Override
     @Transactional
-    public void addUser(User user) {
+    public void save(User user) {
         userDAO.addUser(user);
 
         Set<Role> roles = user.getRoles();
@@ -44,8 +41,20 @@ public class UserManagerImpl implements UserManager {
 
     @Override
     @Transactional
+    public User getUserByID(Integer userId) {
+        return userDAO.getUserByID(userId);
+    }
+
+    @Override
+    @Transactional
     public List getRoles() {
         return roleDAO.getAllRoles();
+    }
+
+    @Override
+    @Transactional
+    public Role getRoleByID(Integer roleId) {
+        return roleDAO.getRoleById(roleId);
     }
 
     @Override

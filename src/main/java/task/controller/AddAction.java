@@ -1,32 +1,27 @@
 package task.controller;
 
 import com.opensymphony.xwork2.ActionSupport;
+import task.entity.Role;
 import task.entity.User;
 import task.service.UserManager;
 
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
-/**
- * Created by Оля on 12.07.2016.
- */
 public class AddAction extends ActionSupport {
 
-    private String
-            firstname,
-            lastname,
-            login,
-            email;
+    private String firstname;
+    private String lastname;
+    private String login;
+    private String email;
     private String[] roles;
 
     private User user;
     private UserManager userManager;
 
     public String addUser() {
-        System.out.println("ADD USER");
-        System.out.println(toString());
-        System.out.println("roles.length = "+ roles == null ? "null" : roles.length);
-
-        /*user = new User();
+        user = new User();
         user.setFirstname(firstname);
         user.setLastname(lastname);
         user.setEmail(email);
@@ -40,9 +35,26 @@ public class AddAction extends ActionSupport {
         }
         user.setRoles(roleSet);
 
-        System.out.println(user);
-        userManager.addUser(user);*/
+        userManager.save(user);
         return SUCCESS;
+    }
+
+    public void validate() {
+        if (firstname.trim().isEmpty()) {
+            addFieldError("firstname", "First name must be not empty");
+        }
+        if (lastname.trim().isEmpty()) {
+            addFieldError("lastname", "Last name must be not empty");
+        }
+        if (login.trim().isEmpty()) {
+            addFieldError("login", "Login must be not empty");
+        }
+        if (email.trim().isEmpty()) {
+            addFieldError("email", "Email must be not empty");
+        }
+        if (roles == null) {
+            addFieldError("roles", "You should select user's role");
+        }
     }
 
     public String getFirstname() {

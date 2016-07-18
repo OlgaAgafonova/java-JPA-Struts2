@@ -13,5 +13,7 @@ public interface UserDAO {
 
     public List getAllUsers();
 
+    public User getUserByID(Integer userId);
+
     public void deleteUserByID(Integer userId);
 }

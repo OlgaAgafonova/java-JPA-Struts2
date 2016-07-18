@@ -52,7 +52,6 @@
             var i = 0;
             $.each(array, function () {
                 if (this.name == 'roles.id') {
-                    //roles[i] = this.value || '';
                     json.roles.push(this.value || '');
                     i++;
                 }
@@ -62,7 +61,6 @@
                 if (this.name != 'roles.id')
                     json[this.name] = this.value || '';
             });
-            //json['roles'] = roles;
             return json;
         }
 
@@ -225,17 +223,17 @@
             <td><s:textfield key="label.firstname" name="firstname" requiredLabel="true"/></td>
         </tr>
         <tr>
-            <td><s:textfield key="label.lastname" name="lastname" requiredLabel="true"/></td>
+            <td><s:textfield key="label.lastname" name="lastname" requiredLabel="true" /></td>
         </tr>
         <tr>
-            <td><s:textfield key="label.email" name="email" type="email" requiredLabel="true"/></td>
+            <td><s:textfield key="label.email" name="email" type="email" requiredLabel="true" /></td>
         </tr>
         <tr>
             <td><s:textfield key="label.login" name="login" requiredLabel="true"/></td>
         </tr>
         <tr>
             <td>
-                <select required multiple name="roles.id">
+                <select required="true" multiple name="roles.id">
                     <option value="0" disabled>Select user's role</option>
                     <s:iterator value="roles" var="role">
                         <option value="<s:property value="#role.id"/>">

@@ -8,11 +8,10 @@ import task.entity.User;
 import task.service.UserManager;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-/**
- * Created by Оля on 09.07.2016.
- */
 public class EditUserAction extends ActionSupport implements Preparable {
 
     private List<User> users;
@@ -78,8 +77,15 @@ public class EditUserAction extends ActionSupport implements Preparable {
     }
 
     public String editUser() {
-        System.out.println("userId = " + userId);
-        System.out.println("changedRoles = " + Arrays.toString(changedRoles));
+        user = userManager.getUserByID(userId);
+        Set<Role> newRolesOfUser = new HashSet<>();
+        for (int i = 0; i < changedRoles.length; i++) {
+            Integer roleId = Integer.valueOf(changedRoles[i]);
+            role = userManager.getRoleByID(roleId);
+            newRolesOfUser.add(role);
+        }
+        user.setRoles(newRolesOfUser);
+        userManager.save(user);
         return SUCCESS;
     }
 
