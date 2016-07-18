@@ -47,11 +47,14 @@
             <result type="json"/>
         </action>
 
-        <action name="add" class="task.controller.AddAction" method="addUser">
-            <result name="input" type="json"/>
-            <result name="success" type="json"/>
+        <action name="register" class="addAction" method="index">
+            <result>view/addNewUser.jsp</result>
         </action>
 
+        <action name="add" class="addAction" method="addUser">
+            <result name="input" type="json"/>
+            <result name="success" type="redirect">/list</result>
+        </action>
 
     </package>
 

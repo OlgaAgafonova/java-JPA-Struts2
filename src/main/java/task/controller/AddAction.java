@@ -7,6 +7,7 @@ import task.service.UserManager;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class AddAction extends ActionSupport {
@@ -17,8 +18,16 @@ public class AddAction extends ActionSupport {
     private String email;
     private String[] roles;
 
+
+    private List<Role> rolesList;
+
     private User user;
     private UserManager userManager;
+
+    public String index() {
+        rolesList = userManager.getRoles();
+        return SUCCESS;
+    }
 
     public String addUser() {
         user = new User();
@@ -39,7 +48,7 @@ public class AddAction extends ActionSupport {
         return SUCCESS;
     }
 
-    public void validate() {
+/*    public void validate() {
         if (firstname.trim().isEmpty()) {
             addFieldError("firstname", "First name must be not empty");
         }
@@ -55,7 +64,7 @@ public class AddAction extends ActionSupport {
         if (roles == null) {
             addFieldError("roles", "You should select user's role");
         }
-    }
+    }*/
 
     public String getFirstname() {
         return firstname;
@@ -95,6 +104,14 @@ public class AddAction extends ActionSupport {
 
     public void setRoles(String[] roles) {
         this.roles = roles;
+    }
+
+    public List<Role> getRolesList() {
+        return rolesList;
+    }
+
+    public void setRolesList(List<Role> rolesList) {
+        this.rolesList = rolesList;
     }
 
     public void setUserManager(UserManager userManager) {

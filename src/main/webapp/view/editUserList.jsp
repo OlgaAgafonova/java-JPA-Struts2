@@ -18,7 +18,8 @@
     <link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/1.10.12/css/jquery.dataTables.css">
     <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
     <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-    <script src="http://cdn.datatables.net/1.10.12/js/jquery.dataTables.js" type="text/javascript"
+
+    <script src="http://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js" type="text/javascript"
             charset="utf8"></script>
     <!-- Подключим jQuery UI -->
     <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet"
@@ -39,46 +40,6 @@
                 success: function () {
                     table._fnAjaxUpdate();
                 },
-                error: function () {
-                    // error handler
-                }
-            });
-        }
-
-        function FormToJson(form) {
-            var array = $(form).serializeArray();
-            var json = {}; json.roles = [];
-            var roles = {};
-            var i = 0;
-            $.each(array, function () {
-                if (this.name == 'roles.id') {
-                    json.roles.push(this.value || '');
-                    i++;
-                }
-            });
-
-            $.each(array, function () {
-                if (this.name != 'roles.id')
-                    json[this.name] = this.value || '';
-            });
-            return json;
-        }
-
-        function addUser() {
-            var form = $('#formAddUser');
-            var json = FormToJson(form);
-            console.log(json);
-            jQuery.ajax({
-                type: 'post',
-                url: "add",
-                dataType: 'json',
-                data: json,
-                traditional: true,
-                success: function () {
-                    form[0].reset();
-                    table._fnAjaxUpdate();
-                }
-                ,
                 error: function () {
                     // error handler
                 }
@@ -134,14 +95,14 @@
             }
         }
 
-        function addDataToTable() {
+        function addDataToTableFromDialog() {
             $('#editRolesDialog').dialog("close");
             var userId = document.getElementById("USER_ID").getAttribute("title");
             console.log(userId);
             jQuery.ajax({
                 type: "POST",
                 url: "edit/user",
-                data:{"userId": userId, "changedRoles": changedUserRoles},
+                data: {"userId": userId, "changedRoles": changedUserRoles},
                 traditional: true,
                 success: function () {
                     table._fnAjaxUpdate();
@@ -152,12 +113,20 @@
             });
         }
 
-
         $(document).ready(function () {
-            table = $("#jqueryDataTable").dataTable({
+            table = $("#jqueryDataTable").DataTable({
                 "sPaginationType": "full_numbers",
                 "sAjaxSource": "list",
                 "bJQueryUI": true,
+                "oLanguage": {
+                    "sSearch": "Search in all columns:"
+                },
+                initComplete: function () {
+                    var r = $('#jqueryDataTable tfoot tr');
+                    r.find('th');
+                    $('#jqueryDataTable thead').append(r);
+                    $('#search_0').css('text-align', 'center');
+                },
                 "aoColumns": [
                     {"mData": "firstname", sDefaultContent: "n/a"},
                     {"mData": "lastname", sDefaultContent: "n/a"},
@@ -181,7 +150,7 @@
             });
 
             dialog = $('#editRolesDialog').dialog({
-                buttons: [{text: "OK", click: addDataToTable},
+                buttons: [{text: "OK", click: addDataToTableFromDialog},
                     {
                         text: "CANCEL", click: function () {
                         $(this).dialog("close")
@@ -208,48 +177,33 @@
                     }
                 ]
             });
+
+            // Setup - add a text input to each header cell
+            $('#jqueryDataTable tfoot th').each(function () {
+                var title = $(this).text();
+                $(this).html('<input type="text" placeholder="Search in ' + title + '" />');
+            });
+
+            // Apply the search
+            table.columns().every(function () {
+                var that = this;
+                $('input', this.footer()).on('keyup change', function () {
+                    if (that.search() !== this.value) {
+                        that
+                                .search(this.value)
+                                .draw();
+                    }
+                });
+            });
         });
 
     </script>
 
-
 </head>
 <body>
 
-<s:form id="formAddUser">
-    <h3>Add user</h3>
-    <table>
-        <tr>
-            <td><s:textfield key="label.firstname" name="firstname" requiredLabel="true"/></td>
-        </tr>
-        <tr>
-            <td><s:textfield key="label.lastname" name="lastname" requiredLabel="true" /></td>
-        </tr>
-        <tr>
-            <td><s:textfield key="label.email" name="email" type="email" requiredLabel="true" /></td>
-        </tr>
-        <tr>
-            <td><s:textfield key="label.login" name="login" requiredLabel="true"/></td>
-        </tr>
-        <tr>
-            <td>
-                <select required="true" multiple name="roles.id">
-                    <option value="0" disabled>Select user's role</option>
-                    <s:iterator value="roles" var="role">
-                        <option value="<s:property value="#role.id"/>">
-                            <s:property value="#role.name"/>
-                        </option>
-                    </s:iterator>
-                </select>
-            </td>
-        </tr>
-
-        <tr>
-            <td>
-                <input type="button" value="Add user" onclick="addUser()"/>
-            </td>
-        </tr>
-    </table>
+<s:form action="register" method="GET">
+    <button>Add user</button>
 </s:form>
 
 <div id="container">
@@ -267,6 +221,16 @@
             </thead>
             <tbody>
             </tbody>
+            <tfoot>
+            <tr>
+                <th>First name</th>
+                <th>Last name</th>
+                <th>Email</th>
+                <th>Login</th>
+                <th>Roles</th>
+                <th>Action</th>
+            </tr>
+            </tfoot>
         </table>
     </div>
 </div>
