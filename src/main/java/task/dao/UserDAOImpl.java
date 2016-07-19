@@ -7,9 +7,6 @@ import task.entity.User;
 
 import java.util.List;
 
-/**
- * Created by Оля on 09.07.2016.
- */
 @Repository
 public class UserDAOImpl implements UserDAO {
 

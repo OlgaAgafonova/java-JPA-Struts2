@@ -6,9 +6,6 @@ import task.entity.Role;
 
 import java.util.List;
 
-/**
- * Created by Оля on 09.07.2016.
- */
 public class RoleDAOImpl implements RoleDAO {
 
     private SessionFactory sessionFactory;

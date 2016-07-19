@@ -3,9 +3,6 @@ package task.entity;
 import javax.persistence.*;
 import java.util.Set;
 
-/**
- * Created by Оля on 09.07.2016.
- */
 @Entity
 @Table(name = "USER")
 public class User {
@@ -87,13 +84,13 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", login='" + login + '\'' +
-                ", firstname='" + firstname + '\'' +
-                ", lastname='" + lastname + '\'' +
-                ", email='" + email + '\'' +
-                ", roles=" + roles +
-                '}';
+        return "User{"
+                + "id=" + id
+                + ", login='" + login + '\''
+                + ", firstname='" + firstname + '\''
+                + ", lastname='" + lastname + '\''
+                + ", email='" + email + '\''
+                + ", roles=" + roles
+                + '}';
     }
 }

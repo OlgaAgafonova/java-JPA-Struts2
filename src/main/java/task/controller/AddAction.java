@@ -5,19 +5,16 @@ import task.entity.Role;
 import task.entity.User;
 import task.service.UserManager;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class AddAction extends ActionSupport {
 
+    private String id;
     private String firstname;
     private String lastname;
     private String login;
     private String email;
     private String[] roles;
-
 
     private List<Role> rolesList;
 
@@ -26,11 +23,22 @@ public class AddAction extends ActionSupport {
 
     public String index() {
         rolesList = userManager.getRoles();
+
+        if (id != null && !id.trim().isEmpty()) {
+            user = userManager.getUserByID(Integer.valueOf(id));
+            firstname = user.getFirstname();
+            lastname = user.getLastname();
+            login = user.getLogin();
+            email = user.getEmail();
+        }
         return SUCCESS;
     }
 
     public String addUser() {
         user = new User();
+        if (id != null && !id.trim().isEmpty()){
+            user.setId(Integer.valueOf(id));
+        }
         user.setFirstname(firstname);
         user.setLastname(lastname);
         user.setEmail(email);
@@ -43,7 +51,6 @@ public class AddAction extends ActionSupport {
             roleSet.add(role);
         }
         user.setRoles(roleSet);
-
         userManager.save(user);
         return SUCCESS;
     }
@@ -65,6 +72,14 @@ public class AddAction extends ActionSupport {
             addFieldError("roles", "You should select user's role");
         }
     }*/
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getFirstname() {
         return firstname;
@@ -120,12 +135,12 @@ public class AddAction extends ActionSupport {
 
     @Override
     public String toString() {
-        return "AddAction{" +
-                "firstname='" + firstname + '\'' +
-                ", lastname='" + lastname + '\'' +
-                ", login='" + login + '\'' +
-                ", email='" + email + '\'' +
-                ", roles=" + Arrays.toString(roles) +
-                '}';
+        return "AddAction{"
+                + "firstname='" + firstname + '\''
+                + ", lastname='" + lastname + '\''
+                + ", login='" + login + '\''
+                + ", email='" + email + '\''
+                + ", roles=" + Arrays.toString(roles)
+                + '}';
     }
 }

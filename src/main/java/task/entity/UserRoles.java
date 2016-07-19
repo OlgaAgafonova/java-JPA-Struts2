@@ -2,9 +2,6 @@ package task.entity;
 
 import javax.persistence.*;
 
-/**
- * Created by Оля on 09.07.2016.
- */
 @Entity
 @Table(name = "USER_ROLES")
 public class UserRoles {

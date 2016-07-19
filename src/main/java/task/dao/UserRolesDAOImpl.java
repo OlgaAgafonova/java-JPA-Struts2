@@ -3,15 +3,10 @@ package task.dao;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.classic.Session;
-import task.entity.User;
 import task.entity.UserRoles;
 
-import java.util.Iterator;
 import java.util.List;
 
-/**
- * Created by Оля on 09.07.2016.
- */
 public class UserRolesDAOImpl implements UserRolesDAO {
 
     private SessionFactory sessionFactory;

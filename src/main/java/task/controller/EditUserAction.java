@@ -41,7 +41,6 @@ public class EditUserAction extends ActionSupport implements Preparable {
     }
 
     public String deleteUser() {
-        System.out.println(user.getId());
         userManager.deleteUserByID(user.getId());
         return SUCCESS;
     }
@@ -60,12 +59,7 @@ public class EditUserAction extends ActionSupport implements Preparable {
     public String getRolesOfUser() {
         users = userManager.getAllUsers();
         DataTableResponse tableResponse = new DataTableResponse();
-        for (int i = 0; i < users.size(); i++) {
-            if (users.get(i).getId() == userId) {
-                user = users.get(i);
-                break;
-            }
-        }
+        user = userManager.getUserByID(userId);
         List<Object> rolesList = Arrays.asList(user.getRoles().toArray());
         tableResponse.setAaData(rolesList);
         tableResponse.setiTotalRecords(rolesList.size());

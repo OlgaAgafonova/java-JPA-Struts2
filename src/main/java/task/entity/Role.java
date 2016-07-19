@@ -2,12 +2,8 @@ package task.entity;
 
 import javax.persistence.*;
 
-/**
- * Created by Оля on 09.07.2016.
- */
-
 @Entity
-@Table(name="ROLE")
+@Table(name = "ROLE")
 public class Role {
 
     @Id
@@ -18,7 +14,8 @@ public class Role {
     @Column(name = "NAME")
     private String name;
 
-    public Role(){}
+    public Role() {
+    }
 
     public Integer getId() {
         return id;

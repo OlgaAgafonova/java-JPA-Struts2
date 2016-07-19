@@ -53,7 +53,7 @@
 
         <action name="add" class="addAction" method="addUser">
             <result name="input" type="json"/>
-            <result name="success" type="redirect">/list</result>
+            <result name="success" type="json"/>
         </action>
 
     </package>

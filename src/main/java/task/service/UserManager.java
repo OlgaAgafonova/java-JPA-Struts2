@@ -5,9 +5,6 @@ import task.entity.User;
 
 import java.util.List;
 
-/**
- * Created by Оля on 09.07.2016.
- */
 public interface UserManager {
 
     public void save(User user);

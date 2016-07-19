@@ -22,7 +22,7 @@
     <script src="http://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js" type="text/javascript"
             charset="utf8"></script>
     <!-- Подключим jQuery UI -->
-    <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet"
+    <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/flick/jquery-ui.css" rel="stylesheet"
           type="text/css"/>
     <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
 
@@ -38,7 +38,7 @@
                 url: "delete",
                 data: {"userId": userId},
                 success: function () {
-                    table._fnAjaxUpdate();
+                    table.ajax.reload();
                 },
                 error: function () {
                     // error handler
@@ -98,7 +98,6 @@
         function addDataToTableFromDialog() {
             $('#editRolesDialog').dialog("close");
             var userId = document.getElementById("USER_ID").getAttribute("title");
-            console.log(userId);
             jQuery.ajax({
                 type: "POST",
                 url: "edit/user",
@@ -128,7 +127,12 @@
                     $('#search_0').css('text-align', 'center');
                 },
                 "aoColumns": [
-                    {"mData": "firstname", sDefaultContent: "n/a"},
+                    {
+                        "mData": "firstname", "render": function (data, type, full, meta) {
+                        return '<a href="/register?id=' + full.id + '">' + data + '</a>';
+
+                    }, sDefaultContent: "n/a"
+                    },
                     {"mData": "lastname", sDefaultContent: "n/a"},
                     {"mData": "email", sDefaultContent: "n/a"},
                     {"mData": "login", sDefaultContent: "n/a"},

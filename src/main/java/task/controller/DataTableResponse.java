@@ -2,11 +2,8 @@ package task.controller;
 
 import java.util.List;
 
-/**
- * Created by Оля on 11.07.2016.
- */
 public class DataTableResponse {
-    private int sEcho ;
+    private int sEcho;
     private int iTotalRecords;
     private int iTotalDisplayRecords;
 

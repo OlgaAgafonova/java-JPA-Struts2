@@ -25,6 +25,8 @@
           type="text/css"/>
 
     <script>
+        var userRoles = {};
+
         function FormToJson(form) {
             var array = $(form).serializeArray();
             var json = {};
@@ -32,13 +34,11 @@
             $.each(array, function () {
                 if (this.name == 'rolesList.id') {
                     json.roles.push(this.value || '');
+                } else {
+                    json[this.name] = this.value || '';
                 }
             });
-
-            $.each(array, function () {
-                if (this.name != 'rolesList.id')
-                    json[this.name] = this.value || '';
-            });
+            json["id"] = document.getElementById("id").value;
             return json;
         }
 
@@ -52,7 +52,6 @@
                 data: json,
                 traditional: true,
                 success: function () {
-                    form[0].reset();
                 }
                 ,
                 error: function () {
@@ -60,13 +59,55 @@
                 }
             });
         }
+
+        function editUserRoles(userId) {
+            jQuery.ajax({
+                type: 'post',
+                url: "get",
+                data: {"userId": userId},
+                traditional: true,
+                success: function (data) {
+                    userRoles = new Array(data.aaData.length);
+                    for (var i = 0; i < userRoles.length; i++) {
+                        userRoles[i] = data.aaData[i].id;
+                    }
+                    selectRoles();
+                },
+                error: function () {
+                    // error handler
+                }
+            });
+        }
+
+        function selectRoles() {
+            var form = document.forms[0];
+            var select = form.elements[4];
+            for (var i = 0; i < userRoles.length; i++) {
+                for (var j = 0; j < select.options.length; j++) {
+                    if (userRoles[i] == select.options[j].value) {
+                        select.options[j].selected = true;
+                    }
+                }
+            }
+        }
+
+        $(function () {
+            var userId = document.getElementById("id").value;
+            if (userId != "") {
+                editUserRoles(userId);
+            }
+        });
     </script>
 
 </head>
 <body>
 
+<s:textfield name="id" type="hidden"/>
+
+<s:a href="/">Home</s:a>
+
 <s:form id="formAddUser">
-    <h3>Add user</h3>
+    <h3>Add or edit user</h3>
     <table>
         <tr>
             <td><s:textfield key="label.firstname" name="firstname" requiredLabel="true"/></td>
@@ -82,7 +123,7 @@
         </tr>
         <tr>
             <td>
-                <select required="true" multiple name="rolesList.id">
+                <select required="true" multiple="multiple" name="rolesList.id">
                     <option value="0" disabled>Select user's role</option>
                     <s:iterator value="rolesList" var="role">
                         <option value="<s:property value="#role.id"/>">
@@ -95,7 +136,8 @@
 
         <tr>
             <td>
-                <input type="button" value="Add user" onclick="addUser()"/>
+                <input type="button" value="Save" onclick="addUser()"/>
+                <input type="button" value="Cancel"/>
             </td>
         </tr>
     </table>

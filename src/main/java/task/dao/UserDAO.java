@@ -4,16 +4,13 @@ import task.entity.User;
 
 import java.util.List;
 
-/**
- * Created by Оля on 09.07.2016.
- */
 public interface UserDAO {
 
-    public void addUser(User user);
+    void addUser(User user);
 
-    public List getAllUsers();
+    List getAllUsers();
 
-    public User getUserByID(Integer userId);
+    User getUserByID(Integer userId);
 
-    public void deleteUserByID(Integer userId);
+    void deleteUserByID(Integer userId);
 }
