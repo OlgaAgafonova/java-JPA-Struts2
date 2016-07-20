@@ -1,9 +1,7 @@
 package task.service;
 
 import org.springframework.transaction.annotation.Transactional;
-import task.dao.RoleDAO;
-import task.dao.UserDAO;
-import task.dao.UserRolesDAO;
+import task.dao.*;
 import task.entity.Role;
 import task.entity.User;
 import task.entity.UserRoles;
@@ -16,11 +14,14 @@ public class UserManagerImpl implements UserManager {
     private UserDAO userDAO;
     private RoleDAO roleDAO;
     private UserRolesDAO userRolesDAO;
+    private PositionDAO positionDAO;
+    private OrganizationDAO organizationDAO;
+    private JobPlaceDAO jobPlaceDAO;
 
     @Override
     @Transactional
     public void save(User user) {
-        userDAO.addUser(user);
+        userDAO.save(user);
 
         Set<Role> roles = user.getRoles();
         Iterator<Role> iterator = roles.iterator();
@@ -29,7 +30,7 @@ public class UserManagerImpl implements UserManager {
             UserRoles userRoles = new UserRoles();
             userRoles.setId_user(user.getId());
             userRoles.setId_role(iterator.next().getId());
-            userRolesDAO.addUserRole(userRoles);
+            userRolesDAO.save(userRoles);
         }
     }
 
@@ -74,5 +75,17 @@ public class UserManagerImpl implements UserManager {
 
     public void setUserRolesDAO(UserRolesDAO userRolesDAO) {
         this.userRolesDAO = userRolesDAO;
+    }
+
+    public void setPositionDAO(PositionDAO positionDAO) {
+        this.positionDAO = positionDAO;
+    }
+
+    public void setOrganizationDAO(OrganizationDAO organizationDAO) {
+        this.organizationDAO = organizationDAO;
+    }
+
+    public void setJobPlaceDAO(JobPlaceDAO jobPlaceDAO) {
+        this.jobPlaceDAO = jobPlaceDAO;
     }
 }

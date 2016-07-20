@@ -7,15 +7,15 @@ import java.util.List;
 
 public interface UserManager {
 
-    public void save(User user);
+    void save(User user);
 
-    public List getAllUsers();
+    List getAllUsers();
 
-    public User getUserByID(Integer userId);
+    User getUserByID(Integer userId);
 
-    public List getRoles();
+    List getRoles();
 
-    public Role getRoleByID(Integer roleId);
+    Role getRoleByID(Integer roleId);
 
-    public void deleteUserByID(Integer userId);
+    void deleteUserByID(Integer userId);
 }

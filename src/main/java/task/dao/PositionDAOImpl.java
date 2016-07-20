@@ -1,0 +1,36 @@
+package task.dao;
+
+import org.hibernate.SessionFactory;
+import org.hibernate.classic.Session;
+import task.entity.Position;
+
+public class PositionDAOImpl implements PositionDAO {
+
+    private SessionFactory sessionFactory;
+
+    @Override
+    public void save(Position position) {
+        getCurrentSession().saveOrUpdate(position);
+    }
+
+    @Override
+    public Position getPositionById(Integer id) {
+        return (Position) getCurrentSession().get(Position.class, id);
+    }
+
+    @Override
+    public void deletePositionByID(Integer id) {
+        Position position = getPositionById(id);
+        if (position != null) {
+            getCurrentSession().delete(position);
+        }
+    }
+
+    private Session getCurrentSession() {
+        return this.sessionFactory.getCurrentSession();
+    }
+
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
+}

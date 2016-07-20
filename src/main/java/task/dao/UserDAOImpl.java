@@ -13,7 +13,7 @@ public class UserDAOImpl implements UserDAO {
     private SessionFactory sessionFactory;
 
     @Override
-    public void addUser(User user) {
+    public void save(User user) {
         getCurrentSession().saveOrUpdate(user);
     }
 
@@ -24,13 +24,12 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public User getUserByID(Integer userId) {
-        User user = (User) this.sessionFactory.getCurrentSession().get(User.class, userId);
-        return user;
+        return (User) getCurrentSession().get(User.class, userId);
     }
 
     @Override
     public void deleteUserByID(Integer userId) {
-        User user = (User) getCurrentSession().load(User.class, userId);
+        User user = getUserByID(userId);
         if (user != null) {
             getCurrentSession().delete(user);
         }

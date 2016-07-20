@@ -19,10 +19,12 @@
     <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
     <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
     <script src="http://cdn.datatables.net/1.10.12/js/jquery.dataTables.js" type="text/javascript"
-            charset="utf8"></script>
+            charset="utf8">
+    </script>
     <!-- Подключим jQuery UI -->
-    <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet"
+    <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/flick/jquery-ui.css" rel="stylesheet"
           type="text/css"/>
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
 
     <script>
         var userRoles = {};
@@ -96,52 +98,66 @@
             if (userId != "") {
                 editUserRoles(userId);
             }
+            $("#tabs").tabs();
         });
     </script>
 
 </head>
 <body>
 
-<s:textfield name="id" type="hidden"/>
 
 <s:a href="/">Home</s:a>
 
-<s:form id="formAddUser">
-    <h3>Add or edit user</h3>
-    <table>
-        <tr>
-            <td><s:textfield key="label.firstname" name="firstname" requiredLabel="true"/></td>
-        </tr>
-        <tr>
-            <td><s:textfield key="label.lastname" name="lastname" requiredLabel="true"/></td>
-        </tr>
-        <tr>
-            <td><s:textfield key="label.email" name="email" type="email" requiredLabel="true"/></td>
-        </tr>
-        <tr>
-            <td><s:textfield key="label.login" name="login" requiredLabel="true"/></td>
-        </tr>
-        <tr>
-            <td>
-                <select required="true" multiple="multiple" name="rolesList.id">
-                    <option value="0" disabled>Select user's role</option>
-                    <s:iterator value="rolesList" var="role">
-                        <option value="<s:property value="#role.id"/>">
-                            <s:property value="#role.name"/>
-                        </option>
-                    </s:iterator>
-                </select>
-            </td>
-        </tr>
+<div id="tabs">
+    <ul>
+        <li><a href="#fragment-1"><span>Add or Edit</span></a></li>
+        <li><a href="#fragment-2"><span>Two</span></a></li>
+    </ul>
 
-        <tr>
-            <td>
-                <input type="button" value="Save" onclick="addUser()"/>
-                <input type="button" value="Cancel"/>
-            </td>
-        </tr>
-    </table>
-</s:form>
+    <div id="fragment-1">
+        <s:textfield name="id" type="hidden"/>
+        <s:form id="formAddUser">
+            <h3>Add or edit user</h3>
+            <table>
+                <tr>
+                    <td><s:textfield key="label.firstname" name="firstname" requiredLabel="true"/></td>
+                </tr>
+                <tr>
+                    <td><s:textfield key="label.lastname" name="lastname" requiredLabel="true"/></td>
+                </tr>
+                <tr>
+                    <td><s:textfield key="label.email" name="email" type="email" requiredLabel="true"/></td>
+                </tr>
+                <tr>
+                    <td><s:textfield key="label.login" name="login" requiredLabel="true"/></td>
+                </tr>
+                <tr>
+                    <td>
+                        <select required="true" multiple="multiple" name="rolesList.id">
+                            <option value="0" disabled>Select user's role</option>
+                            <s:iterator value="rolesList" var="role">
+                                <option value="<s:property value="#role.id"/>">
+                                    <s:property value="#role.name"/>
+                                </option>
+                            </s:iterator>
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <input type="button" value="Save" onclick="addUser()"/>
+                        <input type="button" value="Cancel"/>
+                    </td>
+                </tr>
+            </table>
+        </s:form>
+    </div>
+
+    <div id="fragment-2">
+    </div>
+</div>
+
 
 </body>
 </html>

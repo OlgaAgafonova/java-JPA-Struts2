@@ -12,7 +12,7 @@ public class UserRolesDAOImpl implements UserRolesDAO {
     private SessionFactory sessionFactory;
 
     @Override
-    public void addUserRole(UserRoles userRoles) {
+    public void save(UserRoles userRoles) {
         getCurrentSession().saveOrUpdate(userRoles);
     }
 

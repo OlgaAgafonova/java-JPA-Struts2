@@ -38,10 +38,25 @@
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
+    <bean id="jobPlaceDAO" class="task.dao.JobPlaceDAOImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="organisationDAO" class="task.dao.OrganizationDAOImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="positionDAO" class="task.dao.PositionDAOImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
     <bean id="userManager" class="task.service.UserManagerImpl">
         <property name="userDAO" ref="userDAO"/>
         <property name="roleDAO" ref="roleDAO"/>
         <property name="userRolesDAO" ref="userRolesDAO"/>
+        <property name="positionDAO" ref="positionDAO"/>
+        <property name="organizationDAO" ref="organisationDAO"/>
+        <property name="jobPlaceDAO" ref="jobPlaceDAO"/>
     </bean>
 
     <!-- Configure jdbc.properties -->

@@ -11,7 +11,7 @@ public class RoleDAOImpl implements RoleDAO {
     private SessionFactory sessionFactory;
 
     @Override
-    public void addRole(Role role) {
+    public void save(Role role) {
         getCurrentSession().save(role);
     }
 
@@ -21,18 +21,13 @@ public class RoleDAOImpl implements RoleDAO {
     }
 
     @Override
-    public Role getRoleByName(String name) {
-        return (Role) getCurrentSession().createQuery("from Role where name = ?").setString(0, name).uniqueResult();
-    }
-
-    @Override
     public Role getRoleById(Integer id) {
-        return (Role) getCurrentSession().createQuery("from Role where id = ?").setInteger(0, id).uniqueResult();
+        return (Role) getCurrentSession().get(Role.class, id);
     }
 
     @Override
-    public void deleteRoleByID(Integer roleId) {
-        Role role = (Role) getCurrentSession().load(Role.class, roleId);
+    public void deleteRoleByID(Integer id) {
+        Role role = getRoleById(id);
         if (role != null) {
             getCurrentSession().delete(role);
         }

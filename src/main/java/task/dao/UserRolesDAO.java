@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface UserRolesDAO {
 
-    void addUserRole(UserRoles userRoles);
+    void save(UserRoles userRoles);
 
     List getAllUserRoles();
 
