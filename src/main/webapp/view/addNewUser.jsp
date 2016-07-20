@@ -101,6 +101,7 @@
                 "sPaginationType": "full_numbers",
                 "sAjaxSource": "job?id=" + userId,
                 "bJQueryUI": true,
+                "bAutoWidth": false,
                 "oLanguage": {
                     "sSearch": "Search in all columns:"
                 },

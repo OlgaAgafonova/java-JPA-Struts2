@@ -61,6 +61,12 @@ public class UserManagerImpl implements UserManager {
 
     @Override
     @Transactional
+    public List getAllOrganizations() {
+        return organizationDAO.getAll();
+    }
+
+    @Override
+    @Transactional
     public List<JobPlace> getJobPlaceOfUserById(Integer userId) {
         List<JobPlace> jobPlacesOfUser = jobPlaceDAO.getJobPlaceByUserID(userId);
         return jobPlacesOfUser;

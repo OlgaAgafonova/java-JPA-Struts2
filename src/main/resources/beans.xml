@@ -31,6 +31,12 @@
         </property>
     </bean>
 
+    <bean name="orgAction" class="task.controller.OrganizationAction" scope="prototype">
+        <property name="userManager">
+            <ref bean="userManager"/>
+        </property>
+    </bean>
+
     <!-- Beans are injected automatically by spring context -->
     <bean id="userDAO" class="task.dao.UserDAOImpl">
         <property name="sessionFactory" ref="sessionFactory"/>

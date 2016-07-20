@@ -27,7 +27,8 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
 
     <script>
-        var table;
+        var tableUsers;
+        var tableOrganizations;
         var dialog;
         var dialogTable;
         var userRoles = {};
@@ -38,7 +39,7 @@
                 url: "delete",
                 data: {"userId": userId},
                 success: function () {
-                    table.ajax.reload();
+                    tableUsers.ajax.reload();
                 },
                 error: function () {
                     // error handler
@@ -104,7 +105,7 @@
                 data: {"userId": userId, "changedRoles": changedUserRoles},
                 traditional: true,
                 success: function () {
-                    table._fnAjaxUpdate();
+                    tableUsers._fnAjaxUpdate();
                 },
                 error: function () {
                     // error handler
@@ -113,7 +114,7 @@
         }
 
         $(document).ready(function () {
-            table = $("#jqueryDataTable").DataTable({
+            tableUsers = $("#jqueryDataTable").DataTable({
                 "sPaginationType": "full_numbers",
                 "sAjaxSource": "list",
                 "bJQueryUI": true,
@@ -153,6 +154,24 @@
                 ]
             });
 
+            // Setup - add a text input to each header cell
+            $('#jqueryDataTable tfoot th').each(function () {
+                var title = $(this).text();
+                $(this).html('<input type="text" placeholder="Search in ' + title + '" />');
+            });
+
+            // Apply the search
+            tableUsers.columns().every(function () {
+                var that = this;
+                $('input', this.footer()).on('keyup change', function () {
+                    if (that.search() !== this.value) {
+                        that
+                                .search(this.value)
+                                .draw();
+                    }
+                });
+            });
+
             dialog = $('#editRolesDialog').dialog({
                 buttons: [{text: "OK", click: addDataToTableFromDialog},
                     {
@@ -168,6 +187,7 @@
                 "sPaginationType": "full_numbers",
                 "sAjaxSource": "edit/roles",
                 "bJQueryUI": true,
+                "bAutoWidth": false,
                 "aoColumns": [
                     {"mData": "name", sDefaultContent: "n/a"},
                     {
@@ -184,14 +204,33 @@
                 ]
             });
 
+            tableOrganizations = $("#organizationsDataTable").DataTable({
+                "sPaginationType": "full_numbers",
+                "sAjaxSource": "org",
+                "bJQueryUI": true,
+                "bAutoWidth": false,
+                "oLanguage": {
+                    "sSearch": "Search in all columns:"
+                },
+                initComplete: function () {
+                    var r = $('#organizationsDataTable tfoot tr');
+                    r.find('th');
+                    $('#organizationsDataTable thead').append(r);
+                    $('#search_0').css('text-align', 'center');
+                },
+                "aoColumns": [
+                    {"mData": "name", sDefaultContent: "n/a"}
+                ]
+            });
+
             // Setup - add a text input to each header cell
-            $('#jqueryDataTable tfoot th').each(function () {
+            $('#organizationsDataTable tfoot th').each(function () {
                 var title = $(this).text();
                 $(this).html('<input type="text" placeholder="Search in ' + title + '" />');
             });
 
             // Apply the search
-            table.columns().every(function () {
+            tableOrganizations.columns().every(function () {
                 var that = this;
                 $('input', this.footer()).on('keyup change', function () {
                     if (that.search() !== this.value) {
@@ -201,6 +240,8 @@
                     }
                 });
             });
+
+            $("#tabs").tabs();
         });
 
     </script>
@@ -208,55 +249,81 @@
 </head>
 <body>
 
-<s:form action="register" method="GET">
-    <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Add user</button>
-</s:form>
+<div id="tabs">
+    <ul>
+        <li><a href="#fragment-1"><span>Users</span></a></li>
+        <li><a href="#fragment-2"><span>Organizations</span></a></li>
+    </ul>
+    <div id="fragment-1">
+        <s:form action="register" method="GET">
+            <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Add user</button>
+        </s:form>
 
-<div id="container">
-    <div id="demo_jui">
-        <table class="display" id="jqueryDataTable">
+        <div id="container">
+            <div id="demo_jui">
+                <table class="display" id="jqueryDataTable">
+                    <thead>
+                    <tr>
+                        <th>First name</th>
+                        <th>Last name</th>
+                        <th>Email</th>
+                        <th>Login</th>
+                        <th>Roles</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <th>First name</th>
+                        <th>Last name</th>
+                        <th>Email</th>
+                        <th>Login</th>
+                        <th>Roles</th>
+                        <th>Action</th>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+
+        <div id="editRolesDialog" title="Edit user's roles">
+            Click "OK" to save changes.
+            <div id="dialogContainer">
+                <table class="display" id="jqueryEditUserRolesTable">
+                    <thead>
+                    <tr>
+                        <th>Roles</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            <div id="USER_ID" title=""></div>
+        </div>
+    </div>
+
+    <div id="fragment-2">
+        <table class="display" id="organizationsDataTable">
             <thead>
             <tr>
-                <th>First name</th>
-                <th>Last name</th>
-                <th>Email</th>
-                <th>Login</th>
-                <th>Roles</th>
-                <th>Action</th>
+                <th>Name</th>
             </tr>
             </thead>
             <tbody>
             </tbody>
             <tfoot>
             <tr>
-                <th>First name</th>
-                <th>Last name</th>
-                <th>Email</th>
-                <th>Login</th>
-                <th>Roles</th>
-                <th>Action</th>
+                <th>Name</th>
             </tr>
             </tfoot>
         </table>
     </div>
 </div>
 
-<div id="editRolesDialog" title="Edit user's roles">
-    Click "OK" to save changes.
-    <div id="dialogContainer">
-        <table class="display" id="jqueryEditUserRolesTable">
-            <thead>
-            <tr>
-                <th>Roles</th>
-                <th>Action</th>
-            </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
-    </div>
-    <div id="USER_ID" title=""></div>
-</div>
 
 </body>
 </html>

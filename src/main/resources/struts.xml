@@ -63,7 +63,11 @@
             </result>
         </action>
 
-
+        <action name="org" class="orgAction" method="showOrgs">
+            <result type="json">
+                <param name="root">jsonOrg</param>
+            </result>
+        </action>
 
     </package>
 

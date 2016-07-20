@@ -5,6 +5,8 @@ import org.hibernate.classic.Session;
 import org.springframework.stereotype.Repository;
 import task.entity.Organization;
 
+import java.util.List;
+
 @Repository
 public class OrganizationDAOImpl implements OrganizationDAO {
 
@@ -18,6 +20,11 @@ public class OrganizationDAOImpl implements OrganizationDAO {
     @Override
     public Organization getOrganizationById(Integer id) {
         return (Organization) getCurrentSession().get(Organization.class, id);
+    }
+
+    @Override
+    public List<Organization> getAll() {
+        return getCurrentSession().createQuery("from Organization ").list();
     }
 
     @Override
