@@ -25,12 +25,12 @@ public class JobPlace {
     @Column(name = "ID_USER")
     private Integer id_user;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID")
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "ID_ORGANIZATION")
     private Organization organization;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID")
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "ID_POSITION")
     private Position position;
 
     public JobPlace() {

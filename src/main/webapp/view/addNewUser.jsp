@@ -30,6 +30,7 @@
         var userRoles = {};
         var table;
         var userId;
+        var tabs;
 
         function FormToJson(form) {
             var array = $(form).serializeArray();
@@ -117,8 +118,11 @@
             if (userId != "") {
                 editUserRoles();
                 buildJobTable();
+                tabs = $("#tabs").tabs();
+            } else {
+                tabs = $("#tabs").tabs();
+                tabs.tabs("disable", "#fragment-2");
             }
-            $("#tabs").tabs();
         });
     </script>
 

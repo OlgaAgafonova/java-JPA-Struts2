@@ -7,7 +7,7 @@ import javax.persistence.*;
 public class Position {
 
     @Id
-    @Column(name = "ID")
+    @Column(name = "ID_POSITION")
     @GeneratedValue
     private Integer id;
 

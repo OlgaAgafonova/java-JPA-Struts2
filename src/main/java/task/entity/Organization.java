@@ -7,7 +7,7 @@ import javax.persistence.*;
 public class Organization {
 
     @Id
-    @Column(name = "ID")
+    @Column(name = "ID_ORGANIZATION")
     @GeneratedValue
     private Integer id;
 
