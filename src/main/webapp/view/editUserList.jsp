@@ -176,7 +176,9 @@
                         for (var i = 0; i < userRoles.aaData.length; i++) {
                             if (data == userRoles.aaData[i].name) isGranted = true;
                         }
-                        return '<button id="changeRole_' + full.id + '" onclick="changeRole(' + full.id + ')">' + (isGranted ? 'Delete' : 'Add') + '</button>';
+                        return '<button id="changeRole_' + full.id + '" ' +
+                                'class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" ' +
+                                'onclick="changeRole(' + full.id + ')">' + (isGranted ? 'Delete' : 'Add') + '</button>';
                     }, sDefaultContent: "n/a"
                     }
                 ]
@@ -207,7 +209,7 @@
 <body>
 
 <s:form action="register" method="GET">
-    <button>Add user</button>
+    <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Add user</button>
 </s:form>
 
 <div id="container">

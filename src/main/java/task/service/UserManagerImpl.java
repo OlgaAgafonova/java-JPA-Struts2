@@ -2,6 +2,7 @@ package task.service;
 
 import org.springframework.transaction.annotation.Transactional;
 import task.dao.*;
+import task.entity.JobPlace;
 import task.entity.Role;
 import task.entity.User;
 import task.entity.UserRoles;
@@ -60,9 +61,17 @@ public class UserManagerImpl implements UserManager {
 
     @Override
     @Transactional
+    public List<JobPlace> getJobPlaceOfUserById(Integer userId) {
+        List<JobPlace> jobPlacesOfUser = jobPlaceDAO.getJobPlaceByUserID(userId);
+        return jobPlacesOfUser;
+    }
+
+    @Override
+    @Transactional
     public void deleteUserByID(Integer userId) {
         userDAO.deleteUserByID(userId);
         userRolesDAO.deleteUserRoles(userId);
+        jobPlaceDAO.deleteJobPlaceByUserID(userId);
     }
 
     public void setUserDAO(UserDAO userDAO) {

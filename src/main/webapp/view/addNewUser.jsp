@@ -18,9 +18,9 @@
     <link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/1.10.12/css/jquery.dataTables.css">
     <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
     <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-    <script src="http://cdn.datatables.net/1.10.12/js/jquery.dataTables.js" type="text/javascript"
-            charset="utf8">
-    </script>
+
+    <script src="http://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js" type="text/javascript"
+            charset="utf8"></script>
     <!-- Подключим jQuery UI -->
     <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/flick/jquery-ui.css" rel="stylesheet"
           type="text/css"/>
@@ -28,6 +28,8 @@
 
     <script>
         var userRoles = {};
+        var table;
+        var userId;
 
         function FormToJson(form) {
             var array = $(form).serializeArray();
@@ -40,7 +42,7 @@
                     json[this.name] = this.value || '';
                 }
             });
-            json["id"] = document.getElementById("id").value;
+            json["id"] = userId;
             return json;
         }
 
@@ -62,7 +64,7 @@
             });
         }
 
-        function editUserRoles(userId) {
+        function editUserRoles() {
             jQuery.ajax({
                 type: 'post',
                 url: "get",
@@ -93,10 +95,28 @@
             }
         }
 
+        function buildJobTable() {
+            table = $("#jobDataTable").DataTable({
+                "sPaginationType": "full_numbers",
+                "sAjaxSource": "job?id=" + userId,
+                "bJQueryUI": true,
+                "oLanguage": {
+                    "sSearch": "Search in all columns:"
+                },
+                "aoColumns": [
+                    {"mData": "organization.name", sDefaultContent: "n/a"},
+                    {"mData": "position.name", sDefaultContent: "n/a"},
+                    {"mData": "start", sDefaultContent: "n/a"},
+                    {"mData": "end", sDefaultContent: "n/a"}
+                ]
+            });
+        }
+
         $(function () {
-            var userId = document.getElementById("id").value;
+            userId = document.getElementById("id").value;
             if (userId != "") {
-                editUserRoles(userId);
+                editUserRoles();
+                buildJobTable();
             }
             $("#tabs").tabs();
         });
@@ -105,17 +125,16 @@
 </head>
 <body>
 
-
+<s:textfield name="id" type="hidden"/>
 <s:a href="/">Home</s:a>
 
 <div id="tabs">
     <ul>
-        <li><a href="#fragment-1"><span>Add or Edit</span></a></li>
-        <li><a href="#fragment-2"><span>Two</span></a></li>
+        <li><a href="#fragment-1"><span>General information</span></a></li>
+        <li><a href="#fragment-2"><span>Jobs</span></a></li>
     </ul>
 
     <div id="fragment-1">
-        <s:textfield name="id" type="hidden"/>
         <s:form id="formAddUser">
             <h3>Add or edit user</h3>
             <table>
@@ -146,8 +165,12 @@
 
                 <tr>
                     <td>
-                        <input type="button" value="Save" onclick="addUser()"/>
-                        <input type="button" value="Cancel"/>
+                        <input type="button"
+                               class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
+                               value="Save" onclick="addUser()"/>
+                        <input type="button"
+                               class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
+                               value="Cancel"/>
                     </td>
                 </tr>
             </table>
@@ -155,9 +178,20 @@
     </div>
 
     <div id="fragment-2">
+        <table class="display" id="jobDataTable">
+            <thead>
+            <tr>
+                <th>Organization</th>
+                <th>Position</th>
+                <th>Start date</th>
+                <th>End date</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
     </div>
 </div>
-
 
 </body>
 </html>

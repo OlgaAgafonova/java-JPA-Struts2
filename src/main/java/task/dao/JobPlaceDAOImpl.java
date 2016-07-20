@@ -2,8 +2,12 @@ package task.dao;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.classic.Session;
+import org.springframework.stereotype.Repository;
 import task.entity.JobPlace;
 
+import java.util.List;
+
+@Repository
 public class JobPlaceDAOImpl implements JobPlaceDAO {
 
     private SessionFactory sessionFactory;
@@ -19,10 +23,17 @@ public class JobPlaceDAOImpl implements JobPlaceDAO {
     }
 
     @Override
-    public void deleteJobPlaceByID(Integer id) {
-        JobPlace jobPlace = getJobPlaceById(id);
-        if (jobPlace != null) {
-            getCurrentSession().delete(jobPlace);
+    public List<JobPlace> getJobPlaceByUserID(Integer userId) {
+        return getCurrentSession().createQuery("from JobPlace where id_user = ?").setInteger(0, userId).list();
+    }
+
+    @Override
+    public void deleteJobPlaceByUserID(Integer id) {
+        List<JobPlace> jobPlacesOfUser = getJobPlaceByUserID(id);
+        if (jobPlacesOfUser != null) {
+            for (int i = 0; i < jobPlacesOfUser.size(); i++) {
+                getCurrentSession().delete(jobPlacesOfUser.get(i).getId());
+            }
         }
     }
 

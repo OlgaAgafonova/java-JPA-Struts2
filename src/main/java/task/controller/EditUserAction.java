@@ -41,7 +41,7 @@ public class EditUserAction extends ActionSupport implements Preparable {
     }
 
     public String deleteUser() {
-        userManager.deleteUserByID(user.getId());
+        userManager.deleteUserByID(userId);
         return SUCCESS;
     }
 

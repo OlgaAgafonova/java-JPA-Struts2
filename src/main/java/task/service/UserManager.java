@@ -17,5 +17,7 @@ public interface UserManager {
 
     Role getRoleByID(Integer roleId);
 
+    List getJobPlaceOfUserById(Integer userId);
+
     void deleteUserByID(Integer userId);
 }

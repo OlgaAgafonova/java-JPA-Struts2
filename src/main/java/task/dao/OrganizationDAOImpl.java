@@ -2,8 +2,10 @@ package task.dao;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.classic.Session;
+import org.springframework.stereotype.Repository;
 import task.entity.Organization;
 
+@Repository
 public class OrganizationDAOImpl implements OrganizationDAO {
 
     private SessionFactory sessionFactory;

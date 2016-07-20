@@ -56,6 +56,15 @@
             <result name="success" type="json"/>
         </action>
 
+        <action name="job" class="jobAction" method="showJobs">
+            <result name="input" type="json"/>
+            <result type="json">
+                <param name="root">jsonJob</param>
+            </result>
+        </action>
+
+
+
     </package>
 
 
