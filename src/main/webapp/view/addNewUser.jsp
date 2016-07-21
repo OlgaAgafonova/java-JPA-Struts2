@@ -52,7 +52,7 @@
             var json = FormToJson(form);
             jQuery.ajax({
                 type: 'post',
-                url: "add",
+                url: "/add/user",
                 dataType: 'json',
                 data: json,
                 traditional: true,
@@ -68,7 +68,7 @@
         function editUserRoles() {
             jQuery.ajax({
                 type: 'post',
-                url: "get",
+                url: "/get",
                 data: {"userId": userId},
                 traditional: true,
                 success: function (data) {
@@ -99,7 +99,7 @@
         function buildJobTable() {
             table = $("#jobDataTable").DataTable({
                 "sPaginationType": "full_numbers",
-                "sAjaxSource": "job?id=" + userId,
+                "sAjaxSource": "/job?id=" + userId,
                 "bJQueryUI": true,
                 "bAutoWidth": false,
                 "oLanguage": {
@@ -173,9 +173,10 @@
                         <input type="button"
                                class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
                                value="Save" onclick="addUser()"/>
-                        <input type="button"
+                        <input type="reset"
                                class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
-                               value="Cancel"/>
+                               value="Cancel"
+                        />
                     </td>
                 </tr>
             </table>

@@ -14,6 +14,10 @@ public class Organization {
     @Column(name = "NAME")
     private String name;
 
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "ID_ADDRESS")
+    private Address address;
+
     public Organization() {
     }
 
@@ -21,7 +25,7 @@ public class Organization {
         return id;
     }
 
-    private void setId(Integer id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -33,10 +37,20 @@ public class Organization {
         this.name = name;
     }
 
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
     @Override
     public String toString() {
         return "Organization{"
-                + "name='" + name + '\''
+                + "id=" + id
+                + ", name='" + name + '\''
+                + ", address=" + address
                 + '}';
     }
 }

@@ -2,10 +2,7 @@ package task.service;
 
 import org.springframework.transaction.annotation.Transactional;
 import task.dao.*;
-import task.entity.JobPlace;
-import task.entity.Role;
-import task.entity.User;
-import task.entity.UserRoles;
+import task.entity.*;
 
 import java.util.Iterator;
 import java.util.List;
@@ -37,6 +34,13 @@ public class UserManagerImpl implements UserManager {
 
     @Override
     @Transactional
+    public void save(Organization organization) {
+
+        organizationDAO.save(organization);
+    }
+
+    @Override
+    @Transactional
     public List getAllUsers() {
         return userDAO.getAllUsers();
     }
@@ -63,6 +67,12 @@ public class UserManagerImpl implements UserManager {
     @Transactional
     public List getAllOrganizations() {
         return organizationDAO.getAll();
+    }
+
+    @Override
+    @Transactional
+    public Organization getOrganizationById(Integer orgId) {
+        return organizationDAO.getOrganizationById(orgId);
     }
 
     @Override

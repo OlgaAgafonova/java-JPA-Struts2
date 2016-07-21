@@ -47,11 +47,11 @@
             <result type="json"/>
         </action>
 
-        <action name="register" class="addAction" method="index">
-            <result>view/addNewUser.jsp</result>
+        <action name="register/user" class="addAction" method="index">
+            <result>/view/addNewUser.jsp</result>
         </action>
 
-        <action name="add" class="addAction" method="addUser">
+        <action name="add/user" class="addAction" method="addUser">
             <result name="input" type="json"/>
             <result name="success" type="json"/>
         </action>
@@ -67,6 +67,14 @@
             <result type="json">
                 <param name="root">jsonOrg</param>
             </result>
+        </action>
+
+        <action name="register/organization" class="orgAction" method="index">
+            <result>/view/addNewOrganization.jsp</result>
+        </action>
+        <action name="add/org" class="orgAction" method="addOrg">
+            <result name="input" type="json"/>
+            <result name="success" type="json"/>
         </action>
 
     </package>

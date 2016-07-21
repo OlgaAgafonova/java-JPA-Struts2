@@ -14,6 +14,7 @@ public class OrganizationDAOImpl implements OrganizationDAO {
 
     @Override
     public void save(Organization organization) {
+        getCurrentSession().saveOrUpdate(organization.getAddress());
         getCurrentSession().saveOrUpdate(organization);
     }
 

@@ -11,5 +11,6 @@
         <mapping class="task.entity.Position"/>
         <mapping class="task.entity.Organization"/>
         <mapping class="task.entity.JobPlace"/>
+        <mapping class="task.entity.Address"/>
     </session-factory>
 </hibernate-configuration>

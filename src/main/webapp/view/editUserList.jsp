@@ -113,6 +113,9 @@
             });
         }
 
+        function deleteOrg(orgId) {
+        }
+
         $(document).ready(function () {
             tableUsers = $("#jqueryDataTable").DataTable({
                 "sPaginationType": "full_numbers",
@@ -130,7 +133,7 @@
                 "aoColumns": [
                     {
                         "mData": "firstname", "render": function (data, type, full, meta) {
-                        return '<a href="/register?id=' + full.id + '">' + data + '</a>';
+                        return '<a href="/register/user?id=' + full.id + '">' + data + '</a>';
 
                     }, sDefaultContent: "n/a"
                     },
@@ -219,7 +222,26 @@
                     $('#search_0').css('text-align', 'center');
                 },
                 "aoColumns": [
-                    {"mData": "name", sDefaultContent: "n/a"}
+                    {
+                        "mData": "name", "render": function (data, type, full, meta) {
+                        return '<a href="/register/organization?id=' + full.id + '">' + data + '</a>';
+                    }, sDefaultContent: "n/a"
+                    },
+                    {
+                        "mData": "address", "render": function (data, type, full, meta) {
+                        var strAddress = data.country + "<br>";
+                        strAddress += data.city + "<br>";
+                        strAddress += data.street + ", ";
+                        strAddress += data.house + "<br>";
+                        strAddress += data.zipCode;
+                        return strAddress;
+                    }, sDefaultContent: "n/a"
+                    },
+                    {
+                        "mData": "id", "render": function (data, type, full, meta) {
+                        return '<a href="#" onclick="deleteOrg(' + data + ')">Delete</a>';
+                    }
+                    }
                 ]
             });
 
@@ -255,7 +277,7 @@
         <li><a href="#fragment-2"><span>Organizations</span></a></li>
     </ul>
     <div id="fragment-1">
-        <s:form action="register" method="GET">
+        <s:form action="register/user" method="GET">
             <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Add user</button>
         </s:form>
 
@@ -307,10 +329,17 @@
     </div>
 
     <div id="fragment-2">
+        <s:form action="register/organization" method="GET">
+            <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Add organization
+            </button>
+        </s:form>
+
         <table class="display" id="organizationsDataTable">
             <thead>
             <tr>
                 <th>Name</th>
+                <th>Address</th>
+                <th>Action</th>
             </tr>
             </thead>
             <tbody>
@@ -318,6 +347,8 @@
             <tfoot>
             <tr>
                 <th>Name</th>
+                <th>Address</th>
+                <th>Action</th>
             </tr>
             </tfoot>
         </table>
