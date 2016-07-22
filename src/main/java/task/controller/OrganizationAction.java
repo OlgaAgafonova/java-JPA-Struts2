@@ -4,7 +4,7 @@ import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import task.entity.Address;
 import task.entity.Organization;
-import task.service.UserManager;
+import task.service.Manager;
 
 import java.util.List;
 
@@ -18,12 +18,12 @@ public class OrganizationAction extends ActionSupport {
     private String house;
     private String zipcode;
 
-    private UserManager userManager;
+    private Manager manager;
     private List<Organization> organizations;
 
     public String index() {
         if (id != null && !id.trim().isEmpty()) {
-            Organization organization = userManager.getOrganizationById(Integer.valueOf(id));
+            Organization organization = manager.getOrganizationById(Integer.valueOf(id));
             Address address = organization.getAddress();
             id = String.valueOf(organization.getId());
             orgname = organization.getName();
@@ -37,7 +37,7 @@ public class OrganizationAction extends ActionSupport {
     }
 
     public String showOrgs() {
-        organizations = userManager.getAllOrganizations();
+        organizations = manager.getAllOrganizations();
         DataTableResponse tableResponse = new DataTableResponse();
         tableResponse.setAaData(organizations);
         tableResponse.setiTotalRecords(organizations.size());
@@ -48,11 +48,10 @@ public class OrganizationAction extends ActionSupport {
     }
 
     public String addOrg() {
-        System.out.println("addOrg id = " + id);
         Organization organization = new Organization();
         Address address = new Address();
         if (id != null && !id.trim().isEmpty()) {
-            organization = userManager.getOrganizationById(Integer.valueOf(id));
+            organization = manager.getOrganizationById(Integer.valueOf(id));
             address = organization.getAddress();
         }
         organization.setName(orgname);
@@ -62,11 +61,13 @@ public class OrganizationAction extends ActionSupport {
         address.setHouse(house);
         address.setZipCode(zipcode);
         organization.setAddress(address);
-        userManager.save(organization);
+        manager.save(organization);
         return SUCCESS;
     }
 
     public String delete(){
+        System.out.println("delete/org id = " + id);
+        manager.deleteOrgByID(Integer.valueOf(id));
         return SUCCESS;
     }
 
@@ -134,7 +135,7 @@ public class OrganizationAction extends ActionSupport {
         this.organizations = organizations;
     }
 
-    public void setUserManager(UserManager userManager) {
-        this.userManager = userManager;
+    public void setManager(Manager manager) {
+        this.manager = manager;
     }
 }

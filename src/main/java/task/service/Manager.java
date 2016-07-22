@@ -6,7 +6,7 @@ import task.entity.User;
 
 import java.util.List;
 
-public interface UserManager {
+public interface Manager {
 
     void save(User user);
 
@@ -24,7 +24,9 @@ public interface UserManager {
 
     Organization getOrganizationById(Integer orgId);
 
-    List getJobPlaceOfUserById(Integer userId);
+    List getJobPlaceOfUserByID(Integer userId);
 
     void deleteUserByID(Integer userId);
+
+    void deleteOrgByID(Integer orgId);
 }

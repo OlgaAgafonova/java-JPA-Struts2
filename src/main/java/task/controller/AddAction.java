@@ -3,7 +3,7 @@ package task.controller;
 import com.opensymphony.xwork2.ActionSupport;
 import task.entity.Role;
 import task.entity.User;
-import task.service.UserManager;
+import task.service.Manager;
 
 import java.util.*;
 
@@ -19,13 +19,13 @@ public class AddAction extends ActionSupport {
     private List<Role> rolesList;
 
     private User user;
-    private UserManager userManager;
+    private Manager manager;
 
     public String index() {
-        rolesList = userManager.getRoles();
+        rolesList = manager.getRoles();
 
         if (id != null && !id.trim().isEmpty()) {
-            user = userManager.getUserByID(Integer.valueOf(id));
+            user = manager.getUserByID(Integer.valueOf(id));
             firstname = user.getFirstname();
             lastname = user.getLastname();
             login = user.getLogin();
@@ -47,11 +47,11 @@ public class AddAction extends ActionSupport {
         Set<Role> roleSet = new HashSet<>();
 
         for (int i = 0; i < roles.length; i++) {
-            role = userManager.getRoleByID(Integer.valueOf(roles[i]));
+            role = manager.getRoleByID(Integer.valueOf(roles[i]));
             roleSet.add(role);
         }
         user.setRoles(roleSet);
-        userManager.save(user);
+        manager.save(user);
         return SUCCESS;
     }
 
@@ -129,8 +129,8 @@ public class AddAction extends ActionSupport {
         this.rolesList = rolesList;
     }
 
-    public void setUserManager(UserManager userManager) {
-        this.userManager = userManager;
+    public void setManager(Manager manager) {
+        this.manager = manager;
     }
 
     @Override

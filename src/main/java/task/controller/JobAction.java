@@ -3,19 +3,19 @@ package task.controller;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import task.entity.JobPlace;
-import task.service.UserManager;
+import task.service.Manager;
 
 import java.util.List;
 
 public class JobAction extends ActionSupport {
 
     private String id;
-    private UserManager userManager;
+    private Manager manager;
     private List<JobPlace> jobPlacesOfUser;
 
     public String showJobs() {
         if (id != null && !id.trim().isEmpty()) {
-            jobPlacesOfUser = userManager.getJobPlaceOfUserById(Integer.valueOf(id));
+            jobPlacesOfUser = manager.getJobPlaceOfUserByID(Integer.valueOf(id));
             DataTableResponse tableResponse = new DataTableResponse();
             tableResponse.setAaData(jobPlacesOfUser);
             tableResponse.setiTotalRecords(jobPlacesOfUser.size());
@@ -42,7 +42,7 @@ public class JobAction extends ActionSupport {
         this.jobPlacesOfUser = jobPlacesOfUser;
     }
 
-    public void setUserManager(UserManager userManager) {
-        this.userManager = userManager;
+    public void setManager(Manager manager) {
+        this.manager = manager;
     }
 }

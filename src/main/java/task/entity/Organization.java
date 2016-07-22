@@ -14,7 +14,7 @@ public class Organization {
     @Column(name = "NAME")
     private String name;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "ID_ADDRESS")
     private Address address;
 

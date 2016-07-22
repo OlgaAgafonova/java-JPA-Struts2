@@ -8,7 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-public class UserManagerImpl implements UserManager {
+public class ManagerImpl implements Manager {
     private UserDAO userDAO;
     private RoleDAO roleDAO;
     private UserRolesDAO userRolesDAO;
@@ -35,7 +35,6 @@ public class UserManagerImpl implements UserManager {
     @Override
     @Transactional
     public void save(Organization organization) {
-
         organizationDAO.save(organization);
     }
 
@@ -77,7 +76,7 @@ public class UserManagerImpl implements UserManager {
 
     @Override
     @Transactional
-    public List<JobPlace> getJobPlaceOfUserById(Integer userId) {
+    public List<JobPlace> getJobPlaceOfUserByID(Integer userId) {
         List<JobPlace> jobPlacesOfUser = jobPlaceDAO.getJobPlaceByUserID(userId);
         return jobPlacesOfUser;
     }
@@ -88,6 +87,12 @@ public class UserManagerImpl implements UserManager {
         userDAO.deleteUserByID(userId);
         userRolesDAO.deleteUserRoles(userId);
         jobPlaceDAO.deleteJobPlaceByUserID(userId);
+    }
+
+    @Override
+    @Transactional
+    public void deleteOrgByID(Integer orgId) {
+        organizationDAO.deleteOrganizationByID(orgId);
     }
 
     public void setUserDAO(UserDAO userDAO) {

@@ -1,15 +1,15 @@
 package task.controller;
 
 import com.opensymphony.xwork2.ActionSupport;
-import task.service.UserManager;
+import task.service.Manager;
 
 public class DeleteAction extends ActionSupport {
 
     private Integer userId;
-    private UserManager userManager;
+    private Manager manager;
 
     public String deleteUser() {
-        userManager.deleteUserByID(userId);
+        manager.deleteUserByID(userId);
         return SUCCESS;
     }
 
@@ -21,7 +21,7 @@ public class DeleteAction extends ActionSupport {
         this.userId = userId;
     }
 
-    public void setUserManager(UserManager userManager) {
-        this.userManager = userManager;
+    public void setManager(Manager manager) {
+        this.manager = manager;
     }
 }

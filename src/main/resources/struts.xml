@@ -43,7 +43,11 @@
             <result name="success" type="json"/>
         </action>
 
-        <action name="delete" class="deleteAction" method="deleteUser">
+        <action name="delete/user" class="deleteAction" method="deleteUser">
+            <result type="json"/>
+        </action>
+
+        <action name="delete/org" class="orgAction" method="delete">
             <result type="json"/>
         </action>
 
@@ -51,7 +55,16 @@
             <result>/view/addNewUser.jsp</result>
         </action>
 
+        <action name="register/organization" class="orgAction" method="index">
+            <result>/view/addNewOrganization.jsp</result>
+        </action>
+
         <action name="add/user" class="addAction" method="addUser">
+            <result name="input" type="json"/>
+            <result name="success" type="json"/>
+        </action>
+
+        <action name="add/org" class="orgAction" method="addOrg">
             <result name="input" type="json"/>
             <result name="success" type="json"/>
         </action>
@@ -69,13 +82,8 @@
             </result>
         </action>
 
-        <action name="register/organization" class="orgAction" method="index">
-            <result>/view/addNewOrganization.jsp</result>
-        </action>
-        <action name="add/org" class="orgAction" method="addOrg">
-            <result name="input" type="json"/>
-            <result name="success" type="json"/>
-        </action>
+
+
 
     </package>
 

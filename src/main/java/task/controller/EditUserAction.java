@@ -5,7 +5,7 @@ import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
 import task.entity.Role;
 import task.entity.User;
-import task.service.UserManager;
+import task.service.Manager;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -23,14 +23,14 @@ public class EditUserAction extends ActionSupport implements Preparable {
     private Integer userId;
     private String[] changedRoles;
 
-    private UserManager userManager;
+    private Manager manager;
 
     public String index() {
         return SUCCESS;
     }
 
     public String listUsers() {
-        users = userManager.getAllUsers();
+        users = manager.getAllUsers();
         DataTableResponse tableResponse = new DataTableResponse();
         tableResponse.setAaData(users);
         tableResponse.setiTotalRecords(users.size());
@@ -41,13 +41,13 @@ public class EditUserAction extends ActionSupport implements Preparable {
     }
 
     public String deleteUser() {
-        userManager.deleteUserByID(userId);
+        manager.deleteUserByID(userId);
         return SUCCESS;
     }
 
     public String editRolesOfUser() {
         DataTableResponse tableResponse = new DataTableResponse();
-        roles = userManager.getRoles();
+        roles = manager.getRoles();
         tableResponse.setAaData(roles);
         tableResponse.setiTotalRecords(roles.size());
         tableResponse.setiTotalDisplayRecords(roles.size());
@@ -57,9 +57,9 @@ public class EditUserAction extends ActionSupport implements Preparable {
     }
 
     public String getRolesOfUser() {
-        users = userManager.getAllUsers();
+        users = manager.getAllUsers();
         DataTableResponse tableResponse = new DataTableResponse();
-        user = userManager.getUserByID(userId);
+        user = manager.getUserByID(userId);
         List<Object> rolesList = Arrays.asList(user.getRoles().toArray());
         tableResponse.setAaData(rolesList);
         tableResponse.setiTotalRecords(rolesList.size());
@@ -70,15 +70,15 @@ public class EditUserAction extends ActionSupport implements Preparable {
     }
 
     public String editUser() {
-        user = userManager.getUserByID(userId);
+        user = manager.getUserByID(userId);
         Set<Role> newRolesOfUser = new HashSet<>();
         for (int i = 0; i < changedRoles.length; i++) {
             Integer roleId = Integer.valueOf(changedRoles[i]);
-            role = userManager.getRoleByID(roleId);
+            role = manager.getRoleByID(roleId);
             newRolesOfUser.add(role);
         }
         user.setRoles(newRolesOfUser);
-        userManager.save(user);
+        manager.save(user);
         return SUCCESS;
     }
 
@@ -86,11 +86,11 @@ public class EditUserAction extends ActionSupport implements Preparable {
     public void prepare() throws Exception {
         user = null;
         role = null;
-        roles = userManager.getRoles();
+        roles = manager.getRoles();
     }
 
-    public void setUserManager(UserManager userManager) {
-        this.userManager = userManager;
+    public void setManager(Manager manager) {
+        this.manager = manager;
     }
 
     public User getUser() {

@@ -36,7 +36,7 @@
         function deleteUser(userId) {
             jQuery.ajax({
                 type: "POST",
-                url: "delete",
+                url: "delete/user",
                 data: {"userId": userId},
                 success: function () {
                     tableUsers.ajax.reload();
@@ -114,6 +114,17 @@
         }
 
         function deleteOrg(orgId) {
+            jQuery.ajax({
+                type: "POST",
+                url: "delete/org",
+                data: {"id": orgId},
+                success: function () {
+                    tableOrganizations.ajax.reload();
+                },
+                error: function () {
+                    // error handler
+                }
+            });
         }
 
         $(document).ready(function () {
