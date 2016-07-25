@@ -10,7 +10,7 @@ public interface OrganizationDAO {
 
     Organization getOrganizationById(Integer id);
 
-    List getAll();
+    List<Organization> getAll();
 
     void deleteOrganizationByID(Integer id);
 }

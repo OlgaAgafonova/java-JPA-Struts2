@@ -1,8 +1,6 @@
 package task.service;
 
-import task.entity.Organization;
-import task.entity.Role;
-import task.entity.User;
+import task.entity.*;
 
 import java.util.List;
 
@@ -12,17 +10,23 @@ public interface Manager {
 
     void save(Organization organization);
 
+    void save(JobPlace jobPlace);
+
     List getAllUsers();
 
     User getUserByID(Integer userId);
 
-    List getRoles();
+    List getAllRoles();
 
     Role getRoleByID(Integer roleId);
 
     List getAllOrganizations();
 
-    Organization getOrganizationById(Integer orgId);
+    Organization getOrganizationByID(Integer orgId);
+
+    List getAllPositions();
+
+    Position getPositionByID(Integer posId);
 
     List getJobPlaceOfUserByID(Integer userId);
 

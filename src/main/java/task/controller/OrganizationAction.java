@@ -23,7 +23,7 @@ public class OrganizationAction extends ActionSupport {
 
     public String index() {
         if (id != null && !id.trim().isEmpty()) {
-            Organization organization = manager.getOrganizationById(Integer.valueOf(id));
+            Organization organization = manager.getOrganizationByID(Integer.valueOf(id));
             Address address = organization.getAddress();
             id = String.valueOf(organization.getId());
             orgname = organization.getName();
@@ -51,7 +51,7 @@ public class OrganizationAction extends ActionSupport {
         Organization organization = new Organization();
         Address address = new Address();
         if (id != null && !id.trim().isEmpty()) {
-            organization = manager.getOrganizationById(Integer.valueOf(id));
+            organization = manager.getOrganizationByID(Integer.valueOf(id));
             address = organization.getAddress();
         }
         organization.setName(orgname);

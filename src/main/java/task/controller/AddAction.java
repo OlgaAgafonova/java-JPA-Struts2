@@ -1,13 +1,14 @@
 package task.controller;
 
 import com.opensymphony.xwork2.ActionSupport;
+import com.opensymphony.xwork2.Preparable;
 import task.entity.Role;
 import task.entity.User;
 import task.service.Manager;
 
 import java.util.*;
 
-public class AddAction extends ActionSupport {
+public class AddAction extends ActionSupport implements Preparable {
 
     private String id;
     private String firstname;
@@ -22,21 +23,14 @@ public class AddAction extends ActionSupport {
     private Manager manager;
 
     public String index() {
-        rolesList = manager.getRoles();
-
-        if (id != null && !id.trim().isEmpty()) {
-            user = manager.getUserByID(Integer.valueOf(id));
-            firstname = user.getFirstname();
-            lastname = user.getLastname();
-            login = user.getLogin();
-            email = user.getEmail();
-        }
+        System.out.println("AddAction index");
         return SUCCESS;
     }
 
     public String addUser() {
+        System.out.println("AddAction addUser");
         user = new User();
-        if (id != null && !id.trim().isEmpty()){
+        if (id != null && !id.trim().isEmpty()) {
             user.setId(Integer.valueOf(id));
         }
         user.setFirstname(firstname);
@@ -52,26 +46,43 @@ public class AddAction extends ActionSupport {
         }
         user.setRoles(roleSet);
         manager.save(user);
+        id = String.valueOf(user.getId());
         return SUCCESS;
     }
 
-/*    public void validate() {
-        if (firstname.trim().isEmpty()) {
+    public void validate() {
+        setFormFields();
+        if (firstname == null || firstname.trim().isEmpty()) {
             addFieldError("firstname", "First name must be not empty");
         }
-        if (lastname.trim().isEmpty()) {
+        if (lastname == null || lastname.trim().isEmpty()) {
             addFieldError("lastname", "Last name must be not empty");
         }
-        if (login.trim().isEmpty()) {
+        if (login == null || login.trim().isEmpty()) {
             addFieldError("login", "Login must be not empty");
         }
-        if (email.trim().isEmpty()) {
+        if (email == null || email.trim().isEmpty()) {
             addFieldError("email", "Email must be not empty");
         }
         if (roles == null) {
             addFieldError("roles", "You should select user's role");
         }
-    }*/
+    }
+
+    @Override
+    public void prepare() throws Exception {
+        rolesList = manager.getAllRoles();
+    }
+
+    private void setFormFields() {
+        if (id != null && !id.trim().isEmpty()) {
+            user = manager.getUserByID(Integer.valueOf(id));
+            firstname = user.getFirstname();
+            lastname = user.getLastname();
+            login = user.getLogin();
+            email = user.getEmail();
+        }
+    }
 
     public String getId() {
         return id;

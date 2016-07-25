@@ -47,7 +47,7 @@ public class EditUserAction extends ActionSupport implements Preparable {
 
     public String editRolesOfUser() {
         DataTableResponse tableResponse = new DataTableResponse();
-        roles = manager.getRoles();
+        roles = manager.getAllRoles();
         tableResponse.setAaData(roles);
         tableResponse.setiTotalRecords(roles.size());
         tableResponse.setiTotalDisplayRecords(roles.size());
@@ -86,7 +86,7 @@ public class EditUserAction extends ActionSupport implements Preparable {
     public void prepare() throws Exception {
         user = null;
         role = null;
-        roles = manager.getRoles();
+        roles = manager.getAllRoles();
     }
 
     public void setManager(Manager manager) {

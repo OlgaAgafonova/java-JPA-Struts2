@@ -40,6 +40,12 @@ public class ManagerImpl implements Manager {
 
     @Override
     @Transactional
+    public void save(JobPlace jobPlace) {
+        jobPlaceDAO.save(jobPlace);
+    }
+
+    @Override
+    @Transactional
     public List getAllUsers() {
         return userDAO.getAllUsers();
     }
@@ -52,7 +58,7 @@ public class ManagerImpl implements Manager {
 
     @Override
     @Transactional
-    public List getRoles() {
+    public List getAllRoles() {
         return roleDAO.getAllRoles();
     }
 
@@ -70,8 +76,20 @@ public class ManagerImpl implements Manager {
 
     @Override
     @Transactional
-    public Organization getOrganizationById(Integer orgId) {
+    public Organization getOrganizationByID(Integer orgId) {
         return organizationDAO.getOrganizationById(orgId);
+    }
+
+    @Override
+    @Transactional
+    public List getAllPositions() {
+        return positionDAO.getAll();
+    }
+
+    @Override
+    @Transactional
+    public Position getPositionByID(Integer posId) {
+        return positionDAO.getPositionById(posId);
     }
 
     @Override

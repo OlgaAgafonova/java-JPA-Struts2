@@ -13,6 +13,11 @@
             border: 1px solid gray;
             padding: 5px;
         }
+
+        .errorMessage {
+            font-weight: bold;
+            color: red;
+        }
     </style>
 
     <link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/1.10.12/css/jquery.dataTables.css">
@@ -56,7 +61,12 @@
                 dataType: 'json',
                 data: json,
                 traditional: true,
-                success: function () {
+                success: function (data) {
+                    userId = data.id
+                    if (userId != "" && userId != null && userId != undefined) {
+                        tabs.tabs("enable", "#fragment-2");
+                        buildJobTable();
+                    }
                 }
                 ,
                 error: function () {
@@ -108,10 +118,26 @@
                 "aoColumns": [
                     {"mData": "organization.name", sDefaultContent: "n/a"},
                     {"mData": "position.name", sDefaultContent: "n/a"},
-                    {"mData": "start", sDefaultContent: "n/a"},
-                    {"mData": "end", sDefaultContent: "n/a"}
+                    {
+                        "mData": "start", "render": function (data, type, full, meta) {
+                        return data.substr(0, 10);
+                    }, sDefaultContent: "n/a"
+                    },
+                    {
+                        "mData": "end", "render": function (data, type, full, meta) {
+                        if (data == null) {
+                            return "till present";
+                        }
+                        return data.substr(0, 10);
+                    }, sDefaultContent: "n/a"
+                    }
                 ]
             });
+        }
+
+        function goAddJob() {
+            console.log("goAddJob");
+            location.pathname = "/register/job?id=" + userId;
         }
 
         $(function () {
@@ -144,21 +170,22 @@
             <h3>Add or edit user</h3>
             <table>
                 <tr>
-                    <td><s:textfield key="label.firstname" name="firstname" requiredLabel="true"/></td>
+                    <td><s:textfield key="label.firstname" name="firstname" requiredLabel="true" required="true"/></td>
                 </tr>
                 <tr>
-                    <td><s:textfield key="label.lastname" name="lastname" requiredLabel="true"/></td>
+                    <td><s:textfield key="label.lastname" name="lastname" requiredLabel="true" required="true"/></td>
                 </tr>
                 <tr>
-                    <td><s:textfield key="label.email" name="email" type="email" requiredLabel="true"/></td>
+                    <td><s:textfield key="label.email" name="email" type="email" requiredLabel="true"
+                                     required="true"/></td>
                 </tr>
                 <tr>
-                    <td><s:textfield key="label.login" name="login" requiredLabel="true"/></td>
+                    <td><s:textfield key="label.login" name="login" requiredLabel="true" required="true"/></td>
                 </tr>
                 <tr>
+                    <td><label>User's role(s)*:</label></td>
                     <td>
                         <select required="true" multiple="multiple" name="rolesList.id">
-                            <option value="0" disabled>Select user's role</option>
                             <s:iterator value="rolesList" var="role">
                                 <option value="<s:property value="#role.id"/>">
                                     <s:property value="#role.name"/>
@@ -184,6 +211,12 @@
     </div>
 
     <div id="fragment-2">
+
+        <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
+                onclick="location.pathname = '/register/job?id=' + userId">
+            Add job
+        </button>
+
         <table class="display" id="jobDataTable">
             <thead>
             <tr>

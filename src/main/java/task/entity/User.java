@@ -24,7 +24,7 @@ public class User {
     @Column(name = "EMAIL")
     private String email;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
     @JoinTable(name = "USER_ROLES",
             joinColumns = @JoinColumn(name = "ID_USER"),
             inverseJoinColumns = @JoinColumn(name = "ID_ROLE")

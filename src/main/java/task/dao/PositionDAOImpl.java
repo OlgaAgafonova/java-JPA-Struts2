@@ -5,6 +5,8 @@ import org.hibernate.classic.Session;
 import org.springframework.stereotype.Repository;
 import task.entity.Position;
 
+import java.util.List;
+
 @Repository
 public class PositionDAOImpl implements PositionDAO {
 
@@ -18,6 +20,11 @@ public class PositionDAOImpl implements PositionDAO {
     @Override
     public Position getPositionById(Integer id) {
         return (Position) getCurrentSession().get(Position.class, id);
+    }
+
+    @Override
+    public List<Position> getAll() {
+        return getCurrentSession().createQuery("from Position ").list();
     }
 
     @Override
