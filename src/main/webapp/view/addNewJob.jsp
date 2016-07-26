@@ -13,6 +13,16 @@
             border: 1px solid gray;
             padding: 5px;
         }
+
+        .errorMessage {
+            font-weight: bold;
+            color: red;
+        }
+
+        .okMessage {
+            font-weight: bold;
+            color: green;
+        }
     </style>
 
     <link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/1.10.12/css/jquery.dataTables.css">
@@ -25,45 +35,6 @@
     <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/flick/jquery-ui.css" rel="stylesheet"
           type="text/css"/>
     <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
-
-    <script>
-        var userId;
-
-        function FormToJson(form) {
-            var array = $(form).serializeArray();
-            var json = {};
-            $.each(array, function () {
-                json[this.name] = this.value || '';
-            });
-            json["id"] = userId;
-            return json;
-        }
-
-        function addJob() {
-            var form = $('#formAddJob');
-            var json = FormToJson(form);
-            console.log(json);
-            jQuery.ajax({
-                type: 'post',
-                url: "/add/job",
-                dataType: 'json',
-                data: json,
-                traditional: true,
-                success: function () {
-                }
-                ,
-                error: function () {
-                    // error handler
-                }
-            });
-        }
-
-        $(function () {
-            userId = document.getElementById("id").value;
-            $( "#start" ).datepicker();
-            $( "#end" ).datepicker();
-        });
-    </script>
 </head>
 <body>
 <s:a href="/">Home</s:a>
@@ -71,6 +42,8 @@
 <s:form id="formAddJob">
     <s:textfield id="id" name="id" type="hidden"/>
     <h3>Add job</h3>
+    <span id="ok" class="okMessage"></span>
+    <span id="error" class="errorMessage"></span>
     <table>
         <tr>
             <td><label>Organization*:</label></td>
@@ -109,9 +82,9 @@
 
         <tr>
             <td>
-                <input type="button"
+                <input type="submit"
                        class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
-                       value="Save" onclick="addJob()"/>
+                       value="Save"/>
                 <input type="reset"
                        class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
                        value="Cancel"/>
@@ -120,5 +93,49 @@
     </table>
 </s:form>
 
+<script>
+    var userId;
+
+    function FormToJson(form) {
+        var array = $(form).serializeArray();
+        var json = {};
+        $.each(array, function () {
+            json[this.name] = this.value || '';
+        });
+        json["id"] = userId;
+        return json;
+    }
+
+    function addJob() {
+        var form = $('#formAddJob');
+        var json = FormToJson(form);
+        console.log(json);
+        jQuery.ajax({
+            type: 'post',
+            url: "/add/job",
+            dataType: 'json',
+            data: json,
+            traditional: true,
+            success: function () {
+                $("#ok").text( "Saved" ).show().fadeOut( 4000 );
+            }
+            ,
+            error: function () {
+                $("#error").text("Please, fill in the form correctly.").show();
+            }
+        });
+    }
+
+    $(function () {
+        userId = document.getElementById("id").value;
+        $("#start").datepicker();
+        $("#end").datepicker();
+
+        $("#formAddJob").submit(function (event) {
+            event.preventDefault();
+            addJob();
+        });
+    });
+</script>
 </body>
 </html>

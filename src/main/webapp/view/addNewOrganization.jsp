@@ -13,6 +13,16 @@
             border: 1px solid gray;
             padding: 5px;
         }
+
+        .errorMessage {
+            font-weight: bold;
+            color: red;
+        }
+
+        .okMessage {
+            font-weight: bold;
+            color: green;
+        }
     </style>
 
     <link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/1.10.12/css/jquery.dataTables.css">
@@ -26,41 +36,6 @@
           type="text/css"/>
     <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
 
-    <script>
-        var orgId;
-
-        function FormToJson(form) {
-            var array = $(form).serializeArray();
-            var json = {};
-            $.each(array, function () {
-                json[this.name] = this.value || '';
-            });
-            json["id"] = orgId;
-            return json;
-        }
-
-        function addOrg() {
-            var form = $('#formAddOrg');
-            var json = FormToJson(form);
-            jQuery.ajax({
-                type: 'post',
-                url: "/add/org",
-                dataType: 'json',
-                data: json,
-                traditional: true,
-                success: function () {
-                }
-                ,
-                error: function () {
-                    // error handler
-                }
-            });
-        }
-
-        $(function () {
-            orgId = document.getElementById("id").value;
-        });
-    </script>
 
 </head>
 <body>
@@ -70,6 +45,8 @@
 <s:form id="formAddOrg">
     <s:textfield id="id" name="id" type="hidden"/>
     <h3>Add or edit organization</h3>
+    <span id="ok" class="okMessage"></span>
+    <span id="error" class="errorMessage"></span>
     <table>
         <tr>
             <td><s:textfield key="label.orgname" name="orgname" requiredLabel="true"/></td>
@@ -92,9 +69,9 @@
 
         <tr>
             <td>
-                <input type="button"
+                <input type="submit"
                        class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
-                       value="Save" onclick="addOrg()"/>
+                       value="Save"/>
                 <input type="reset"
                        class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
                        value="Cancel"/>
@@ -103,6 +80,45 @@
     </table>
 </s:form>
 
+<script>
+    var orgId;
 
+    function FormToJson(form) {
+        var array = $(form).serializeArray();
+        var json = {};
+        $.each(array, function () {
+            json[this.name] = this.value || '';
+        });
+        json["id"] = orgId;
+        return json;
+    }
+
+    function addOrg() {
+        var form = $('#formAddOrg');
+        var json = FormToJson(form);
+        jQuery.ajax({
+            type: 'post',
+            url: "/add/org",
+            dataType: 'json',
+            data: json,
+            traditional: true,
+            success: function () {
+                $("#ok").text("Saved").show().fadeOut(4000);
+            },
+            error: function () {
+                $("#error").text("Please, fill in the form correctly.").show();
+            }
+        });
+    }
+
+    $(function () {
+        orgId = document.getElementById("id").value;
+
+        $("#formAddOrg").submit(function (event) {
+            event.preventDefault();
+            addOrg();
+        });
+    });
+</script>
 </body>
 </html>

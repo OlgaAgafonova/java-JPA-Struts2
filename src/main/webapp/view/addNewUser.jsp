@@ -51,8 +51,8 @@
     <div id="fragment-1">
         <s:form id="formAddUser">
             <h3>Add or edit user</h3>
-            <div id="ok" class="okMessage"/>
-            <div id="error" class="errorMessage"/>
+            <span id="ok" class="okMessage"></span>
+            <span id="error" class="errorMessage"></span>
             <table>
                 <tr>
                     <td><s:textfield key="label.firstname" name="firstname" requiredLabel="true" required="true"/></td>
@@ -157,7 +157,7 @@
             traditional: true,
             success: function (data) {
                 userId = data.id
-                $("#ok").empty().append("Saved").fadeOut(4000);
+                $("#ok").text( "Saved" ).show().fadeOut( 4000 );
                 if (userId != "" && userId != null && userId != undefined) {
                     tabs.tabs("enable", "#fragment-2");
                     jobTable.ajax.reload();
@@ -165,7 +165,7 @@
                 }
             },
             error: function () {
-                $("#error").empty().append("Please, fill in the form correctly.");
+                $("#error").text("Please, fill in the form correctly.").show();
             }
         });
     }

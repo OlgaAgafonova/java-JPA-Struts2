@@ -48,7 +48,7 @@ public class AddAction extends ActionSupport {
         if (id != null && !id.trim().isEmpty()) {
             user.setId(Integer.valueOf(id));
         }
-        //manager.save(user);
+        manager.save(user);
         return SUCCESS;
     }
 
