@@ -45,6 +45,9 @@ public class JobAction extends ActionSupport {
     }
 
     public String addJob() {
+        if(validation()){
+            return ERROR;
+        }
         Organization organization = manager.getOrganizationByID(Integer.valueOf(this.organization));
         Position position = manager.getPositionByID(Integer.valueOf(this.position));
         SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
@@ -62,6 +65,26 @@ public class JobAction extends ActionSupport {
         jobPlace.setEnd(endDate);
         manager.save(jobPlace);
         return SUCCESS;
+    }
+
+    private boolean validation() {
+        if (isStringEmpty(organization)) {
+            return true;
+        }
+        if (isStringEmpty(position)) {
+            return true;
+        }
+        if (isStringEmpty(start)) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isStringEmpty(String string) {
+        if (string == null || string.trim().isEmpty()) {
+            return true;
+        }
+        return false;
     }
 
     public String getId() {

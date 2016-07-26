@@ -1,14 +1,13 @@
 package task.controller;
 
 import com.opensymphony.xwork2.ActionSupport;
-import com.opensymphony.xwork2.Preparable;
 import task.entity.Role;
 import task.entity.User;
 import task.service.Manager;
 
 import java.util.*;
 
-public class AddAction extends ActionSupport implements Preparable {
+public class AddAction extends ActionSupport {
 
     private String id;
     private String firstname;
@@ -23,35 +22,63 @@ public class AddAction extends ActionSupport implements Preparable {
     private Manager manager;
 
     public String index() {
-        System.out.println("AddAction index");
+        rolesList = manager.getAllRoles();
+        setFormFields();
         return SUCCESS;
     }
 
     public String addUser() {
-        System.out.println("AddAction addUser");
-        user = new User();
-        if (id != null && !id.trim().isEmpty()) {
-            user.setId(Integer.valueOf(id));
+        if (validation()) {
+            return ERROR;
         }
+        System.out.println(new Date());
+        System.out.println(toString());
+        user = new User();
         user.setFirstname(firstname);
         user.setLastname(lastname);
         user.setEmail(email);
         user.setLogin(login);
         Role role;
         Set<Role> roleSet = new HashSet<>();
-
         for (int i = 0; i < roles.length; i++) {
             role = manager.getRoleByID(Integer.valueOf(roles[i]));
             roleSet.add(role);
         }
         user.setRoles(roleSet);
-        manager.save(user);
-        id = String.valueOf(user.getId());
+        if (id != null && !id.trim().isEmpty()) {
+            user.setId(Integer.valueOf(id));
+        }
+        //manager.save(user);
         return SUCCESS;
     }
 
-    public void validate() {
-        setFormFields();
+    private boolean validation() {
+        if (isStringEmpty(firstname)) {
+            return true;
+        }
+        if (isStringEmpty(lastname)) {
+            return true;
+        }
+        if (isStringEmpty(login)) {
+            return true;
+        }
+        if (isStringEmpty(email)) {
+            return true;
+        }
+        if (roles == null) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isStringEmpty(String string) {
+        if (string == null || string.trim().isEmpty()) {
+            return true;
+        }
+        return false;
+    }
+
+    /*    public void validate() {
         if (firstname == null || firstname.trim().isEmpty()) {
             addFieldError("firstname", "First name must be not empty");
         }
@@ -67,12 +94,7 @@ public class AddAction extends ActionSupport implements Preparable {
         if (roles == null) {
             addFieldError("roles", "You should select user's role");
         }
-    }
-
-    @Override
-    public void prepare() throws Exception {
-        rolesList = manager.getAllRoles();
-    }
+    }*/
 
     private void setFormFields() {
         if (id != null && !id.trim().isEmpty()) {

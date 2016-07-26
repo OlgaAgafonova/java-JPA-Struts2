@@ -18,6 +18,11 @@
             font-weight: bold;
             color: red;
         }
+
+        .okMessage {
+            font-weight: bold;
+            color: green;
+        }
     </style>
 
     <link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/1.10.12/css/jquery.dataTables.css">
@@ -30,128 +35,6 @@
     <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/flick/jquery-ui.css" rel="stylesheet"
           type="text/css"/>
     <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
-
-    <script>
-        var userRoles = {};
-        var table;
-        var userId;
-        var tabs;
-
-        function FormToJson(form) {
-            var array = $(form).serializeArray();
-            var json = {};
-            json.roles = [];
-            $.each(array, function () {
-                if (this.name == 'rolesList.id') {
-                    json.roles.push(this.value || '');
-                } else {
-                    json[this.name] = this.value || '';
-                }
-            });
-            json["id"] = userId;
-            return json;
-        }
-
-        function addUser() {
-            var form = $('#formAddUser');
-            var json = FormToJson(form);
-            jQuery.ajax({
-                type: 'post',
-                url: "/add/user",
-                dataType: 'json',
-                data: json,
-                traditional: true,
-                success: function (data) {
-                    userId = data.id
-                    if (userId != "" && userId != null && userId != undefined) {
-                        tabs.tabs("enable", "#fragment-2");
-                        buildJobTable();
-                    }
-                }
-                ,
-                error: function () {
-                    // error handler
-                }
-            });
-        }
-
-        function editUserRoles() {
-            jQuery.ajax({
-                type: 'post',
-                url: "/get",
-                data: {"userId": userId},
-                traditional: true,
-                success: function (data) {
-                    userRoles = new Array(data.aaData.length);
-                    for (var i = 0; i < userRoles.length; i++) {
-                        userRoles[i] = data.aaData[i].id;
-                    }
-                    selectRoles();
-                },
-                error: function () {
-                    // error handler
-                }
-            });
-        }
-
-        function selectRoles() {
-            var form = document.forms[0];
-            var select = form.elements[4];
-            for (var i = 0; i < userRoles.length; i++) {
-                for (var j = 0; j < select.options.length; j++) {
-                    if (userRoles[i] == select.options[j].value) {
-                        select.options[j].selected = true;
-                    }
-                }
-            }
-        }
-
-        function buildJobTable() {
-            table = $("#jobDataTable").DataTable({
-                "sPaginationType": "full_numbers",
-                "sAjaxSource": "/job?id=" + userId,
-                "bJQueryUI": true,
-                "bAutoWidth": false,
-                "oLanguage": {
-                    "sSearch": "Search in all columns:"
-                },
-                "aoColumns": [
-                    {"mData": "organization.name", sDefaultContent: "n/a"},
-                    {"mData": "position.name", sDefaultContent: "n/a"},
-                    {
-                        "mData": "start", "render": function (data, type, full, meta) {
-                        return data.substr(0, 10);
-                    }, sDefaultContent: "n/a"
-                    },
-                    {
-                        "mData": "end", "render": function (data, type, full, meta) {
-                        if (data == null) {
-                            return "till present";
-                        }
-                        return data.substr(0, 10);
-                    }, sDefaultContent: "n/a"
-                    }
-                ]
-            });
-        }
-
-        function goAddJob() {
-            console.log("goAddJob");
-            location.pathname = "/register/job?id=" + userId;
-        }
-
-        $(function () {
-            userId = document.getElementById("id").value;
-            if (userId != "") {
-                editUserRoles();
-                buildJobTable();
-                tabs = $("#tabs").tabs();
-            } else {
-                tabs = $("#tabs").tabs();
-                tabs.tabs("disable", "#fragment-2");
-            }
-        });
-    </script>
 
 </head>
 <body>
@@ -168,6 +51,8 @@
     <div id="fragment-1">
         <s:form id="formAddUser">
             <h3>Add or edit user</h3>
+            <div id="ok" class="okMessage"/>
+            <div id="error" class="errorMessage"/>
             <table>
                 <tr>
                     <td><s:textfield key="label.firstname" name="firstname" requiredLabel="true" required="true"/></td>
@@ -185,7 +70,7 @@
                 <tr>
                     <td><label>User's role(s)*:</label></td>
                     <td>
-                        <select required="true" multiple="multiple" name="rolesList.id">
+                        <select required="true" multiple="multiple" name="roles">
                             <s:iterator value="rolesList" var="role">
                                 <option value="<s:property value="#role.id"/>">
                                     <s:property value="#role.name"/>
@@ -197,9 +82,9 @@
 
                 <tr>
                     <td>
-                        <input type="button"
+                        <input type="submit"
                                class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
-                               value="Save" onclick="addUser()"/>
+                               value="Save"/>
                         <input type="reset"
                                class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
                                value="Cancel"
@@ -231,6 +116,138 @@
         </table>
     </div>
 </div>
+
+<script>
+    var userRoles = {};
+    var jobTable;
+    var userId;
+    var tabs;
+
+    function isStringEmpty(string) {
+        if (string == null || string.size == 0) {
+            return true;
+        }
+        return false;
+    }
+
+    function FormToJson(form) {
+        var array = $(form).serializeArray();
+        var json = {};
+        json.roles = [];
+        $.each(array, function () {
+            if (this.name == 'roles') {
+                json.roles.push(this.value || '');
+            } else {
+                json[this.name] = this.value || '';
+            }
+        });
+        json["id"] = userId;
+        return json;
+    }
+
+    function addUser() {
+        console.log("addUser");
+        var form = $('#formAddUser');
+        var json = FormToJson(form);
+        jQuery.ajax({
+            type: 'post',
+            url: "/add/user",
+            dataType: 'json',
+            data: json,
+            traditional: true,
+            success: function (data) {
+                userId = data.id
+                $("#ok").empty().append("Saved").fadeOut(4000);
+                if (userId != "" && userId != null && userId != undefined) {
+                    tabs.tabs("enable", "#fragment-2");
+                    jobTable.ajax.reload();
+                    editUserRoles();
+                }
+            },
+            error: function () {
+                $("#error").empty().append("Please, fill in the form correctly.");
+            }
+        });
+    }
+
+    function editUserRoles() {
+        jQuery.ajax({
+            type: 'post',
+            url: "/get",
+            data: {"userId": userId},
+            traditional: true,
+            success: function (data) {
+                userRoles = new Array(data.aaData.length);
+                for (var i = 0; i < userRoles.length; i++) {
+                    userRoles[i] = data.aaData[i].id;
+                }
+                selectRoles();
+            },
+            error: function () {
+            }
+        });
+    }
+
+    function selectRoles() {
+        var form = document.forms[0];
+        var select = form.elements[4];
+        for (var i = 0; i < userRoles.length; i++) {
+            for (var j = 0; j < select.options.length; j++) {
+                if (userRoles[i] == select.options[j].value) {
+                    select.options[j].selected = true;
+                }
+            }
+        }
+    }
+
+    function buildJobTable() {
+        jobTable = $("#jobDataTable").DataTable({
+            "sPaginationType": "full_numbers",
+            "sAjaxSource": "/job?id=" + userId,
+            "bJQueryUI": true,
+            "bAutoWidth": false,
+            "oLanguage": {
+                "sSearch": "Search in all columns:"
+            },
+            "aoColumns": [
+                {"mData": "organization.name", sDefaultContent: "n/a"},
+                {"mData": "position.name", sDefaultContent: "n/a"},
+                {
+                    "mData": "start", "render": function (data, type, full, meta) {
+                    return data.substr(0, 10);
+                }, sDefaultContent: "n/a"
+                },
+                {
+                    "mData": "end", "render": function (data, type, full, meta) {
+                    if (data == null) {
+                        return "till present";
+                    }
+                    return data.substr(0, 10);
+                }, sDefaultContent: "n/a"
+                }
+            ]
+        });
+    }
+
+    $(function () {
+        userId = document.getElementById("id").value;
+        if (userId != "") {
+            editUserRoles();
+            tabs = $("#tabs").tabs();
+        } else {
+            tabs = $("#tabs").tabs();
+            tabs.tabs("disable", "#fragment-2");
+        }
+        buildJobTable();
+
+        $("#formAddUser").submit(function (event) {
+            event.preventDefault();
+            addUser();
+        });
+    });
+
+
+</script>
 
 </body>
 </html>

@@ -26,10 +26,11 @@ public class EditUserAction extends ActionSupport implements Preparable {
     private Manager manager;
 
     public String index() {
+        roles = manager.getAllRoles();
         return SUCCESS;
     }
 
-    public String listUsers() {
+    public String showUsers() {
         users = manager.getAllUsers();
         DataTableResponse tableResponse = new DataTableResponse();
         tableResponse.setAaData(users);
@@ -37,11 +38,6 @@ public class EditUserAction extends ActionSupport implements Preparable {
         tableResponse.setiTotalDisplayRecords(users.size());
         tableResponse.setsEcho(0);
         ActionContext.getContext().put("jsonRoot", tableResponse);
-        return SUCCESS;
-    }
-
-    public String deleteUser() {
-        manager.deleteUserByID(userId);
         return SUCCESS;
     }
 
@@ -86,7 +82,6 @@ public class EditUserAction extends ActionSupport implements Preparable {
     public void prepare() throws Exception {
         user = null;
         role = null;
-        roles = manager.getAllRoles();
     }
 
     public void setManager(Manager manager) {

@@ -48,6 +48,9 @@ public class OrganizationAction extends ActionSupport {
     }
 
     public String addOrg() {
+        if (validation()) {
+            return ERROR;
+        }
         Organization organization = new Organization();
         Address address = new Address();
         if (id != null && !id.trim().isEmpty()) {
@@ -65,10 +68,38 @@ public class OrganizationAction extends ActionSupport {
         return SUCCESS;
     }
 
-    public String delete(){
-        System.out.println("delete/org id = " + id);
+    public String delete() {
         manager.deleteOrgByID(Integer.valueOf(id));
         return SUCCESS;
+    }
+
+    private boolean validation() {
+        if (isStringEmpty(orgname)) {
+            return true;
+        }
+        if (isStringEmpty(country)) {
+            return true;
+        }
+        if (isStringEmpty(city)) {
+            return true;
+        }
+        if (isStringEmpty(street)) {
+            return true;
+        }
+        if (isStringEmpty(house)) {
+            return true;
+        }
+        if (isStringEmpty(zipcode)) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isStringEmpty(String string) {
+        if (string == null || string.trim().isEmpty()) {
+            return true;
+        }
+        return false;
     }
 
     public String getId() {
