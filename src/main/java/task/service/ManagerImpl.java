@@ -94,7 +94,7 @@ public class ManagerImpl implements Manager {
 
     @Override
     @Transactional
-    public List<JobPlace> getJobPlaceOfUserByID(Integer userId) {
+    public List<JobPlace> getJobPlacesOfUserByID(Integer userId) {
         List<JobPlace> jobPlacesOfUser = jobPlaceDAO.getJobPlaceByUserID(userId);
         return jobPlacesOfUser;
     }

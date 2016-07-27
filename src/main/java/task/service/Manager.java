@@ -28,7 +28,7 @@ public interface Manager {
 
     Position getPositionByID(Integer posId);
 
-    List getJobPlaceOfUserByID(Integer userId);
+    List getJobPlacesOfUserByID(Integer userId);
 
     void deleteUserByID(Integer userId);
 

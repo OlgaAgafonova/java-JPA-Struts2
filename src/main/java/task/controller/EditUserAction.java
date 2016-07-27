@@ -41,7 +41,7 @@ public class EditUserAction extends ActionSupport implements Preparable {
         return SUCCESS;
     }
 
-    public String editRolesOfUser() {
+    public String getAllRoles() {
         DataTableResponse tableResponse = new DataTableResponse();
         roles = manager.getAllRoles();
         tableResponse.setAaData(roles);

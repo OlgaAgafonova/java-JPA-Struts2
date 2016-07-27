@@ -1,9 +1,10 @@
 package task.entity;
 
 
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 import java.util.Date;
-import java.util.Set;
 
 @Entity
 @Table(name = "JOB_PLACE")
@@ -32,6 +33,9 @@ public class JobPlace {
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ID_POSITION")
     private Position position;
+
+    @Column(name = "TYPE", columnDefinition = "TINYINT", nullable = false)
+    private byte type;
 
     public JobPlace() {
     }
@@ -82,6 +86,14 @@ public class JobPlace {
 
     public void setPosition(Position position) {
         this.position = position;
+    }
+
+    public byte getType() {
+        return type;
+    }
+
+    public void setType(byte type) {
+        this.type = type;
     }
 
     @Override

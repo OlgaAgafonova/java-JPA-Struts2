@@ -39,7 +39,7 @@
             </result>
         </action>
 
-        <action name="edit/roles" class="editUserAction" method="editRolesOfUser">
+        <action name="edit/roles" class="editUserAction" method="getAllRoles">
             <result type="json">
                 <param name="root">jsonAllRoles</param>
             </result>
@@ -61,7 +61,6 @@
         <action name="delete/org" class="orgAction" method="delete">
             <result type="json"/>
         </action>
-
 
         <action name="add/user" class="addAction" method="addUser">
             <result name="input" type="json"/>

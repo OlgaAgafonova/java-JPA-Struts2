@@ -1,13 +1,16 @@
 package task.controller;
 
 import com.opensymphony.xwork2.ActionSupport;
+import com.opensymphony.xwork2.Preparable;
+import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
+import com.opensymphony.xwork2.validator.annotations.Validations;
 import task.entity.Role;
 import task.entity.User;
 import task.service.Manager;
 
 import java.util.*;
 
-public class AddAction extends ActionSupport {
+public class AddAction extends ActionSupport implements Preparable {
 
     private String id;
     private String firstname;
@@ -22,17 +25,25 @@ public class AddAction extends ActionSupport {
     private Manager manager;
 
     public String index() {
+        System.out.println("AddAction index");
         rolesList = manager.getAllRoles();
         setFormFields();
         return SUCCESS;
     }
 
+    @Validations(
+            requiredFields = {
+                    @RequiredFieldValidator(fieldName = "roles", message = "You must select a role."),
+                    @RequiredFieldValidator(fieldName = "firstname", message = "You must enter a first name.", key = "First name"),
+                    @RequiredFieldValidator(fieldName = "lastname", message = "You must enter a last name."),
+                    @RequiredFieldValidator(fieldName = "login", message = "You must enter a login."),
+                    @RequiredFieldValidator(fieldName = "email", message = "You must enter an email address.")}
+
+    )
     public String addUser() {
-        if (validation()) {
-            return ERROR;
-        }
+        System.out.println("AddAction addUser");
         System.out.println(new Date());
-        System.out.println(toString());
+        System.out.println(toString()); System.out.println("AddAction index");
         user = new User();
         user.setFirstname(firstname);
         user.setLastname(lastname);
@@ -48,55 +59,12 @@ public class AddAction extends ActionSupport {
         if (id != null && !id.trim().isEmpty()) {
             user.setId(Integer.valueOf(id));
         }
-        manager.save(user);
+        //manager.save(user);
         return SUCCESS;
     }
 
-    private boolean validation() {
-        if (isStringEmpty(firstname)) {
-            return true;
-        }
-        if (isStringEmpty(lastname)) {
-            return true;
-        }
-        if (isStringEmpty(login)) {
-            return true;
-        }
-        if (isStringEmpty(email)) {
-            return true;
-        }
-        if (roles == null) {
-            return true;
-        }
-        return false;
-    }
-
-    private boolean isStringEmpty(String string) {
-        if (string == null || string.trim().isEmpty()) {
-            return true;
-        }
-        return false;
-    }
-
-    /*    public void validate() {
-        if (firstname == null || firstname.trim().isEmpty()) {
-            addFieldError("firstname", "First name must be not empty");
-        }
-        if (lastname == null || lastname.trim().isEmpty()) {
-            addFieldError("lastname", "Last name must be not empty");
-        }
-        if (login == null || login.trim().isEmpty()) {
-            addFieldError("login", "Login must be not empty");
-        }
-        if (email == null || email.trim().isEmpty()) {
-            addFieldError("email", "Email must be not empty");
-        }
-        if (roles == null) {
-            addFieldError("roles", "You should select user's role");
-        }
-    }*/
-
     private void setFormFields() {
+        System.out.println("AddAction setFormFields");
         if (id != null && !id.trim().isEmpty()) {
             user = manager.getUserByID(Integer.valueOf(id));
             firstname = user.getFirstname();
@@ -104,6 +72,13 @@ public class AddAction extends ActionSupport {
             login = user.getLogin();
             email = user.getEmail();
         }
+    }
+
+    @Override
+    public void prepare() throws Exception {
+        System.out.println("AddAction prepare()");
+        rolesList = manager.getAllRoles();
+        setFormFields();
     }
 
     public String getId() {

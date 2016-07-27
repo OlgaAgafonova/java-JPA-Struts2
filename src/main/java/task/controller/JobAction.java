@@ -10,6 +10,7 @@ import task.service.Manager;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 public class JobAction extends ActionSupport {
@@ -21,6 +22,7 @@ public class JobAction extends ActionSupport {
     private String position;
     private String start;
     private String end;
+    private String type;
 
     private Manager manager;
     private List<JobPlace> jobPlacesOfUser;
@@ -33,7 +35,7 @@ public class JobAction extends ActionSupport {
 
     public String showJobs() {
         if (id != null && !id.trim().isEmpty()) {
-            jobPlacesOfUser = manager.getJobPlaceOfUserByID(Integer.valueOf(id));
+            jobPlacesOfUser = manager.getJobPlacesOfUserByID(Integer.valueOf(id));
             DataTableResponse tableResponse = new DataTableResponse();
             tableResponse.setAaData(jobPlacesOfUser);
             tableResponse.setiTotalRecords(jobPlacesOfUser.size());
@@ -45,7 +47,7 @@ public class JobAction extends ActionSupport {
     }
 
     public String addJob() {
-        if(validation()){
+        if (validation()) {
             return ERROR;
         }
         Organization organization = manager.getOrganizationByID(Integer.valueOf(this.organization));
@@ -63,7 +65,13 @@ public class JobAction extends ActionSupport {
         jobPlace.setPosition(position);
         jobPlace.setStart(startDate);
         jobPlace.setEnd(endDate);
-        manager.save(jobPlace);
+
+        if (type.equals("1") && isCrossingWithMainJobs(startDate, endDate)) {
+            addActionError("Two main job in the same time");
+            return ERROR;
+        }
+
+        //manager.save(jobPlace);
         return SUCCESS;
     }
 
@@ -85,6 +93,22 @@ public class JobAction extends ActionSupport {
             return true;
         }
         return false;
+    }
+
+    private boolean isCrossingWithMainJobs(Date start, Date end) {
+        boolean flag = false;
+        jobPlacesOfUser = manager.getJobPlacesOfUserByID(Integer.valueOf(id));
+        Iterator<JobPlace> iterator = jobPlacesOfUser.iterator();
+        for (int i = 0; i < jobPlacesOfUser.size(); i++) {
+            JobPlace place = iterator.next();
+            if (place.getType() != 0) {
+                Date startMain = place.getStart();
+                Date endMain = place.getEnd();
+                if (end != null && end.before(startMain)) flag = true;
+                if (endMain != null && start.after(endMain)) flag = true;
+            }
+        }
+        return flag;
     }
 
     public String getId() {
@@ -149,6 +173,14 @@ public class JobAction extends ActionSupport {
 
     public void setPosition(String position) {
         this.position = position;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     @Override

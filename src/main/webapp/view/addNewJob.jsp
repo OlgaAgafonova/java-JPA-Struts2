@@ -44,6 +44,11 @@
     <h3>Add job</h3>
     <span id="ok" class="okMessage"></span>
     <span id="error" class="errorMessage"></span>
+    <s:if test="hasActionErrors()">
+        <div class="errorMessage">
+            <s:actionerror/>
+        </div>
+    </s:if>
     <table>
         <tr>
             <td><label>Organization*:</label></td>
@@ -79,6 +84,15 @@
         <tr>
             <s:textfield id="end" name="end" key="label.end"/>
         </tr>
+        <tr>
+            <td>Type of job*:</td>
+            <td>
+                <select required="true" name="type">
+                    <option value="1">Main</option>
+                    <option value="0">Temporal</option>
+                </select>
+            </td>
+        </tr>
 
         <tr>
             <td>
@@ -109,7 +123,6 @@
     function addJob() {
         var form = $('#formAddJob');
         var json = FormToJson(form);
-        console.log(json);
         jQuery.ajax({
             type: 'post',
             url: "/add/job",
@@ -117,10 +130,13 @@
             data: json,
             traditional: true,
             success: function () {
-                $("#ok").text( "Saved" ).show().fadeOut( 4000 );
+                $("#ok").text("Saved").show().fadeOut(4000);
             }
             ,
-            error: function () {
+            error: function (request, status, error) {
+                console.log(request);
+                console.log(status);
+                console.log(error);
                 $("#error").text("Please, fill in the form correctly.").show();
             }
         });
