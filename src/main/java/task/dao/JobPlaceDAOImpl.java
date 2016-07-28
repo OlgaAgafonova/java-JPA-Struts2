@@ -23,16 +23,27 @@ public class JobPlaceDAOImpl implements JobPlaceDAO {
     }
 
     @Override
-    public List<JobPlace> getJobPlaceByUserID(Integer userId) {
-        return getCurrentSession().createQuery("from JobPlace where id_user = ?").setInteger(0, userId).list();
+    public List getJobPlaceByUserID(Integer userId) {
+        return getCurrentSession()
+                .createQuery("from JobPlace where user.id = ?")
+                .setInteger(0, userId)
+                .list();
+    }
+
+    @Override
+    public List getJobPlacesByOrganizationID(Integer orgId) {
+       return getCurrentSession()
+               .createQuery("from JobPlace where organization.id = ?")
+               .setInteger(0, orgId)
+               .list();
     }
 
     @Override
     public void deleteJobPlaceByUserID(Integer id) {
         List<JobPlace> jobPlacesOfUser = getJobPlaceByUserID(id);
         if (jobPlacesOfUser != null) {
-            for (int i = 0; i < jobPlacesOfUser.size(); i++) {
-                getCurrentSession().delete(jobPlacesOfUser.get(i).getId());
+            for (JobPlace aJobPlacesOfUser : jobPlacesOfUser) {
+                getCurrentSession().delete(aJobPlacesOfUser.getId());
             }
         }
     }

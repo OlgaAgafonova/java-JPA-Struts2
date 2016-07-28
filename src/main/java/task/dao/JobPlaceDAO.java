@@ -12,5 +12,7 @@ public interface JobPlaceDAO {
 
     List getJobPlaceByUserID(Integer userId);
 
+    List getJobPlacesByOrganizationID(Integer orgId);
+
     void deleteJobPlaceByUserID(Integer userId);
 }

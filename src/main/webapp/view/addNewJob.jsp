@@ -38,75 +38,78 @@
 </head>
 <body>
 <s:a href="/">Home</s:a>
+<div id="tabs">
+    <ul>
+        <li><a href="#fragment-1"><span>General information</span></a></li>
+    </ul>
 
-<s:form id="formAddJob">
-    <s:textfield id="id" name="id" type="hidden"/>
-    <h3>Add job</h3>
-    <span id="ok" class="okMessage"></span>
-    <span id="error" class="errorMessage"></span>
-    <s:if test="hasActionErrors()">
-        <div class="errorMessage">
-            <s:actionerror/>
-        </div>
-    </s:if>
-    <table>
-        <tr>
-            <td><label>Organization*:</label></td>
-            <td>
-                <select required="true" name="organization">
-                    <option value="0" disabled>Select</option>
-                    <s:iterator value="organizations" var="org">
-                        <option value="<s:property value="#org.id"/>">
-                            <s:property value="#org.name"/>
-                        </option>
-                    </s:iterator>
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <td><label>Position*:</label></td>
-            <td>
-                <select required="true" name="position">
-                    <option value="0" disabled>Select</option>
-                    <s:iterator value="positions" var="pos">
-                        <option value="<s:property value="#pos.id"/>">
-                            <s:property value="#pos.name"/>
-                        </option>
-                    </s:iterator>
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <s:textfield id="start" name="start" key="label.start" requiredLabel="true" required="true"/>
-            </td>
-        </tr>
-        <tr>
-            <s:textfield id="end" name="end" key="label.end"/>
-        </tr>
-        <tr>
-            <td>Type of job*:</td>
-            <td>
-                <select required="true" name="type">
-                    <option value="1">Main</option>
-                    <option value="0">Temporal</option>
-                </select>
-            </td>
-        </tr>
+    <div id="fragment-1">
+        <s:form id="formAddJob">
+            <s:textfield id="id" name="id" type="hidden"/>
+            <h3>Add job</h3>
+            <span id="ok" class="okMessage"></span>
+            <span id="error" class="errorMessage"></span>
 
-        <tr>
-            <td>
-                <input type="submit"
-                       class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
-                       value="Save"/>
-                <input type="reset"
-                       class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
-                       value="Cancel"/>
-            </td>
-        </tr>
-    </table>
-</s:form>
+            <table>
+                <tr>
+                    <td><label for="org">Organization*:</label></td>
+                    <td>
+                        <select id="org" required="true" name="organization">
+                            <option value="0" disabled>Select</option>
+                            <s:iterator value="organizations" var="org">
+                                <option value="<s:property value=" #org.id
+                                "/>">
+                                    <s:property value="#org.name"/>
+                                </option>
+                            </s:iterator>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="pos">Position*:</label></td>
+                    <td>
+                        <select id="pos" required="true" name="position">
+                            <option value="0" disabled>Select</option>
+                            <s:iterator value="positions" var="pos">
+                                <option value="<s:property value="#pos.id"/>">
+                                    <s:property value="#pos.name"/>
+                                </option>
+                            </s:iterator>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <s:textfield id="start" name="start" key="label.start" requiredLabel="true" required="true"/>
+                    </td>
+                </tr>
+                <tr>
+                    <s:textfield id="end" name="end" key="label.end"/>
+                </tr>
+                <tr>
+                    <td><label for="type">Type of job*:</label></td>
+                    <td>
+                        <select id="type" required="true" name="type">
+                            <option value="1">Main</option>
+                            <option value="0">Temporal</option>
+                        </select>
+                    </td>
+                </tr>
 
+                <tr>
+                    <td>
+                        <input type="submit"
+                               class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
+                               value="Save"/>
+                        <input type="reset"
+                               class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
+                               value="Cancel"/>
+                    </td>
+                </tr>
+            </table>
+        </s:form>
+    </div>
+</div>
 <script>
     var userId;
 
@@ -151,6 +154,8 @@
             event.preventDefault();
             addJob();
         });
+
+        $("#tabs").tabs();
     });
 </script>
 </body>

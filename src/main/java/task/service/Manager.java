@@ -30,6 +30,8 @@ public interface Manager {
 
     List getJobPlacesOfUserByID(Integer userId);
 
+    List getJobPlacesByOrganizationID(Integer orgId);
+
     void deleteUserByID(Integer userId);
 
     void deleteOrgByID(Integer orgId);

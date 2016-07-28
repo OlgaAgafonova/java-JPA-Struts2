@@ -1,16 +1,13 @@
 package task.controller;
 
 import com.opensymphony.xwork2.ActionSupport;
-import com.opensymphony.xwork2.Preparable;
-import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
-import com.opensymphony.xwork2.validator.annotations.Validations;
 import task.entity.Role;
 import task.entity.User;
 import task.service.Manager;
 
 import java.util.*;
 
-public class AddAction extends ActionSupport implements Preparable {
+public class AddUserAction extends ActionSupport {
 
     private String id;
     private String firstname;
@@ -19,31 +16,18 @@ public class AddAction extends ActionSupport implements Preparable {
     private String email;
     private String[] roles;
 
-    private List<Role> rolesList;
+    private List rolesList;
 
     private User user;
     private Manager manager;
 
     public String index() {
-        System.out.println("AddAction index");
         rolesList = manager.getAllRoles();
         setFormFields();
         return SUCCESS;
     }
 
-    @Validations(
-            requiredFields = {
-                    @RequiredFieldValidator(fieldName = "roles", message = "You must select a role."),
-                    @RequiredFieldValidator(fieldName = "firstname", message = "You must enter a first name.", key = "First name"),
-                    @RequiredFieldValidator(fieldName = "lastname", message = "You must enter a last name."),
-                    @RequiredFieldValidator(fieldName = "login", message = "You must enter a login."),
-                    @RequiredFieldValidator(fieldName = "email", message = "You must enter an email address.")}
-
-    )
     public String addUser() {
-        System.out.println("AddAction addUser");
-        System.out.println(new Date());
-        System.out.println(toString()); System.out.println("AddAction index");
         user = new User();
         user.setFirstname(firstname);
         user.setLastname(lastname);
@@ -51,20 +35,19 @@ public class AddAction extends ActionSupport implements Preparable {
         user.setLogin(login);
         Role role;
         Set<Role> roleSet = new HashSet<>();
-        for (int i = 0; i < roles.length; i++) {
-            role = manager.getRoleByID(Integer.valueOf(roles[i]));
+        for (String role1 : roles) {
+            role = manager.getRoleByID(Integer.valueOf(role1));
             roleSet.add(role);
         }
         user.setRoles(roleSet);
         if (id != null && !id.trim().isEmpty()) {
             user.setId(Integer.valueOf(id));
         }
-        //manager.save(user);
+        manager.save(user);
         return SUCCESS;
     }
 
     private void setFormFields() {
-        System.out.println("AddAction setFormFields");
         if (id != null && !id.trim().isEmpty()) {
             user = manager.getUserByID(Integer.valueOf(id));
             firstname = user.getFirstname();
@@ -72,13 +55,6 @@ public class AddAction extends ActionSupport implements Preparable {
             login = user.getLogin();
             email = user.getEmail();
         }
-    }
-
-    @Override
-    public void prepare() throws Exception {
-        System.out.println("AddAction prepare()");
-        rolesList = manager.getAllRoles();
-        setFormFields();
     }
 
     public String getId() {
@@ -143,7 +119,7 @@ public class AddAction extends ActionSupport implements Preparable {
 
     @Override
     public String toString() {
-        return "AddAction{"
+        return "AddUserAction{"
                 + "firstname='" + firstname + '\''
                 + ", lastname='" + lastname + '\''
                 + ", login='" + login + '\''

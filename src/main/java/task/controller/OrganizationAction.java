@@ -1,10 +1,10 @@
 package task.controller;
 
-import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import task.entity.Address;
 import task.entity.Organization;
 import task.service.Manager;
+import task.service.Utils;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ public class OrganizationAction extends ActionSupport {
     private String zipcode;
 
     private Manager manager;
-    private List<Organization> organizations;
+    private List organizations;
 
     public String index() {
         if (id != null && !id.trim().isEmpty()) {
@@ -38,12 +38,7 @@ public class OrganizationAction extends ActionSupport {
 
     public String showOrgs() {
         organizations = manager.getAllOrganizations();
-        DataTableResponse tableResponse = new DataTableResponse();
-        tableResponse.setAaData(organizations);
-        tableResponse.setiTotalRecords(organizations.size());
-        tableResponse.setiTotalDisplayRecords(organizations.size());
-        tableResponse.setsEcho(0);
-        ActionContext.getContext().put("jsonOrg", tableResponse);
+        Utils.toResponse(organizations, "jsonOrg");
         return SUCCESS;
     }
 
@@ -70,6 +65,14 @@ public class OrganizationAction extends ActionSupport {
 
     public String delete() {
         manager.deleteOrgByID(Integer.valueOf(id));
+        return SUCCESS;
+    }
+
+    public String employees() {
+        if (id != null && !id.trim().isEmpty()) {
+            List employees = manager.getJobPlacesByOrganizationID(Integer.valueOf(id));
+            Utils.toResponse(employees, "jsonEmployees");
+        }
         return SUCCESS;
     }
 

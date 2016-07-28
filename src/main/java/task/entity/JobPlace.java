@@ -1,8 +1,5 @@
 package task.entity;
 
-
-import org.hibernate.annotations.Type;
-
 import javax.persistence.*;
 import java.util.Date;
 
@@ -23,8 +20,9 @@ public class JobPlace {
     @Column(name = "END_DATE")
     private Date end;
 
-    @Column(name = "ID_USER")
-    private Integer id_user;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "ID_USER")
+    private User user;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ID_ORGANIZATION")
@@ -64,12 +62,12 @@ public class JobPlace {
         this.end = end;
     }
 
-    public Integer getId_user() {
-        return id_user;
+    public User getUser() {
+        return user;
     }
 
-    public void setId_user(Integer id_user) {
-        this.id_user = id_user;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Organization getOrganization() {
@@ -101,7 +99,7 @@ public class JobPlace {
         return "JobPlace{"
                 + "start=" + start
                 + ", end=" + end
-                + ", id_user=" + id_user
+                + ", id_user=" + user
                 + ", organization=" + organization
                 + ", position=" + position
                 + '}';

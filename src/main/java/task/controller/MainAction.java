@@ -1,21 +1,21 @@
 package task.controller;
 
-import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
 import task.entity.Role;
 import task.entity.User;
 import task.service.Manager;
+import task.service.Utils;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class EditUserAction extends ActionSupport implements Preparable {
+public class MainAction extends ActionSupport implements Preparable {
 
-    private List<User> users;
-    private List<Role> roles;
+    private List users;
+    private List roles;
 
     private User user;
     private Role role;
@@ -32,44 +32,30 @@ public class EditUserAction extends ActionSupport implements Preparable {
 
     public String showUsers() {
         users = manager.getAllUsers();
-        DataTableResponse tableResponse = new DataTableResponse();
-        tableResponse.setAaData(users);
-        tableResponse.setiTotalRecords(users.size());
-        tableResponse.setiTotalDisplayRecords(users.size());
-        tableResponse.setsEcho(0);
-        ActionContext.getContext().put("jsonRoot", tableResponse);
+        Utils.toResponse(users, "jsonRoot");
         return SUCCESS;
     }
 
     public String getAllRoles() {
-        DataTableResponse tableResponse = new DataTableResponse();
         roles = manager.getAllRoles();
-        tableResponse.setAaData(roles);
-        tableResponse.setiTotalRecords(roles.size());
-        tableResponse.setiTotalDisplayRecords(roles.size());
-        tableResponse.setsEcho(0);
-        ActionContext.getContext().put("jsonAllRoles", tableResponse);
+        Utils.toResponse(roles, "jsonAllRoles");
         return SUCCESS;
     }
 
     public String getRolesOfUser() {
         users = manager.getAllUsers();
-        DataTableResponse tableResponse = new DataTableResponse();
         user = manager.getUserByID(userId);
-        List<Object> rolesList = Arrays.asList(user.getRoles().toArray());
-        tableResponse.setAaData(rolesList);
-        tableResponse.setiTotalRecords(rolesList.size());
-        tableResponse.setiTotalDisplayRecords(rolesList.size());
-        tableResponse.setsEcho(0);
-        ActionContext.getContext().put("jsonUserRoles", tableResponse);
+        List<Object> rolesList = new ArrayList<>();
+        rolesList.addAll(user.getRoles());
+        Utils.toResponse(rolesList, "jsonUserRoles");
         return SUCCESS;
     }
 
     public String editUser() {
         user = manager.getUserByID(userId);
         Set<Role> newRolesOfUser = new HashSet<>();
-        for (int i = 0; i < changedRoles.length; i++) {
-            Integer roleId = Integer.valueOf(changedRoles[i]);
+        for (String changedRole : changedRoles) {
+            Integer roleId = Integer.valueOf(changedRole);
             role = manager.getRoleByID(roleId);
             newRolesOfUser.add(role);
         }

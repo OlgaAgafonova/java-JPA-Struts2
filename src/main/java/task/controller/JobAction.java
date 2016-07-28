@@ -1,11 +1,11 @@
 package task.controller;
 
-import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import task.entity.JobPlace;
 import task.entity.Organization;
 import task.entity.Position;
 import task.service.Manager;
+import task.service.Utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -16,16 +16,16 @@ import java.util.List;
 public class JobAction extends ActionSupport {
 
     private String id;
-    private List<Organization> organizations;
+    private List organizations;
     private String organization;
-    private List<Position> positions;
+    private List positions;
     private String position;
     private String start;
     private String end;
     private String type;
 
     private Manager manager;
-    private List<JobPlace> jobPlacesOfUser;
+    private List jobPlacesOfUser;
 
     public String index() {
         organizations = manager.getAllOrganizations();
@@ -36,12 +36,7 @@ public class JobAction extends ActionSupport {
     public String showJobs() {
         if (id != null && !id.trim().isEmpty()) {
             jobPlacesOfUser = manager.getJobPlacesOfUserByID(Integer.valueOf(id));
-            DataTableResponse tableResponse = new DataTableResponse();
-            tableResponse.setAaData(jobPlacesOfUser);
-            tableResponse.setiTotalRecords(jobPlacesOfUser.size());
-            tableResponse.setiTotalDisplayRecords(jobPlacesOfUser.size());
-            tableResponse.setsEcho(0);
-            ActionContext.getContext().put("jsonJob", tableResponse);
+            Utils.toResponse(jobPlacesOfUser, "jsonJob");
         }
         return SUCCESS;
     }
@@ -57,10 +52,10 @@ public class JobAction extends ActionSupport {
         try {
             startDate = format.parse(start);
             endDate = format.parse(end);
-        } catch (ParseException e) {
+        } catch (ParseException ignored) {
         }
         JobPlace jobPlace = new JobPlace();
-        jobPlace.setId_user(Integer.valueOf(id));
+        jobPlace.setUser(manager.getUserByID(Integer.valueOf(id)));
         jobPlace.setOrganization(organization);
         jobPlace.setPosition(position);
         jobPlace.setStart(startDate);
@@ -70,29 +65,16 @@ public class JobAction extends ActionSupport {
             addActionError("Two main job in the same time");
             return ERROR;
         }
-
-        //manager.save(jobPlace);
+        manager.save(jobPlace);
         return SUCCESS;
     }
 
     private boolean validation() {
-        if (isStringEmpty(organization)) {
-            return true;
-        }
-        if (isStringEmpty(position)) {
-            return true;
-        }
-        if (isStringEmpty(start)) {
-            return true;
-        }
-        return false;
+        return isStringEmpty(organization) || isStringEmpty(position) || isStringEmpty(start);
     }
 
     private boolean isStringEmpty(String string) {
-        if (string == null || string.trim().isEmpty()) {
-            return true;
-        }
-        return false;
+        return string == null || string.trim().isEmpty();
     }
 
     private boolean isCrossingWithMainJobs(Date start, Date end) {
@@ -185,13 +167,13 @@ public class JobAction extends ActionSupport {
 
     @Override
     public String toString() {
-        return "JobAction{" +
-                "id='" + id + '\'' +
-                ", organization=" + organization +
-                ", position=" + position +
-                ", start='" + start + '\'' +
-                ", end='" + end + '\'' +
-                '}';
+        return "JobAction{"
+                + "id='" + id + '\''
+                + ", organization=" + organization
+                + ", position=" + position
+                + ", start='" + start + '\''
+                + ", end='" + end + '\''
+                + '}';
     }
 
     public void setManager(Manager manager) {

@@ -3,7 +3,7 @@ package task.controller;
 import com.opensymphony.xwork2.ActionSupport;
 import task.service.Manager;
 
-public class DeleteAction extends ActionSupport {
+public class DeleteUserAction extends ActionSupport {
 
     private Integer userId;
     private Manager manager;

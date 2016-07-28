@@ -7,34 +7,24 @@
 
         http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
-    <bean name="editUserAction" class="task.controller.EditUserAction" scope="prototype">
-        <property name="manager">
-            <ref bean="manager"/>
-        </property>
+    <bean name="mainAction" class="task.controller.MainAction" scope="prototype">
+        <property name="manager" ref="manager"/>
     </bean>
 
-    <bean name="deleteAction" class="task.controller.DeleteAction" scope="prototype">
-        <property name="manager">
-            <ref bean="manager"/>
-        </property>
+    <bean name="deleteAction" class="task.controller.DeleteUserAction" scope="prototype">
+        <property name="manager" ref="manager"/>
     </bean>
 
-    <bean name="addAction" class="task.controller.AddAction" scope="prototype">
-        <property name="manager">
-            <ref bean="manager"/>
-        </property>
+    <bean name="addAction" class="task.controller.AddUserAction" scope="prototype">
+        <property name="manager" ref="manager"/>
     </bean>
 
     <bean name="jobAction" class="task.controller.JobAction" scope="prototype">
-        <property name="manager">
-            <ref bean="manager"/>
-        </property>
+        <property name="manager" ref="manager"/>
     </bean>
 
     <bean name="orgAction" class="task.controller.OrganizationAction" scope="prototype">
-        <property name="manager">
-            <ref bean="manager"/>
-        </property>
+        <property name="manager" ref="manager"/>
     </bean>
 
     <!-- Beans are injected automatically by spring context -->
@@ -87,12 +77,8 @@
     <bean id="sessionFactory"
           class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
-        <property name="configLocation">
-            <value>classpath:hibernate.cfg.xml</value>
-        </property>
-        <property name="configurationClass">
-            <value>org.hibernate.cfg.Configuration</value>
-        </property>
+        <property name="configLocation" value="classpath:hibernate.cfg.xml"/>
+        <property name="configurationClass" value="org.hibernate.cfg.Configuration"/>
         <property name="hibernateProperties">
             <props>
                 <prop key="hibernate.dialect">${jdbc.dialect}</prop>

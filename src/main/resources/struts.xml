@@ -18,7 +18,7 @@
             <interceptor name="json" class="org.apache.struts2.json.JSONInterceptor"/>
         </interceptors>
 
-        <action name="*" class="editUserAction" method="index">
+        <action name="*" class="mainAction" method="index">
             <result>view/main.jsp</result>
         </action>
         <action name="register/user" class="addAction" method="index">
@@ -33,23 +33,23 @@
         </action>
 
 
-        <action name="list" class="editUserAction" method="showUsers">
+        <action name="list" class="mainAction" method="showUsers">
             <result type="json">
                 <param name="root">jsonRoot</param>
             </result>
         </action>
 
-        <action name="edit/roles" class="editUserAction" method="getAllRoles">
+        <action name="edit/roles" class="mainAction" method="getAllRoles">
             <result type="json">
                 <param name="root">jsonAllRoles</param>
             </result>
         </action>
-        <action name="get" class="editUserAction" method="getRolesOfUser">
+        <action name="get" class="mainAction" method="getRolesOfUser">
             <result type="json">
                 <param name="root">jsonUserRoles</param>
             </result>
         </action>
-        <action name="edit/user" class="editUserAction" method="editUser">
+        <action name="edit/user" class="mainAction" method="editUser">
             <result name="input" type="json"/>
             <result name="success" type="json"/>
         </action>
@@ -90,6 +90,12 @@
         <action name="org" class="orgAction" method="showOrgs">
             <result type="json">
                 <param name="root">jsonOrg</param>
+            </result>
+        </action>
+
+        <action name="employees" class="orgAction" method="employees">
+            <result type="json">
+                <param name="root">jsonEmployees</param>
             </result>
         </action>
 

@@ -4,9 +4,7 @@ import org.springframework.transaction.annotation.Transactional;
 import task.dao.*;
 import task.entity.*;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class ManagerImpl implements Manager {
     private UserDAO userDAO;
@@ -58,6 +56,12 @@ public class ManagerImpl implements Manager {
 
     @Override
     @Transactional
+    public List getJobPlacesByOrganizationID(Integer orgId) {
+        return jobPlaceDAO.getJobPlacesByOrganizationID(orgId);
+    }
+
+    @Override
+    @Transactional
     public List getAllRoles() {
         return roleDAO.getAllRoles();
     }
@@ -95,8 +99,7 @@ public class ManagerImpl implements Manager {
     @Override
     @Transactional
     public List<JobPlace> getJobPlacesOfUserByID(Integer userId) {
-        List<JobPlace> jobPlacesOfUser = jobPlaceDAO.getJobPlaceByUserID(userId);
-        return jobPlacesOfUser;
+        return (List<JobPlace>) jobPlaceDAO.getJobPlaceByUserID(userId);
     }
 
     @Override

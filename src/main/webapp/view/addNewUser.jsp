@@ -49,7 +49,7 @@
     </ul>
 
     <div id="fragment-1">
-        <s:form id="formAddUser">
+        <s:form id="formAddUser" validate="true">
             <h3>Add or edit user</h3>
             <span id="ok" class="okMessage"></span>
             <span id="error" class="errorMessage"></span>
