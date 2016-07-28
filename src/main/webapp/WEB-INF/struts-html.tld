@@ -1564,7 +1564,7 @@
         <teiclass>org.apache.struts.taglib.html.MessagesTei</teiclass>
         <bodycontent>JSP</bodycontent>
         <attribute>
-            <name>id</name>
+            <name>id_user</name>
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>

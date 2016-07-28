@@ -99,7 +99,7 @@ public class JobPlace {
         return "JobPlace{"
                 + "start=" + start
                 + ", end=" + end
-                + ", id_user=" + user
+                + ", user=" + user
                 + ", organization=" + organization
                 + ", position=" + position
                 + '}';

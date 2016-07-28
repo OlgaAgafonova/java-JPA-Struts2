@@ -167,7 +167,7 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
-            <name>id</name>
+            <name>id_user</name>
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>

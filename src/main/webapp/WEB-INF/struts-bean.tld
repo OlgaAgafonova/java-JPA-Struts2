@@ -12,7 +12,7 @@
         <teiclass>org.apache.struts.taglib.bean.CookieTei</teiclass>
         <bodycontent>empty</bodycontent>
         <attribute>
-            <name>id</name>
+            <name>id_user</name>
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
@@ -38,7 +38,7 @@
         <teiclass>org.apache.struts.taglib.bean.DefineTei</teiclass>
         <bodycontent>JSP</bodycontent>
         <attribute>
-            <name>id</name>
+            <name>id_user</name>
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
@@ -79,7 +79,7 @@
         <teiclass>org.apache.struts.taglib.bean.HeaderTei</teiclass>
         <bodycontent>empty</bodycontent>
         <attribute>
-            <name>id</name>
+            <name>id_user</name>
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
@@ -120,7 +120,7 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
-            <name>id</name>
+            <name>id_user</name>
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
@@ -206,7 +206,7 @@
         <teiclass>org.apache.struts.taglib.bean.PageTei</teiclass>
         <bodycontent>empty</bodycontent>
         <attribute>
-            <name>id</name>
+            <name>id_user</name>
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
@@ -222,7 +222,7 @@
         <teiclass>org.apache.struts.taglib.bean.ParameterTei</teiclass>
         <bodycontent>empty</bodycontent>
         <attribute>
-            <name>id</name>
+            <name>id_user</name>
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
@@ -248,7 +248,7 @@
         <teiclass>org.apache.struts.taglib.bean.ResourceTei</teiclass>
         <bodycontent>empty</bodycontent>
         <attribute>
-            <name>id</name>
+            <name>id_user</name>
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
@@ -274,7 +274,7 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
-            <name>id</name>
+            <name>id_user</name>
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
@@ -300,7 +300,7 @@
         <teiclass>org.apache.struts.taglib.bean.StrutsTei</teiclass>
         <bodycontent>empty</bodycontent>
         <attribute>
-            <name>id</name>
+            <name>id_user</name>
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>

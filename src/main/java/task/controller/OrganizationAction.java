@@ -10,7 +10,7 @@ import java.util.List;
 
 public class OrganizationAction extends ActionSupport {
 
-    private String id;
+    private String id_org;
     private String orgname;
     private String country;
     private String city;
@@ -22,10 +22,10 @@ public class OrganizationAction extends ActionSupport {
     private List organizations;
 
     public String index() {
-        if (id != null && !id.trim().isEmpty()) {
-            Organization organization = manager.getOrganizationByID(Integer.valueOf(id));
+        if (id_org != null && !id_org.trim().isEmpty()) {
+            Organization organization = manager.getOrganizationByID(Integer.valueOf(id_org));
             Address address = organization.getAddress();
-            id = String.valueOf(organization.getId());
+            id_org = String.valueOf(organization.getId());
             orgname = organization.getName();
             country = address.getCountry();
             city = address.getCity();
@@ -48,8 +48,8 @@ public class OrganizationAction extends ActionSupport {
         }
         Organization organization = new Organization();
         Address address = new Address();
-        if (id != null && !id.trim().isEmpty()) {
-            organization = manager.getOrganizationByID(Integer.valueOf(id));
+        if (id_org != null && !id_org.trim().isEmpty()) {
+            organization = manager.getOrganizationByID(Integer.valueOf(id_org));
             address = organization.getAddress();
         }
         organization.setName(orgname);
@@ -64,13 +64,13 @@ public class OrganizationAction extends ActionSupport {
     }
 
     public String delete() {
-        manager.deleteOrgByID(Integer.valueOf(id));
+        manager.deleteOrgByID(Integer.valueOf(id_org));
         return SUCCESS;
     }
 
     public String employees() {
-        if (id != null && !id.trim().isEmpty()) {
-            List employees = manager.getJobPlacesByOrganizationID(Integer.valueOf(id));
+        if (id_org != null && !id_org.trim().isEmpty()) {
+            List employees = manager.getJobPlacesByOrganizationID(Integer.valueOf(id_org));
             Utils.toResponse(employees, "jsonEmployees");
         }
         return SUCCESS;
@@ -105,12 +105,12 @@ public class OrganizationAction extends ActionSupport {
         return false;
     }
 
-    public String getId() {
-        return id;
+    public String getId_org() {
+        return id_org;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setId_org(String id_org) {
+        this.id_org = id_org;
     }
 
     public String getOrgname() {

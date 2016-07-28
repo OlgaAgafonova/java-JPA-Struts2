@@ -50,10 +50,11 @@
 
     <div id="fragment-1">
         <s:form id="formAddOrg">
-            <s:textfield id="id" name="id" type="hidden"/>
+            <s:textfield id="id_org" name="id_org" type="hidden"/>
             <h3>Add or edit organization</h3>
             <span id="ok" class="okMessage"></span>
             <span id="error" class="errorMessage"></span>
+
             <table>
                 <tr>
                     <td><s:textfield key="label.orgname" name="orgname" requiredLabel="true"/></td>
@@ -89,6 +90,11 @@
     </div>
 
     <div id="fragment-2">
+        <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
+                onclick="location.pathname = '/register/job?id_org=' + orgId">
+            Add employee(s)
+        </button>
+
         <table class="display" id="employeesDataTable">
             <thead>
             <tr>
@@ -117,7 +123,7 @@
         $.each(array, function () {
             json[this.name] = this.value || '';
         });
-        json["id"] = orgId;
+        json["id_org"] = orgId;
         return json;
     }
 
@@ -143,7 +149,7 @@
     function buildEmployeesTable() {
         jobTable = $("#employeesDataTable").DataTable({
             "sPaginationType": "full_numbers",
-            "sAjaxSource": "/employees?id=" + orgId,
+            "sAjaxSource": "/employees?id_org=" + orgId,
             "bJQueryUI": true,
             "bAutoWidth": false,
             "oLanguage": {
@@ -171,7 +177,7 @@
         });
     }
     $(function () {
-        orgId = document.getElementById("id").value;
+        orgId = document.getElementById("id_org").value;
         if (orgId != "") {
             tabs = $("#tabs").tabs();
         } else {

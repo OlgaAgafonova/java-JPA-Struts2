@@ -47,7 +47,7 @@
         <teiclass>org.apache.struts.taglib.bean.DefineTei</teiclass>
         <bodycontent>empty</bodycontent>
         <attribute>
-            <name>id</name>
+            <name>id_user</name>
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
@@ -153,7 +153,7 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
-            <name>id</name>
+            <name>id_user</name>
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
@@ -1184,7 +1184,7 @@
         <teiclass>org.apache.struts.taglib.html.MessagesTei</teiclass>
         <bodycontent>JSP</bodycontent>
         <attribute>
-            <name>id</name>
+            <name>id_user</name>
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
@@ -2454,7 +2454,7 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
-            <name>id</name>
+            <name>id_user</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>

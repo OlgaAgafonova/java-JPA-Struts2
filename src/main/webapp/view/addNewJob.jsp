@@ -4,12 +4,9 @@
 <head>
     <title>Task</title>
     <style>
-        table.list {
+        table.list, table.list td, table.list th {
             border-collapse: collapse;
             width: 40%;
-        }
-
-        table.list, table.list td, table.list th {
             border: 1px solid gray;
             padding: 5px;
         }
@@ -38,6 +35,7 @@
 </head>
 <body>
 <s:a href="/">Home</s:a>
+
 <div id="tabs">
     <ul>
         <li><a href="#fragment-1"><span>General information</span></a></li>
@@ -45,20 +43,33 @@
 
     <div id="fragment-1">
         <s:form id="formAddJob">
-            <s:textfield id="id" name="id" type="hidden"/>
-            <h3>Add job</h3>
+            <s:textfield id="id_user" name="id_user" type="hidden"/>
+            <s:textfield id="id_org" name="id_org" type="hidden"/>
+
+            <h3 id="header">Add job</h3>
+
             <span id="ok" class="okMessage"></span>
             <span id="error" class="errorMessage"></span>
 
             <table>
                 <tr>
+                    <td><label for="user">User*:</label></td>
+                    <td>
+                        <select id="user" required="true" name="user">
+                            <s:iterator value="users" var="user">
+                                <option value="<s:property value="#user.id"/>">
+                                    <s:property value="#user.lastname + ' ' + #user.firstname"/>
+                                </option>
+                            </s:iterator>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
                     <td><label for="org">Organization*:</label></td>
                     <td>
                         <select id="org" required="true" name="organization">
-                            <option value="0" disabled>Select</option>
                             <s:iterator value="organizations" var="org">
-                                <option value="<s:property value=" #org.id
-                                "/>">
+                                <option value="<s:property value="#org.id"/>">
                                     <s:property value="#org.name"/>
                                 </option>
                             </s:iterator>
@@ -69,7 +80,6 @@
                     <td><label for="pos">Position*:</label></td>
                     <td>
                         <select id="pos" required="true" name="position">
-                            <option value="0" disabled>Select</option>
                             <s:iterator value="positions" var="pos">
                                 <option value="<s:property value="#pos.id"/>">
                                     <s:property value="#pos.name"/>
@@ -80,7 +90,8 @@
                 </tr>
                 <tr>
                     <td>
-                        <s:textfield id="start" name="start" key="label.start" requiredLabel="true" required="true"/>
+                        <s:textfield id="start" name="start" key="label.start" requiredLabel="true"
+                                     required="true"/>
                     </td>
                 </tr>
                 <tr>
@@ -110,8 +121,10 @@
         </s:form>
     </div>
 </div>
+
 <script>
     var userId;
+    var orgId;
 
     function FormToJson(form) {
         var array = $(form).serializeArray();
@@ -119,7 +132,9 @@
         $.each(array, function () {
             json[this.name] = this.value || '';
         });
-        json["id"] = userId;
+        json["id_user"] = userId;
+        json["id_org"] = orgId;
+        console.log(json);
         return json;
     }
 
@@ -136,17 +151,48 @@
                 $("#ok").text("Saved").show().fadeOut(4000);
             }
             ,
-            error: function (request, status, error) {
-                console.log(request);
-                console.log(status);
-                console.log(error);
+            error: function () {
                 $("#error").text("Please, fill in the form correctly.").show();
             }
         });
     }
 
+    function disableUser() {
+        var form = document.forms[0];
+        var select = form.elements[2];
+        for (var j = 0; j < select.options.length; j++) {
+            if (userId == select.options[j].value) {
+                select.options[j].selected = true;
+            }
+        }
+        select.disabled = true;
+    }
+
+    function disableOrganisation() {
+        var form = document.forms[0];
+        var select = form.elements[3];
+        for (var j = 0; j < select.options.length; j++) {
+            if (orgId == select.options[j].value) {
+                select.options[j].selected = true;
+            }
+        }
+        select.disabled = true;
+    }
+
     $(function () {
-        userId = document.getElementById("id").value;
+        $("#tabs").tabs();
+        userId = document.getElementById("id_user").value;
+        orgId = document.getElementById("id_org").value;
+        console.log("userId "+userId);
+        console.log("orgId "+orgId);
+        if (userId != undefined && userId != null && userId != "") {
+            disableUser();
+        }
+        if (orgId != undefined && orgId != null && orgId !="") {
+            document.getElementById("header").innerHTML = "Add employee";
+            disableOrganisation();
+        }
+
         $("#start").datepicker();
         $("#end").datepicker();
 
@@ -154,8 +200,6 @@
             event.preventDefault();
             addJob();
         });
-
-        $("#tabs").tabs();
     });
 </script>
 </body>

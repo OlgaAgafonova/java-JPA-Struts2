@@ -9,7 +9,7 @@ import java.util.*;
 
 public class AddUserAction extends ActionSupport {
 
-    private String id;
+    private String id_user;
     private String firstname;
     private String lastname;
     private String login;
@@ -40,16 +40,16 @@ public class AddUserAction extends ActionSupport {
             roleSet.add(role);
         }
         user.setRoles(roleSet);
-        if (id != null && !id.trim().isEmpty()) {
-            user.setId(Integer.valueOf(id));
+        if (id_user != null && !id_user.trim().isEmpty()) {
+            user.setId(Integer.valueOf(id_user));
         }
         manager.save(user);
         return SUCCESS;
     }
 
     private void setFormFields() {
-        if (id != null && !id.trim().isEmpty()) {
-            user = manager.getUserByID(Integer.valueOf(id));
+        if (id_user != null && !id_user.trim().isEmpty()) {
+            user = manager.getUserByID(Integer.valueOf(id_user));
             firstname = user.getFirstname();
             lastname = user.getLastname();
             login = user.getLogin();
@@ -57,12 +57,12 @@ public class AddUserAction extends ActionSupport {
         }
     }
 
-    public String getId() {
-        return id;
+    public String getId_user() {
+        return id_user;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setId_user(String id_user) {
+        this.id_user = id_user;
     }
 
     public String getFirstname() {

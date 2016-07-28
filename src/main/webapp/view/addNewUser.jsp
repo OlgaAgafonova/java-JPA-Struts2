@@ -4,14 +4,11 @@
 <head>
     <title>Task</title>
     <style>
-        table.list {
-            border-collapse: collapse;
-            width: 40%;
-        }
-
         table.list, table.list td, table.list th {
             border: 1px solid gray;
             padding: 5px;
+            border-collapse: collapse;
+            width: 40%;
         }
 
         .errorMessage {
@@ -39,7 +36,7 @@
 </head>
 <body>
 
-<s:textfield name="id" type="hidden"/>
+<s:textfield name="id_user" type="hidden"/>
 <s:a href="/">Home</s:a>
 
 <div id="tabs">
@@ -68,9 +65,9 @@
                     <td><s:textfield key="label.login" name="login" requiredLabel="true" required="true"/></td>
                 </tr>
                 <tr>
-                    <td><label>User's role(s)*:</label></td>
+                    <td><label for="roles">User's role(s)*:</label></td>
                     <td>
-                        <select required="true" multiple="multiple" name="roles">
+                        <select id="roles" required="true" multiple="multiple" name="roles">
                             <s:iterator value="rolesList" var="role">
                                 <option value="<s:property value="#role.id"/>">
                                     <s:property value="#role.name"/>
@@ -98,7 +95,7 @@
     <div id="fragment-2">
 
         <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
-                onclick="location.pathname = '/register/job?id=' + userId">
+                onclick="location.pathname = '/register/job?id_user=' + userId">
             Add job
         </button>
 
@@ -123,13 +120,6 @@
     var userId;
     var tabs;
 
-    function isStringEmpty(string) {
-        if (string == null || string.size == 0) {
-            return true;
-        }
-        return false;
-    }
-
     function FormToJson(form) {
         var array = $(form).serializeArray();
         var json = {};
@@ -141,7 +131,7 @@
                 json[this.name] = this.value || '';
             }
         });
-        json["id"] = userId;
+        json["id_user"] = userId;
         return json;
     }
 
@@ -156,8 +146,8 @@
             data: json,
             traditional: true,
             success: function (data) {
-                userId = data.id
-                $("#ok").text( "Saved" ).show().fadeOut( 4000 );
+                userId = data.id_user
+                $("#ok").text("Saved").show().fadeOut(4000);
                 if (userId != "" && userId != null && userId != undefined) {
                     tabs.tabs("enable", "#fragment-2");
                     jobTable.ajax.reload();
@@ -174,7 +164,7 @@
         jQuery.ajax({
             type: 'post',
             url: "/get",
-            data: {"userId": userId},
+            data: {"id_user": userId},
             traditional: true,
             success: function (data) {
                 userRoles = new Array(data.aaData.length);
@@ -203,7 +193,7 @@
     function buildJobTable() {
         jobTable = $("#jobDataTable").DataTable({
             "sPaginationType": "full_numbers",
-            "sAjaxSource": "/job?id=" + userId,
+            "sAjaxSource": "/job?id_user=" + userId,
             "bJQueryUI": true,
             "bAutoWidth": false,
             "oLanguage": {
@@ -230,7 +220,7 @@
     }
 
     $(function () {
-        userId = document.getElementById("id").value;
+        userId = document.getElementById("id_user").value;
         if (userId != "") {
             editUserRoles();
             tabs = $("#tabs").tabs();

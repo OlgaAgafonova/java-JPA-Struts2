@@ -4,38 +4,42 @@ import com.opensymphony.xwork2.ActionSupport;
 import task.entity.JobPlace;
 import task.entity.Organization;
 import task.entity.Position;
+import task.entity.User;
 import task.service.Manager;
 import task.service.Utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 public class JobAction extends ActionSupport {
 
-    private String id;
-    private List organizations;
+    private String id_user;
+    private String id_org;
+    private String user;
     private String organization;
-    private List positions;
     private String position;
     private String start;
     private String end;
     private String type;
 
     private Manager manager;
+    private List users;
+    private List organizations;
+    private List positions;
     private List jobPlacesOfUser;
 
     public String index() {
+        users = manager.getAllUsers();
         organizations = manager.getAllOrganizations();
         positions = manager.getAllPositions();
         return SUCCESS;
     }
 
     public String showJobs() {
-        if (id != null && !id.trim().isEmpty()) {
-            jobPlacesOfUser = manager.getJobPlacesOfUserByID(Integer.valueOf(id));
+        if (id_user != null && !id_user.trim().isEmpty()) {
+            jobPlacesOfUser = manager.getJobPlacesOfUserByID(Integer.valueOf(id_user));
             Utils.toResponse(jobPlacesOfUser, "jsonJob");
         }
         return SUCCESS;
@@ -45,8 +49,28 @@ public class JobAction extends ActionSupport {
         if (validation()) {
             return ERROR;
         }
-        Organization organization = manager.getOrganizationByID(Integer.valueOf(this.organization));
+        JobPlace jobPlace = new JobPlace();
+        if (!isStringEmpty(id_user)) {
+            jobPlace = makeJobPlaceFromUser();
+        }
+        if (!isStringEmpty(id_org)) {
+            jobPlace = makeJobPlaceFromOrganization();
+        }
+
+        if (!checkCrossingWithMainJobs(jobPlace.getStart(), jobPlace.getEnd(), jobPlace.getUser().getId())) {
+            return ERROR;
+        }
+
+        manager.save(jobPlace);
+        return SUCCESS;
+    }
+
+    private JobPlace makeJobPlaceFromOrganization() {
+        JobPlace jobPlace = new JobPlace();
+        Organization organization = manager.getOrganizationByID(Integer.valueOf(this.id_org));
         Position position = manager.getPositionByID(Integer.valueOf(this.position));
+        User user = manager.getUserByID(Integer.valueOf(this.user));
+
         SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
         Date startDate = null, endDate = null;
         try {
@@ -54,35 +78,57 @@ public class JobAction extends ActionSupport {
             endDate = format.parse(end);
         } catch (ParseException ignored) {
         }
-        JobPlace jobPlace = new JobPlace();
-        jobPlace.setUser(manager.getUserByID(Integer.valueOf(id)));
+
+        jobPlace.setUser(user);
         jobPlace.setOrganization(organization);
         jobPlace.setPosition(position);
         jobPlace.setStart(startDate);
         jobPlace.setEnd(endDate);
 
-        if (type.equals("1") && isCrossingWithMainJobs(startDate, endDate)) {
-            addActionError("Two main job in the same time");
-            return ERROR;
+        return jobPlace;
+    }
+
+    private JobPlace makeJobPlaceFromUser() {
+        JobPlace jobPlace = new JobPlace();
+
+        Organization organization = manager.getOrganizationByID(Integer.valueOf(this.organization));
+        Position position = manager.getPositionByID(Integer.valueOf(this.position));
+        User user = manager.getUserByID(Integer.valueOf(this.id_user));
+
+        SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
+        Date startDate = null, endDate = null;
+        try {
+            startDate = format.parse(start);
+            endDate = format.parse(end);
+        } catch (ParseException ignored) {
         }
-        manager.save(jobPlace);
-        return SUCCESS;
+
+        jobPlace.setUser(user);
+        jobPlace.setOrganization(organization);
+        jobPlace.setPosition(position);
+        jobPlace.setStart(startDate);
+        jobPlace.setEnd(endDate);
+
+        return jobPlace;
     }
 
     private boolean validation() {
-        return isStringEmpty(organization) || isStringEmpty(position) || isStringEmpty(start);
+        return isStringEmpty(user) && isStringEmpty(id_user)
+                || isStringEmpty(organization) && isStringEmpty(id_org)
+                || isStringEmpty(position)
+                || isStringEmpty(start);
+
     }
 
     private boolean isStringEmpty(String string) {
         return string == null || string.trim().isEmpty();
     }
 
-    private boolean isCrossingWithMainJobs(Date start, Date end) {
+    private boolean isCrossingWithMainJobs(Date start, Date end, Integer id_user) {
         boolean flag = false;
-        jobPlacesOfUser = manager.getJobPlacesOfUserByID(Integer.valueOf(id));
-        Iterator<JobPlace> iterator = jobPlacesOfUser.iterator();
-        for (int i = 0; i < jobPlacesOfUser.size(); i++) {
-            JobPlace place = iterator.next();
+        jobPlacesOfUser = manager.getJobPlacesOfUserByID(Integer.valueOf(id_user));
+        for (Object aJobPlace : jobPlacesOfUser) {
+            JobPlace place = (JobPlace) aJobPlace;
             if (place.getType() != 0) {
                 Date startMain = place.getStart();
                 Date endMain = place.getEnd();
@@ -93,36 +139,40 @@ public class JobAction extends ActionSupport {
         return flag;
     }
 
-    public String getId() {
-        return id;
+    private boolean checkCrossingWithMainJobs(Date start, Date end, Integer id_user) {
+        return !(type.equals("1") && isCrossingWithMainJobs(start, end, id_user));
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public String getId_user() {
+        return id_user;
     }
 
-    public List<JobPlace> getJobPlacesOfUser() {
-        return jobPlacesOfUser;
+    public void setId_user(String id_user) {
+        this.id_user = id_user;
     }
 
-    public void setJobPlacesOfUser(List<JobPlace> jobPlacesOfUser) {
-        this.jobPlacesOfUser = jobPlacesOfUser;
+    public String getId_org() {
+        return id_org;
+    }
+
+    public void setId_org(String id_org) {
+        this.id_org = id_org;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
     }
 
     public List<Organization> getOrganizations() {
         return organizations;
     }
 
-    public void setOrganizations(List<Organization> organizations) {
-        this.organizations = organizations;
-    }
-
     public List<Position> getPositions() {
         return positions;
-    }
-
-    public void setPositions(List<Position> positions) {
-        this.positions = positions;
     }
 
     public String getStart() {
@@ -165,14 +215,21 @@ public class JobAction extends ActionSupport {
         this.type = type;
     }
 
+    public List getUsers() {
+        return users;
+    }
+
     @Override
     public String toString() {
         return "JobAction{"
-                + "id='" + id + '\''
-                + ", organization=" + organization
-                + ", position=" + position
+                + "id_user='" + id_user + '\''
+                + ", id_org='" + id_org + '\''
+                + ", user='" + user + '\''
+                + ", organization='" + organization + '\''
+                + ", position='" + position + '\''
                 + ", start='" + start + '\''
                 + ", end='" + end + '\''
+                + ", type='" + type + '\''
                 + '}';
     }
 

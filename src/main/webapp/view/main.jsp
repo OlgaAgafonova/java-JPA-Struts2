@@ -4,14 +4,11 @@
 <head>
     <title>Task</title>
     <style>
-        table.list {
-            border-collapse: collapse;
-            width: 40%;
-        }
-
         table.list, table.list td, table.list th {
             border: 1px solid gray;
             padding: 5px;
+            border-collapse: collapse;
+            width: 40%;
         }
     </style>
 
@@ -36,7 +33,9 @@
     </ul>
     <div id="fragment-1">
         <s:form action="register/user" method="GET">
-            <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Add user</button>
+            <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
+                Add user
+            </button>
         </s:form>
 
         <div id="container">
@@ -82,13 +81,14 @@
                     </tbody>
                 </table>
             </div>
-            <div id="USER_ID" title=""></div>
+            <div id="id_user" title=""></div>
         </div>
     </div>
 
     <div id="fragment-2">
         <s:form action="register/organization" method="GET">
-            <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Add organization
+            <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
+                Add organization
             </button>
         </s:form>
 
@@ -124,7 +124,7 @@
         jQuery.ajax({
             type: "POST",
             url: "delete/user",
-            data: {"userId": userId},
+            data: {"id_user": userId},
             success: function () {
                 tableUsers.ajax.reload();
             },
@@ -138,14 +138,14 @@
         jQuery.ajax({
             type: 'post',
             url: "get",
-            data: {"userId": userId},
+            data: {"id_user": userId},
             traditional: true,
             success: function (data) {
                 userRoles = data;
                 dialogTable._fnAjaxUpdate();
                 changedUserRoles = new Array(userRoles.length);
                 for (var i = 0; i < changedUserRoles.length; i++) {
-                    changedUserRoles[i] = userRoles.aaData[i].id;
+                    changedUserRoles[i] = userRoles.aaData[i].id_user;
                 }
             },
             error: function () {
@@ -154,7 +154,7 @@
         });
         dialogTable.fnUpdate();
         dialog.dialog("open");
-        document.getElementById("USER_ID").setAttribute("title", userId);
+        document.getElementById("id_user").setAttribute("title", userId);
     }
 
     function changeRole(roleId) {
@@ -185,14 +185,14 @@
 
     function addDataToTableFromDialog() {
         $('#editRolesDialog').dialog("close");
-        var userId = document.getElementById("USER_ID").getAttribute("title");
+        var userId = document.getElementById("id_user").getAttribute("title");
         jQuery.ajax({
             type: "POST",
             url: "edit/user",
-            data: {"userId": userId, "changedRoles": changedUserRoles},
+            data: {"id_user": userId, "changedRoles": changedUserRoles},
             traditional: true,
             success: function () {
-                tableUsers._fnAjaxUpdate();
+                tableUsers.ajax.reload();
             },
             error: function () {
                 // error handler
@@ -204,7 +204,7 @@
         jQuery.ajax({
             type: "POST",
             url: "delete/org",
-            data: {"id": orgId},
+            data: {"id_user": orgId},
             success: function () {
                 tableOrganizations.ajax.reload();
             },
@@ -231,7 +231,7 @@
             "aoColumns": [
                 {
                     "mData": "firstname", "render": function (data, type, full, meta) {
-                    return '<a href="/register/user?id=' + full.id + '">' + data + '</a>';
+                    return '<a href="/register/user?id_user=' + full.id + '">' + data + '</a>';
 
                 }, sDefaultContent: "n/a"
                 },
@@ -322,7 +322,7 @@
             "aoColumns": [
                 {
                     "mData": "name", "render": function (data, type, full, meta) {
-                    return '<a href="/register/organization?id=' + full.id + '">' + data + '</a>';
+                    return '<a href="/register/organization?id_org=' + full.id + '">' + data + '</a>';
                 }, sDefaultContent: "n/a"
                 },
                 {
@@ -336,7 +336,7 @@
                 }, sDefaultContent: "n/a"
                 },
                 {
-                    "mData": "id", "render": function (data, type, full, meta) {
+                    "mData": "id_user", "render": function (data, type, full, meta) {
                     return '<a href="#" onclick="deleteOrg(' + data + ')">Delete</a>';
                 }
                 }

@@ -20,31 +20,27 @@ public class MainAction extends ActionSupport implements Preparable {
     private User user;
     private Role role;
 
-    private Integer userId;
+    private Integer id_user;
     private String[] changedRoles;
 
     private Manager manager;
 
     public String index() {
-        roles = manager.getAllRoles();
         return SUCCESS;
     }
 
     public String showUsers() {
-        users = manager.getAllUsers();
         Utils.toResponse(users, "jsonRoot");
         return SUCCESS;
     }
 
     public String getAllRoles() {
-        roles = manager.getAllRoles();
         Utils.toResponse(roles, "jsonAllRoles");
         return SUCCESS;
     }
 
     public String getRolesOfUser() {
-        users = manager.getAllUsers();
-        user = manager.getUserByID(userId);
+        user = manager.getUserByID(id_user);
         List<Object> rolesList = new ArrayList<>();
         rolesList.addAll(user.getRoles());
         Utils.toResponse(rolesList, "jsonUserRoles");
@@ -52,7 +48,8 @@ public class MainAction extends ActionSupport implements Preparable {
     }
 
     public String editUser() {
-        user = manager.getUserByID(userId);
+        if(id_user != null)
+        user = manager.getUserByID(id_user);
         Set<Role> newRolesOfUser = new HashSet<>();
         for (String changedRole : changedRoles) {
             Integer roleId = Integer.valueOf(changedRole);
@@ -68,6 +65,8 @@ public class MainAction extends ActionSupport implements Preparable {
     public void prepare() throws Exception {
         user = null;
         role = null;
+        users = manager.getAllUsers();
+        roles = manager.getAllRoles();
     }
 
     public void setManager(Manager manager) {
@@ -82,40 +81,12 @@ public class MainAction extends ActionSupport implements Preparable {
         this.user = user;
     }
 
-    public Role getRole() {
-        return role;
+    public Integer getId_user() {
+        return id_user;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    public List<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(List<User> users) {
-        this.users = users;
-    }
-
-    public List<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(List<Role> roles) {
-        this.roles = roles;
-    }
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
-
-    public String[] getChangedRoles() {
-        return changedRoles;
+    public void setId_user(Integer id_user) {
+        this.id_user = id_user;
     }
 
     public void setChangedRoles(String[] changedRoles) {
