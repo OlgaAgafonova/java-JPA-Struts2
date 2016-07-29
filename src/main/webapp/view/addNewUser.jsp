@@ -106,6 +106,7 @@
                 <th>Position</th>
                 <th>Start date</th>
                 <th>End date</th>
+                <th>Action</th>
             </tr>
             </thead>
             <tbody>
@@ -213,6 +214,15 @@
                         return "till present";
                     }
                     return data.substr(0, 10);
+                }, sDefaultContent: "n/a"
+                },
+                {
+                    "mData": "id", "render": function (data, type, full, meta) {
+                    return '<a href="/register/job?id_job=' + full.id
+                            + '&id_user=' + full.user.id
+                            + '&id_org=' + full.organization.id
+                            + '&id_pos=' + full.position.id
+                            + '">Edit</a>';
                 }, sDefaultContent: "n/a"
                 }
             ]

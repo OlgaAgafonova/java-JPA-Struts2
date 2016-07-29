@@ -98,8 +98,14 @@ public class ManagerImpl implements Manager {
 
     @Override
     @Transactional
-    public List<JobPlace> getJobPlacesOfUserByID(Integer userId) {
+    public List<JobPlace> getJobPlacesByUserID(Integer userId) {
         return (List<JobPlace>) jobPlaceDAO.getJobPlaceByUserID(userId);
+    }
+
+    @Override
+    @Transactional
+    public JobPlace getJobPlaceByID(Integer jobPlaceId) {
+        return jobPlaceDAO.getJobPlaceById(jobPlaceId);
     }
 
     @Override

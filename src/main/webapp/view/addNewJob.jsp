@@ -45,6 +45,8 @@
         <s:form id="formAddJob">
             <s:textfield id="id_user" name="id_user" type="hidden"/>
             <s:textfield id="id_org" name="id_org" type="hidden"/>
+            <s:textfield id="id_job" name="id_job" type="hidden"/>
+            <s:textfield id="id_pos" name="id_pos" type="hidden"/>
 
             <h3 id="header">Add job</h3>
 
@@ -125,6 +127,8 @@
 <script>
     var userId;
     var orgId;
+    var jobId;
+    var posId;
 
     function FormToJson(form) {
         var array = $(form).serializeArray();
@@ -132,9 +136,6 @@
         $.each(array, function () {
             json[this.name] = this.value || '';
         });
-        json["id_user"] = userId;
-        json["id_org"] = orgId;
-        console.log(json);
         return json;
     }
 
@@ -147,11 +148,12 @@
             dataType: 'json',
             data: json,
             traditional: true,
-            success: function () {
+            success: function (data) {
                 $("#ok").text("Saved").show().fadeOut(4000);
-            }
-            ,
-            error: function () {
+                document.getElementById("start").value = data.start;
+                document.getElementById("end").value = data.end;
+            },
+            error: function (a, b, c, d) {
                 $("#error").text("Please, fill in the form correctly.").show();
             }
         });
@@ -159,7 +161,7 @@
 
     function disableUser() {
         var form = document.forms[0];
-        var select = form.elements[2];
+        var select = form.elements[4];
         for (var j = 0; j < select.options.length; j++) {
             if (userId == select.options[j].value) {
                 select.options[j].selected = true;
@@ -167,10 +169,19 @@
         }
         select.disabled = true;
     }
-
     function disableOrganisation() {
         var form = document.forms[0];
-        var select = form.elements[3];
+        var select = form.elements[5];
+        for (var j = 0; j < select.options.length; j++) {
+            if (orgId == select.options[j].value) {
+                select.options[j].selected = true;
+            }
+        }
+        select.disabled = true;
+    }
+    function disablePosition() {
+        var form = document.forms[0];
+        var select = form.elements[6];
         for (var j = 0; j < select.options.length; j++) {
             if (orgId == select.options[j].value) {
                 select.options[j].selected = true;
@@ -183,14 +194,20 @@
         $("#tabs").tabs();
         userId = document.getElementById("id_user").value;
         orgId = document.getElementById("id_org").value;
-        console.log("userId "+userId);
-        console.log("orgId "+orgId);
-        if (userId != undefined && userId != null && userId != "") {
+        jobId = document.getElementById("id_job").value;
+        posId = document.getElementById("id_pos").value;
+        if (userId != "" && orgId == "" && jobId == "" && posId == "") {
             disableUser();
         }
-        if (orgId != undefined && orgId != null && orgId !="") {
+        if (userId == "" && orgId != "" && jobId == "" && posId == "") {
             document.getElementById("header").innerHTML = "Add employee";
             disableOrganisation();
+        }
+        if (userId != "" && orgId != "" && jobId != "" && posId != "") {
+            document.getElementById("header").innerHTML = "Edit job place";
+            disableUser();
+            disableOrganisation();
+            disablePosition();
         }
 
         $("#start").datepicker();

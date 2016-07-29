@@ -65,13 +65,13 @@
         <action name="add/user" class="addAction" method="addUser">
             <result name="input" type="json"/>
             <result name="success" type="json"/>
-            <result name="error" />
+            <result name="error"/>
         </action>
 
         <action name="add/org" class="orgAction" method="addOrg">
             <result name="input" type="json"/>
             <result name="success" type="json"/>
-            <result name="error" />
+            <result name="error"/>
         </action>
 
         <action name="add/job" class="jobAction" method="addJob">
