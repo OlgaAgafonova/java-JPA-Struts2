@@ -318,14 +318,14 @@ public class JobAction extends ActionSupport {
 
     @Override
     public String toString() {
-        return "JobAction{" +
-                "id_user='" + id_user + '\'' +
-                ", id_org='" + id_org + '\'' +
-                ", id_job='" + id_job + '\'' +
-                ", id_pos='" + id_pos + '\'' +
-                ", start='" + start + '\'' +
-                ", end='" + end + '\'' +
-                '}';
+        return "JobAction{"
+                + "id_user='" + id_user + '\''
+                + ", id_org='" + id_org + '\''
+                + ", id_job='" + id_job + '\''
+                + ", id_pos='" + id_pos + '\''
+                + ", start='" + start + '\''
+                + ", end='" + end + '\''
+                + '}';
     }
 
     public void setManager(Manager manager) {
