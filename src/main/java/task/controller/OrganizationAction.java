@@ -1,11 +1,13 @@
 package task.controller;
 
 import com.opensymphony.xwork2.ActionSupport;
+import org.apache.struts2.ServletActionContext;
 import task.entity.Address;
 import task.entity.Organization;
 import task.service.Manager;
 import task.service.Utils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public class OrganizationAction extends ActionSupport {
@@ -37,8 +39,13 @@ public class OrganizationAction extends ActionSupport {
     }
 
     public String showOrgs() {
-        organizations = manager.getAllOrganizations();
-        Utils.toResponse(organizations, "jsonOrg");
+        HttpServletRequest request = ServletActionContext.getRequest();
+        Integer iDisplayStart = Integer.valueOf(request.getParameterMap().get("iDisplayStart")[0]);
+        Integer iDisplayLength = Integer.valueOf(request.getParameterMap().get("iDisplayLength")[0]);
+
+        organizations = manager.getOrganizations(iDisplayStart, iDisplayLength);
+        int totalSize = manager.getTotalCountOfOrganizations().intValue();
+        Utils.toResponse(organizations, "jsonOrg", totalSize, totalSize);
         return SUCCESS;
     }
 
@@ -68,7 +75,7 @@ public class OrganizationAction extends ActionSupport {
         return SUCCESS;
     }
 
-    public String employees() {
+    public String showEmployees() {
         if (id_org != null) {
             List employees = manager.getJobPlacesByOrganizationID(id_org);
             Utils.toResponse(employees, "jsonEmployees");

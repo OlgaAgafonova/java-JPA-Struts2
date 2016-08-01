@@ -28,14 +28,14 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public List getUsers(Integer start, Integer maxRows) {
-        return getCurrentSession().createQuery("from User order by firstname")
+        return getCurrentSession().createQuery("from User order by lastname")
                 .setFirstResult(start)
                 .setMaxResults(maxRows)
                 .list();
     }
 
     @Override
-    public List getAllUsers() {
+    public List getAll() {
         return getCurrentSession().createQuery("from User").list();
     }
 

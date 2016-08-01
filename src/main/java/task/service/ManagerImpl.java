@@ -50,6 +50,12 @@ public class ManagerImpl implements Manager {
 
     @Override
     @Transactional
+    public Long getTotalCountOfOrganizations() {
+        return organizationDAO.getCountOfOrganization();
+    }
+
+    @Override
+    @Transactional
     public List getUsers(Integer start, Integer maxRows) {
         return userDAO.getUsers(start, maxRows);
     }
@@ -57,7 +63,7 @@ public class ManagerImpl implements Manager {
     @Override
     @Transactional
     public List getAllUsers() {
-        return userDAO.getAllUsers();
+        return userDAO.getAll();
     }
 
     @Override
@@ -88,6 +94,12 @@ public class ManagerImpl implements Manager {
     @Transactional
     public List getAllOrganizations() {
         return organizationDAO.getAll();
+    }
+
+    @Override
+    @Transactional
+    public List getOrganizations(Integer start, Integer maxRows) {
+        return organizationDAO.getOrganizations(start, maxRows);
     }
 
     @Override

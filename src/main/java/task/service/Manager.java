@@ -14,6 +14,8 @@ public interface Manager {
 
     Long getTotalCountOfUsers();
 
+    Long getTotalCountOfOrganizations();
+
     List getUsers(Integer start, Integer maxRows);
 
     List getAllUsers();
@@ -25,6 +27,8 @@ public interface Manager {
     Role getRoleByID(Integer roleId);
 
     List getAllOrganizations();
+
+    List getOrganizations(Integer start, Integer maxRows);
 
     Organization getOrganizationByID(Integer orgId);
 

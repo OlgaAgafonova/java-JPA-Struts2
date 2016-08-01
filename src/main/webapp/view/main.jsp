@@ -232,12 +232,12 @@
             },
             "aoColumns": [
                 {
-                    "mData": "firstname", "render": function (data, type, full, meta) {
+                    "mData": "lastname", "render": function (data, type, full, meta) {
                     return '<a href="/register/user?id_user=' + full.id + '">' + data + '</a>';
 
                 }, sDefaultContent: "n/a"
                 },
-                {"mData": "lastname", sDefaultContent: "n/a"},
+                {"mData": "firstname", sDefaultContent: "n/a"},
                 {"mData": "email", sDefaultContent: "n/a"},
                 {"mData": "login", sDefaultContent: "n/a"},
                 {
@@ -309,6 +309,8 @@
 
         tableOrganizations = $("#organizationsDataTable").DataTable({
             "sPaginationType": "full_numbers",
+            "serverSide": true,
+            "processing": true,
             "sAjaxSource": "org",
             "bJQueryUI": true,
             "bAutoWidth": false,

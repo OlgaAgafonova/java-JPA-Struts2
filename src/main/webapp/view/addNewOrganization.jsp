@@ -157,8 +157,8 @@
                 "sSearch": "Search in all columns:"
             },
             "aoColumns": [
-                {"mData": "user.firstname", sDefaultContent: "n/a"},
                 {"mData": "user.lastname", sDefaultContent: "n/a"},
+                {"mData": "user.firstname", sDefaultContent: "n/a"},
                 {"mData": "user.email", sDefaultContent: "n/a"},
                 {"mData": "position.name", sDefaultContent: "n/a"},
                 {
@@ -178,9 +178,9 @@
                     "mData": "id", "render": function (data, type, full, meta) {
                     return '<a href="/register/job?id_job=' + full.id
                             + '&id_user=' + full.user.id
-                            + '&id_org='+ full.organization.id
-                            + '&id_pos='+ full.position.id
-                            +'">Edit</a>';
+                            + '&id_org=' + full.organization.id
+                            + '&id_pos=' + full.position.id
+                            + '">Edit</a>';
                 }, sDefaultContent: "n/a"
                 }
             ]

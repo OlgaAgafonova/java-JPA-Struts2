@@ -2,6 +2,7 @@ package task.dao;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.classic.Session;
+import org.hibernate.criterion.Projections;
 import org.springframework.stereotype.Repository;
 import task.entity.Organization;
 
@@ -24,8 +25,24 @@ public class OrganizationDAOImpl implements OrganizationDAO {
     }
 
     @Override
-    public List<Organization> getAll() {
+    public List getAll() {
         return getCurrentSession().createQuery("from Organization ").list();
+    }
+
+    @Override
+    public List getOrganizations(Integer start, Integer maxRows) {
+        return getCurrentSession().createQuery("from Organization order by name")
+                .setFirstResult(start)
+                .setMaxResults(maxRows)
+                .list();
+    }
+
+    @Override
+    public Long getCountOfOrganization() {
+        return (Long)getCurrentSession()
+                .createCriteria(Organization.class)
+                .setProjection(Projections.rowCount())
+                .uniqueResult();
     }
 
     @Override

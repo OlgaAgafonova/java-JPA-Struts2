@@ -10,7 +10,11 @@ public interface OrganizationDAO {
 
     Organization getOrganizationById(Integer id);
 
-    List<Organization> getAll();
+    List getAll();
+
+    List getOrganizations(Integer start, Integer maxRows);
+
+    Long getCountOfOrganization();
 
     void deleteOrganizationByID(Integer id);
 }

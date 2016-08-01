@@ -10,7 +10,7 @@ public interface UserDAO {
 
     List getUsers(Integer start, Integer maxRows);
 
-    List getAllUsers();
+    List getAll();
 
     Long getCountOfUsers();
 
