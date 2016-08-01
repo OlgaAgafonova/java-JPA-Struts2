@@ -10,7 +10,7 @@ import java.util.List;
 
 public class OrganizationAction extends ActionSupport {
 
-    private String id_org;
+    private Integer id_org;
     private String orgname;
     private String country;
     private String city;
@@ -22,10 +22,10 @@ public class OrganizationAction extends ActionSupport {
     private List organizations;
 
     public String index() {
-        if (id_org != null && !id_org.trim().isEmpty()) {
-            Organization organization = manager.getOrganizationByID(Integer.valueOf(id_org));
+        if (id_org != null) {
+            Organization organization = manager.getOrganizationByID(id_org);
             Address address = organization.getAddress();
-            id_org = String.valueOf(organization.getId());
+            id_org = organization.getId();
             orgname = organization.getName();
             country = address.getCountry();
             city = address.getCity();
@@ -48,8 +48,8 @@ public class OrganizationAction extends ActionSupport {
         }
         Organization organization = new Organization();
         Address address = new Address();
-        if (id_org != null && !id_org.trim().isEmpty()) {
-            organization = manager.getOrganizationByID(Integer.valueOf(id_org));
+        if (id_org != null) {
+            organization = manager.getOrganizationByID(id_org);
             address = organization.getAddress();
         }
         organization.setName(orgname);
@@ -69,8 +69,8 @@ public class OrganizationAction extends ActionSupport {
     }
 
     public String employees() {
-        if (id_org != null && !id_org.trim().isEmpty()) {
-            List employees = manager.getJobPlacesByOrganizationID(Integer.valueOf(id_org));
+        if (id_org != null) {
+            List employees = manager.getJobPlacesByOrganizationID(id_org);
             Utils.toResponse(employees, "jsonEmployees");
         }
         return SUCCESS;
@@ -105,11 +105,11 @@ public class OrganizationAction extends ActionSupport {
         return false;
     }
 
-    public String getId_org() {
+    public Integer getId_org() {
         return id_org;
     }
 
-    public void setId_org(String id_org) {
+    public void setId_org(Integer id_org) {
         this.id_org = id_org;
     }
 

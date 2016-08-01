@@ -12,6 +12,10 @@ public interface Manager {
 
     void save(JobPlace jobPlace);
 
+    Long getTotalCountOfUsers();
+
+    List getUsers(Integer start, Integer maxRows);
+
     List getAllUsers();
 
     User getUserByID(Integer userId);

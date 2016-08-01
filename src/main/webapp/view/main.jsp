@@ -218,6 +218,8 @@
         tableUsers = $("#jqueryDataTable").DataTable({
             "sPaginationType": "full_numbers",
             "sAjaxSource": "list",
+            "processing": true,
+            "serverSide": true,
             "bJQueryUI": true,
             "oLanguage": {
                 "sSearch": "Search in all columns:"

@@ -2,6 +2,7 @@ package task.dao;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.classic.Session;
+import org.hibernate.criterion.Projections;
 import org.springframework.stereotype.Repository;
 import task.entity.User;
 
@@ -18,7 +19,23 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public List<User> getAllUsers() {
+    public Long getCountOfUsers() {
+        return (Long)getCurrentSession()
+                .createCriteria(User.class)
+                .setProjection(Projections.rowCount())
+                .uniqueResult();
+    }
+
+    @Override
+    public List getUsers(Integer start, Integer maxRows) {
+        return getCurrentSession().createQuery("from User order by firstname")
+                .setFirstResult(start)
+                .setMaxResults(maxRows)
+                .list();
+    }
+
+    @Override
+    public List getAllUsers() {
         return getCurrentSession().createQuery("from User").list();
     }
 

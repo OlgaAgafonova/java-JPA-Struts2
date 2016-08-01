@@ -9,6 +9,8 @@ public class DataTableResponse {
 
     private List<?> aaData;
 
+    private String error;
+
     public int getsEcho() {
         return sEcho;
     }
@@ -39,6 +41,14 @@ public class DataTableResponse {
 
     public void setAaData(List<?> aaData) {
         this.aaData = aaData;
+    }
+
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
     }
 
     @Override

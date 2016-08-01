@@ -65,19 +65,21 @@
         <action name="add/user" class="addAction" method="addUser">
             <result name="input" type="json"/>
             <result name="success" type="json"/>
-            <result name="error"/>
+            <result name="error" type="json"/>
         </action>
 
         <action name="add/org" class="orgAction" method="addOrg">
             <result name="input" type="json"/>
             <result name="success" type="json"/>
-            <result name="error"/>
+            <result name="error" type="json"/>
         </action>
 
         <action name="add/job" class="jobAction" method="addJob">
             <result name="input" type="json"/>
             <result name="success" type="json"/>
-            <result name="error" />
+            <result name="error" type="json">
+                <param name="root">jsonError</param>
+            </result>
         </action>
 
         <action name="job" class="jobAction" method="showJobs">

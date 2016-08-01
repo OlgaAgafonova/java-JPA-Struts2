@@ -149,11 +149,16 @@
             data: json,
             traditional: true,
             success: function (data) {
-                $("#ok").text("Saved").show().fadeOut(4000);
-                document.getElementById("start").value = data.start;
-                document.getElementById("end").value = data.end;
+                if (data.error != null) {
+                    $("#error").text(data.error).show();
+                } else {
+                    $("#ok").text("Saved").show().fadeOut(4000);
+                    document.getElementById("start").value = data.start;
+                    document.getElementById("end").value = data.end;
+                }
+
             },
-            error: function (a, b, c, d) {
+            error: function () {
                 $("#error").text("Please, fill in the form correctly.").show();
             }
         });

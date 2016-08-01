@@ -1,24 +1,21 @@
 package task.controller;
 
 import com.opensymphony.xwork2.ActionSupport;
-import com.opensymphony.xwork2.Preparable;
+import org.apache.struts2.ServletActionContext;
 import task.entity.Role;
 import task.entity.User;
 import task.service.Manager;
 import task.service.Utils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class MainAction extends ActionSupport implements Preparable {
-
-    private List users;
-    private List roles;
+public class MainAction extends ActionSupport {
 
     private User user;
-    private Role role;
 
     private Integer id_user;
     private String[] changedRoles;
@@ -30,11 +27,18 @@ public class MainAction extends ActionSupport implements Preparable {
     }
 
     public String showUsers() {
-        Utils.toResponse(users, "jsonRoot");
+        HttpServletRequest request = ServletActionContext.getRequest();
+        Integer iDisplayStart = Integer.valueOf(request.getParameterMap().get("iDisplayStart")[0]);
+        Integer iDisplayLength = Integer.valueOf(request.getParameterMap().get("iDisplayLength")[0]);
+
+        List users = manager.getUsers(iDisplayStart, iDisplayLength);
+        int totalSize = manager.getTotalCountOfUsers().intValue();
+        Utils.toResponse(users, "jsonRoot", totalSize, totalSize);
         return SUCCESS;
     }
 
     public String getAllRoles() {
+        List roles = manager.getAllRoles();
         Utils.toResponse(roles, "jsonAllRoles");
         return SUCCESS;
     }
@@ -48,25 +52,18 @@ public class MainAction extends ActionSupport implements Preparable {
     }
 
     public String editUser() {
-        if(id_user != null)
-        user = manager.getUserByID(id_user);
-        Set<Role> newRolesOfUser = new HashSet<>();
-        for (String changedRole : changedRoles) {
-            Integer roleId = Integer.valueOf(changedRole);
-            role = manager.getRoleByID(roleId);
-            newRolesOfUser.add(role);
+        if (id_user != null) {
+            user = manager.getUserByID(id_user);
+            Set<Role> newRolesOfUser = new HashSet<>();
+            for (String changedRole : changedRoles) {
+                Integer roleId = Integer.valueOf(changedRole);
+                Role role = manager.getRoleByID(roleId);
+                newRolesOfUser.add(role);
+            }
+            user.setRoles(newRolesOfUser);
+            manager.save(user);
         }
-        user.setRoles(newRolesOfUser);
-        manager.save(user);
         return SUCCESS;
-    }
-
-    @Override
-    public void prepare() throws Exception {
-        user = null;
-        role = null;
-        users = manager.getAllUsers();
-        roles = manager.getAllRoles();
     }
 
     public void setManager(Manager manager) {

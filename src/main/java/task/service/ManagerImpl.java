@@ -44,6 +44,18 @@ public class ManagerImpl implements Manager {
 
     @Override
     @Transactional
+    public Long getTotalCountOfUsers() {
+        return userDAO.getCountOfUsers();
+    }
+
+    @Override
+    @Transactional
+    public List getUsers(Integer start, Integer maxRows) {
+        return userDAO.getUsers(start, maxRows);
+    }
+
+    @Override
+    @Transactional
     public List getAllUsers() {
         return userDAO.getAllUsers();
     }
