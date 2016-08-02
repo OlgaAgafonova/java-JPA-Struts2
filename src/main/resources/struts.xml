@@ -54,6 +54,11 @@
                 <param name="root">jsonEmployees</param>
             </result>
         </action>
+        <action name="certifications" class="orgAction" method="showCertifications">
+            <result type="json">
+                <param name="root">jsonCertifications</param>
+            </result>
+        </action>
 
 
         <action name="edit/roles" class="mainAction" method="getAllRoles">
@@ -68,6 +73,9 @@
         </action>
         <action name="edit/user" class="mainAction" method="editUser">
             <result name="input" type="json"/>
+            <result name="success" type="json"/>
+        </action>
+        <action name="certifications/current" class="orgAction" method="getCurrentStatus">
             <result name="success" type="json"/>
         </action>
 

@@ -13,6 +13,7 @@ public class ManagerImpl implements Manager {
     private PositionDAO positionDAO;
     private OrganizationDAO organizationDAO;
     private JobPlaceDAO jobPlaceDAO;
+    private CertificationDAO certificationDAO;
 
     @Override
     @Transactional
@@ -40,6 +41,12 @@ public class ManagerImpl implements Manager {
     @Transactional
     public void save(JobPlace jobPlace) {
         jobPlaceDAO.save(jobPlace);
+    }
+
+    @Override
+    @Transactional
+    public void save(Certification certification) {
+        certificationDAO.save(certification);
     }
 
     @Override
@@ -134,6 +141,18 @@ public class ManagerImpl implements Manager {
 
     @Override
     @Transactional
+    public List getCertificationsByOrganizationID(Integer orgId) {
+        return certificationDAO.getCertificationsByOrganizationID(orgId);
+    }
+
+    @Override
+    @Transactional
+    public Byte getCurrentCertificationStatusByOrganizationID(Integer orgId) {
+        return certificationDAO.getCurrentStatusByOrganizationID(orgId);
+    }
+
+    @Override
+    @Transactional
     public void deleteUserByID(Integer userId) {
         userDAO.deleteUserByID(userId);
         userRolesDAO.deleteUserRoles(userId);
@@ -168,5 +187,9 @@ public class ManagerImpl implements Manager {
 
     public void setJobPlaceDAO(JobPlaceDAO jobPlaceDAO) {
         this.jobPlaceDAO = jobPlaceDAO;
+    }
+
+    public void setCertificationDAO(CertificationDAO certificationDAO) {
+        this.certificationDAO = certificationDAO;
     }
 }

@@ -46,6 +46,7 @@
     <ul>
         <li><a href="#fragment-1"><span>General information</span></a></li>
         <li><a href="#fragment-2"><span>Employees</span></a></li>
+        <li><a href="#fragment-3"><span>Certifications</span></a></li>
     </ul>
 
     <div id="fragment-1">
@@ -111,6 +112,29 @@
             </tbody>
         </table>
     </div>
+
+    <div id="fragment-3">
+        <div id="addDocuments" hidden="true">
+            upload
+        </div>
+        <div id="giveCertification" hidden="true">
+            <button>Certify</button>
+        </div>
+        <div id="removeCertification" hidden="true">
+            <button>Remove certification</button>
+        </div>
+
+        <table class="display" id="certificationsDataTable">
+            <thead>
+            <tr>
+                <th>Date</th>
+                <th>Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 
@@ -148,7 +172,7 @@
     }
 
     function buildEmployeesTable() {
-        jobTable = $("#employeesDataTable").DataTable({
+        $("#employeesDataTable").DataTable({
             "sPaginationType": "full_numbers",
             "sAjaxSource": "/employees?id_org=" + orgId,
             "bJQueryUI": true,
@@ -186,6 +210,64 @@
             ]
         });
     }
+
+    function buildCertificationTable() {
+        $("#certificationsDataTable").DataTable({
+            "sPaginationType": "full_numbers",
+            "sAjaxSource": "/certifications?id_org=" + orgId,
+            "bJQueryUI": true,
+            "bAutoWidth": false,
+            "oLanguage": {
+                "sSearch": "Search in all columns:"
+            },
+            "aoColumns": [
+                {
+                    "mData": "date", "render": function (data, type, full, meta) {
+                    return data.substr(0, 10);
+                }, sDefaultContent: "n/a"
+                },
+                {
+                    "mData": "status", "render": function (data, type, full, meta) {
+                    switch (data) {
+                        case 0: {
+                            return 'documents on consideration';
+                        }
+                        case 1: {
+                            return 'is accredited';
+                        }
+                        case 2: {
+                            return 'is NOT accredited';
+                        }
+                    }
+
+                }, sDefaultContent: "n/a"
+                }
+            ]
+        });
+        buildCertificationPanel();
+    }
+
+    function buildCertificationPanel() {
+        jQuery.ajax({
+            type: 'post',
+            url: "/certifications/current?id_org=" + orgId,
+            success: function (data) {
+                console.log(data.currStatus);
+                if (data.currStatus == 0) {
+                    document.getElementById("giveCertification").removeAttribute("hidden");
+                }
+                if (data.currStatus == 1) {
+                    document.getElementById("removeCertification").removeAttribute("hidden");
+                }
+                if (data.currStatus == 2) {
+                    document.getElementById("addDocuments").removeAttribute("hidden");
+                }
+            },
+            error: function () {
+            }
+        });
+    }
+
     $(function () {
         orgId = document.getElementById("id_org").value;
         if (orgId != "") {
@@ -195,6 +277,7 @@
             tabs.tabs("disable", "#fragment-2");
         }
         buildEmployeesTable();
+        buildCertificationTable();
 
         $("#formAddOrg").submit(function (event) {
             event.preventDefault();

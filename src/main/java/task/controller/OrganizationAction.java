@@ -22,6 +22,7 @@ public class OrganizationAction extends ActionSupport {
 
     private Manager manager;
     private List organizations;
+    private Byte currStatus;
 
     public String index() {
         if (id_org != null) {
@@ -49,6 +50,27 @@ public class OrganizationAction extends ActionSupport {
         return SUCCESS;
     }
 
+    public String showEmployees() {
+        if (id_org != null) {
+            List employees = manager.getJobPlacesByOrganizationID(id_org);
+            Utils.toResponse(employees, "jsonEmployees");
+        }
+        return SUCCESS;
+    }
+
+    public String showCertifications(){
+        if (id_org != null) {
+            List certifications  = manager.getCertificationsByOrganizationID(id_org);
+            Utils.toResponse(certifications, "jsonCertifications");
+        }
+        return SUCCESS;
+    }
+
+    public String getCurrentStatus(){
+        currStatus = manager.getCurrentCertificationStatusByOrganizationID(id_org);
+        return SUCCESS;
+    }
+
     public String addOrg() {
         if (validation()) {
             return ERROR;
@@ -72,14 +94,6 @@ public class OrganizationAction extends ActionSupport {
 
     public String delete() {
         manager.deleteOrgByID(Integer.valueOf(id_org));
-        return SUCCESS;
-    }
-
-    public String showEmployees() {
-        if (id_org != null) {
-            List employees = manager.getJobPlacesByOrganizationID(id_org);
-            Utils.toResponse(employees, "jsonEmployees");
-        }
         return SUCCESS;
     }
 
@@ -174,6 +188,14 @@ public class OrganizationAction extends ActionSupport {
 
     public void setOrganizations(List<Organization> organizations) {
         this.organizations = organizations;
+    }
+
+    public Byte getCurrStatus() {
+        return currStatus;
+    }
+
+    public void setCurrStatus(Byte currStatus) {
+        this.currStatus = currStatus;
     }
 
     public void setManager(Manager manager) {

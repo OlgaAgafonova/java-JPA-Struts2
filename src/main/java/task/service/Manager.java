@@ -12,6 +12,8 @@ public interface Manager {
 
     void save(JobPlace jobPlace);
 
+    void save(Certification certification);
+
     Long getTotalCountOfUsers();
 
     Long getTotalCountOfOrganizations();
@@ -41,6 +43,10 @@ public interface Manager {
     List getJobPlacesByOrganizationID(Integer orgId);
 
     JobPlace getJobPlaceByID(Integer jobPlaceId);
+
+    List getCertificationsByOrganizationID(Integer orgId);
+
+    Byte getCurrentCertificationStatusByOrganizationID(Integer orgId);
 
     void deleteUserByID(Integer userId);
 

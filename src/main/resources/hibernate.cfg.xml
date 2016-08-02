@@ -12,5 +12,6 @@
         <mapping class="task.entity.Organization"/>
         <mapping class="task.entity.JobPlace"/>
         <mapping class="task.entity.Address"/>
+        <mapping class="task.entity.Certification"/>
     </session-factory>
 </hibernate-configuration>
