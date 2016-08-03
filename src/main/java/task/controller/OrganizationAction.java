@@ -1,6 +1,7 @@
 package task.controller;
 
 import com.opensymphony.xwork2.ActionSupport;
+import org.apache.commons.io.FileUtils;
 import org.apache.struts2.ServletActionContext;
 import task.entity.Address;
 import task.entity.Organization;
@@ -8,6 +9,8 @@ import task.service.Manager;
 import task.service.Utils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 public class OrganizationAction extends ActionSupport {
@@ -23,6 +26,9 @@ public class OrganizationAction extends ActionSupport {
     private Manager manager;
     private List organizations;
     private Byte currStatus;
+    private File file;
+    private String contentType;
+    private String filename;
 
     public String index() {
         if (id_org != null) {
@@ -58,16 +64,18 @@ public class OrganizationAction extends ActionSupport {
         return SUCCESS;
     }
 
-    public String showCertifications(){
+    public String showCertifications() {
         if (id_org != null) {
-            List certifications  = manager.getCertificationsByOrganizationID(id_org);
+            List certifications = manager.getCertificationsByOrganizationID(id_org);
             Utils.toResponse(certifications, "jsonCertifications");
         }
         return SUCCESS;
     }
 
-    public String getCurrentStatus(){
-        currStatus = manager.getCurrentCertificationStatusByOrganizationID(id_org);
+    public String getCurrentStatus() {
+        if (id_org != null) {
+            currStatus = manager.getCurrentCertificationStatusByOrganizationID(id_org);
+        }
         return SUCCESS;
     }
 
@@ -89,6 +97,25 @@ public class OrganizationAction extends ActionSupport {
         address.setZipCode(zipcode);
         organization.setAddress(address);
         manager.save(organization);
+        return SUCCESS;
+    }
+
+    public String uploadDocuments() {
+
+        String destPath = "F:\\Andersen\\task1\\Temp";
+
+        System.out.println("id_org = " + id_org);
+
+        try {
+            System.out.println("Src File name: " + file);
+            System.out.println("Dst File name: " + filename);
+
+            File destFile = new File(destPath, filename);
+            FileUtils.copyFile(file, destFile);
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            return ERROR;
+        }
         return SUCCESS;
     }
 
@@ -196,6 +223,18 @@ public class OrganizationAction extends ActionSupport {
 
     public void setCurrStatus(Byte currStatus) {
         this.currStatus = currStatus;
+    }
+
+    public void setUpload(File file) {
+        this.file = file;
+    }
+
+    public void setUploadContentType(String contentType) {
+        this.contentType = contentType;
+    }
+
+    public void setUploadFileName(String filename) {
+        this.filename = filename;
     }
 
     public void setManager(Manager manager) {

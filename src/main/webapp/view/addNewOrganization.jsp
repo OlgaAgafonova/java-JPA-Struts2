@@ -28,6 +28,7 @@
     <link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/1.10.12/css/jquery.dataTables.css">
     <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
     <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <script src="http://malsup.github.com/jquery.form.js"></script>
 
     <script src="http://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js" type="text/javascript"
             charset="utf8"></script>
@@ -114,13 +115,16 @@
     </div>
 
     <div id="fragment-3">
-        <div id="addDocuments" hidden="true">
-            upload
+        <div id="addDocuments" hidden="hidden">
+            <s:form id="formUpload" action="upload" method="POST" enctype="multipart/form-data">
+                <s:file id="upload" name="upload" label="File" />
+                <s:submit/>
+            </s:form>
         </div>
-        <div id="giveCertification" hidden="true">
+        <div id="giveCertification" hidden="hidden">
             <button>Certify</button>
         </div>
-        <div id="removeCertification" hidden="true">
+        <div id="removeCertification" hidden="hidden">
             <button>Remove certification</button>
         </div>
 
@@ -148,7 +152,6 @@
         $.each(array, function () {
             json[this.name] = this.value || '';
         });
-        json["id_org"] = orgId;
         return json;
     }
 
@@ -252,7 +255,6 @@
             type: 'post',
             url: "/certifications/current?id_org=" + orgId,
             success: function (data) {
-                console.log(data.currStatus);
                 if (data.currStatus == 0) {
                     document.getElementById("giveCertification").removeAttribute("hidden");
                 }
@@ -283,6 +285,19 @@
             event.preventDefault();
             addOrg();
         });
+
+        $('#formUpload').ajaxForm({
+            data: {"id_org": orgId},
+            clearForm: true,
+            success: function (msg) {
+                console.log(msg);
+                alert("File has been uploaded successfully");
+            },
+            error: function (msg) {
+                alert("Couldn't upload file");
+            }
+        });
+
     });
 </script>
 </body>

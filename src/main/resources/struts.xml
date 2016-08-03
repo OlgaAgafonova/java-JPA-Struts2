@@ -78,6 +78,11 @@
         <action name="certifications/current" class="orgAction" method="getCurrentStatus">
             <result name="success" type="json"/>
         </action>
+        <action name="upload" class="orgAction" method="uploadDocuments">
+            <result name="input" type="json"/>
+            <result name="success" type="json"/>
+            <result name="error" type="json"/>
+        </action>
 
         <action name="delete/user" class="deleteAction" method="deleteUser">
             <result type="json"/>
