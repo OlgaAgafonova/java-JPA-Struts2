@@ -77,6 +77,8 @@
         <property name="hibernateProperties">
             <props>
                 <prop key="hibernate.dialect">${jdbc.dialect}</prop>
+                <prop key="show_sql">true</prop>
+                <prop key="format_sql">true</prop>
             </props>
         </property>
     </bean>

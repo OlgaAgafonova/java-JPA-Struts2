@@ -6,6 +6,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.classic.Session;
 import org.hibernate.engine.jdbc.LobCreator;
 import task.entity.Certification;
+import task.entity.CertificationView;
 import task.enums.CertificationStatus;
 
 import java.io.File;
@@ -43,22 +44,18 @@ public class CertificationDAOImpl implements CertificationDAO {
     }
 
     @Override
-    public Certification getCurrentCertificationByOrganizationID(Integer orgId) {
-        List<Certification> certifications = getCertificationsByOrganizationID(orgId);
+    public CertificationView getCurrentCertificationByOrganizationID(Integer orgId) {
+        List<CertificationView> certifications = getCertificationsByOrganizationID(orgId);
         int size = certifications.size();
         return certifications.get(size - 1);
     }
 
     @Override
-    public List<Certification> getCertificationsByOrganizationID(Integer orgId) {
-        return (List<Certification>) getCurrentSession()
-                .createQuery("from Certification where idOrg = ? order by date")
+    public List<CertificationView> getCertificationsByOrganizationID(Integer orgId) {
+        return (List<CertificationView>) getCurrentSession()
+                .createQuery("from CertificationView where idOrg = ? order by date")
                 .setInteger(0, orgId)
                 .list();
-    }
-
-    private Session getCurrentSession() {
-        return this.sessionFactory.getCurrentSession();
     }
 
     @Override
@@ -86,6 +83,15 @@ public class CertificationDAOImpl implements CertificationDAO {
         certification.setDate(new Date());
         certification.setStatus(CertificationStatus.REMOVED.getValue());
         save(certification);
+    }
+
+    @Override
+    public void deleteByID(Integer id) {
+        System.out.println("DELETE CERTIFICATION");
+    }
+
+    private Session getCurrentSession() {
+        return this.sessionFactory.getCurrentSession();
     }
 
     public void setSessionFactory(SessionFactory sessionFactory) {

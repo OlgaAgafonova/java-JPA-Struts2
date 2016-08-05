@@ -3,10 +3,7 @@ package task.controller;
 import com.opensymphony.xwork2.ActionSupport;
 import org.apache.commons.io.FileUtils;
 import org.apache.struts2.ServletActionContext;
-import task.entity.Address;
-import task.entity.Certification;
-import task.entity.JobPlace;
-import task.entity.Organization;
+import task.entity.*;
 import task.service.Manager;
 import task.service.Utils;
 
@@ -67,7 +64,8 @@ public class OrganizationAction extends ActionSupport {
 
     public String showCertifications() {
         if (id_org != null) {
-            List<Certification> certifications = manager.getCertificationsByOrganizationID(id_org);
+            List<CertificationView> certifications = manager.getCertificationsByOrganizationID(id_org);
+            System.out.println(certifications);
             Utils.toResponse(certifications, "jsonCertifications");
         }
         return SUCCESS;
@@ -75,7 +73,7 @@ public class OrganizationAction extends ActionSupport {
 
     public String getCurrentStatus() {
         if (id_org != null) {
-            Certification certification = manager.getCurrentCertificationByOrganizationID(id_org);
+            CertificationView certification = manager.getCurrentCertificationByOrganizationID(id_org);
             currStatus = certification.getStatus();
         }
         return SUCCESS;

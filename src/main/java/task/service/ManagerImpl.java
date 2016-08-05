@@ -148,13 +148,13 @@ public class ManagerImpl implements Manager {
 
     @Override
     @Transactional
-    public List<Certification> getCertificationsByOrganizationID(Integer orgId) {
+    public List<CertificationView> getCertificationsByOrganizationID(Integer orgId) {
         return certificationDAO.getCertificationsByOrganizationID(orgId);
     }
 
     @Override
     @Transactional
-    public Certification getCurrentCertificationByOrganizationID(Integer orgId) {
+    public CertificationView getCurrentCertificationByOrganizationID(Integer orgId) {
         return certificationDAO.getCurrentCertificationByOrganizationID(orgId);
     }
 
@@ -188,6 +188,12 @@ public class ManagerImpl implements Manager {
     @Transactional
     public void deleteOrgByID(Integer orgId) {
         organizationDAO.deleteOrganizationByID(orgId);
+    }
+
+    @Override
+    @Transactional
+    public void deleteCertificationByID(Integer cerfId) {
+        certificationDAO.deleteByID(cerfId);
     }
 
     public void setUserDAO(UserDAO userDAO) {

@@ -53,11 +53,13 @@ public interface Manager {
 
     JobPlace getJobPlaceByID(Integer jobPlaceId);
 
-    List<Certification> getCertificationsByOrganizationID(Integer orgId);
+    List<CertificationView> getCertificationsByOrganizationID(Integer orgId);
 
-    Certification getCurrentCertificationByOrganizationID(Integer orgId);
+    CertificationView getCurrentCertificationByOrganizationID(Integer orgId);
 
     void deleteUserByID(Integer userId);
 
     void deleteOrgByID(Integer orgId);
+
+    void deleteCertificationByID(Integer cerfId);
 }

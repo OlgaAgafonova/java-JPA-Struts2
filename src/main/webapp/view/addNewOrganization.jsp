@@ -278,7 +278,9 @@
                     }
                     return "";
                 }, sDefaultContent: "n/a"
-                }
+                },
+                {"mData": "isLast"}
+
             ]
         });
         buildCertificationPanel();
