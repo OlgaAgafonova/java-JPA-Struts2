@@ -116,38 +116,37 @@ public class OrganizationAction extends ActionSupport {
         return SUCCESS;
     }
 
+    public String certify() {
+        manager.addCertification(id_org);
+        return SUCCESS;
+    }
+
+    public String refuse() {
+        manager.refuseCertification(id_org);
+        return SUCCESS;
+    }
+
+    public String remove() {
+        manager.removeCertification(id_org);
+        return SUCCESS;
+    }
+
     public String delete() {
         manager.deleteOrgByID(Integer.valueOf(id_org));
         return SUCCESS;
     }
 
     private boolean validation() {
-        if (isStringEmpty(orgname)) {
-            return true;
-        }
-        if (isStringEmpty(country)) {
-            return true;
-        }
-        if (isStringEmpty(city)) {
-            return true;
-        }
-        if (isStringEmpty(street)) {
-            return true;
-        }
-        if (isStringEmpty(house)) {
-            return true;
-        }
-        if (isStringEmpty(zipcode)) {
-            return true;
-        }
-        return false;
+        return isStringEmpty(orgname)
+                || isStringEmpty(country)
+                || isStringEmpty(city)
+                || isStringEmpty(street)
+                || isStringEmpty(house)
+                || isStringEmpty(zipcode);
     }
 
     private boolean isStringEmpty(String string) {
-        if (string == null || string.trim().isEmpty()) {
-            return true;
-        }
-        return false;
+        return string == null || string.trim().isEmpty();
     }
 
     public Integer getId_org() {

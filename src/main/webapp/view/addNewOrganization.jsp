@@ -126,15 +126,18 @@
             </s:form>
         </div>
         <div id="giveCertification" hidden="hidden">
-            <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
+            <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
+                    onclick="certify()">
                 Certify
             </button>
-            <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
+            <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
+                    onclick="refuse()">
                 Refuse
             </button>
         </div>
         <div id="removeCertification" hidden="hidden">
-            <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
+            <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
+                    onclick="remove()">
                 Remove certification
             </button>
         </div>
@@ -313,6 +316,45 @@
         });
     }
 
+    function certify() {
+        jQuery.ajax({
+            type: 'post',
+            url: "/certifications/certify?id_org=" + orgId,
+            success: function () {
+                certificationTable.ajax.reload();
+                buildCertificationPanel();
+            },
+            error: function () {
+            }
+        });
+    }
+
+    function refuse() {
+        jQuery.ajax({
+            type: 'post',
+            url: "/certifications/refuse?id_org=" + orgId,
+            success: function () {
+                certificationTable.ajax.reload();
+                buildCertificationPanel();
+            },
+            error: function () {
+            }
+        });
+    }
+
+    function remove() {
+        jQuery.ajax({
+            type: 'post',
+            url: "/certifications/remove?id_org=" + orgId,
+            success: function () {
+                certificationTable.ajax.reload();
+                buildCertificationPanel();
+            },
+            error: function () {
+            }
+        });
+    }
+
     $(function () {
         orgId = document.getElementById("id_org").value;
         if (orgId != "") {
@@ -334,7 +376,6 @@
             clearForm: true,
             success: function () {
                 $("#upload-error").hide();
-                $("#upload-ok").text("The document is successfully loaded").show();
 
                 $('#addDocuments').hide();
                 $('#giveCertification').show();
@@ -343,7 +384,9 @@
                 certificationTable.ajax.reload();
             },
             error: function () {
-                $("#upload-error").text("Sorry. The document wasn't loaded.").show();
+                $("#upload-error")
+                        .text("Sorry. The document wasn't loaded.")
+                        .show();
             }
         });
 

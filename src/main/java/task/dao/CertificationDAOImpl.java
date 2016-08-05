@@ -6,6 +6,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.classic.Session;
 import org.hibernate.engine.jdbc.LobCreator;
 import task.entity.Certification;
+import task.enums.CertificationStatus;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,7 +36,7 @@ public class CertificationDAOImpl implements CertificationDAO {
             certification.setDate(new Date());
             certification.setFilename(filename);
             certification.setDocument(document);
-            certification.setStatus((byte) 0);
+            certification.setStatus(CertificationStatus.CONSIDERED.getValue());
             save(certification);
         } catch (IOException ignored) {
         }
@@ -58,6 +59,33 @@ public class CertificationDAOImpl implements CertificationDAO {
 
     private Session getCurrentSession() {
         return this.sessionFactory.getCurrentSession();
+    }
+
+    @Override
+    public void certify(Integer orgId) {
+        Certification certification = new Certification();
+        certification.setIdOrg(orgId);
+        certification.setDate(new Date());
+        certification.setStatus(CertificationStatus.CERTIFIED.getValue());
+        save(certification);
+    }
+
+    @Override
+    public void refuse(Integer orgId) {
+        Certification certification = new Certification();
+        certification.setIdOrg(orgId);
+        certification.setDate(new Date());
+        certification.setStatus(CertificationStatus.REFUSED.getValue());
+        save(certification);
+    }
+
+    @Override
+    public void remove(Integer orgId) {
+        Certification certification = new Certification();
+        certification.setIdOrg(orgId);
+        certification.setDate(new Date());
+        certification.setStatus(CertificationStatus.REMOVED.getValue());
+        save(certification);
     }
 
     public void setSessionFactory(SessionFactory sessionFactory) {

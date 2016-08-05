@@ -79,6 +79,15 @@
         <action name="certifications/current" class="orgAction" method="getCurrentStatus">
             <result name="success" type="json"/>
         </action>
+        <action name="certifications/certify" class="orgAction" method="certify">
+            <result name="success" type="json"/>
+        </action>
+        <action name="certifications/refuse" class="orgAction" method="refuse">
+            <result name="success" type="json"/>
+        </action>
+        <action name="certifications/remove" class="orgAction" method="remove">
+            <result name="success" type="json"/>
+        </action>
         <action name="upload" class="orgAction" method="uploadDocuments">
             <result name="input" type="json"/>
             <result name="success" type="json"/>

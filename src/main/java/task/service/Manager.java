@@ -17,6 +17,12 @@ public interface Manager {
 
     void addDocument(Integer orgId, String filename, File file);
 
+    void addCertification(Integer orgId);
+
+    void refuseCertification(Integer orgId);
+
+    void removeCertification(Integer orgId);
+
     Long getTotalCountOfUsers();
 
     Long getTotalCountOfOrganizations();

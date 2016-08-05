@@ -53,7 +53,7 @@ public class ManagerImpl implements Manager {
     @Override
     @Transactional
     public void addDocument(Integer orgId, String filename, File file) {
-        certificationDAO.addDocument(orgId,filename,file);
+        certificationDAO.addDocument(orgId, filename, file);
     }
 
     @Override
@@ -156,6 +156,24 @@ public class ManagerImpl implements Manager {
     @Transactional
     public Certification getCurrentCertificationByOrganizationID(Integer orgId) {
         return certificationDAO.getCurrentCertificationByOrganizationID(orgId);
+    }
+
+    @Override
+    @Transactional
+    public void addCertification(Integer orgId) {
+        certificationDAO.certify(orgId);
+    }
+
+    @Override
+    @Transactional
+    public void refuseCertification(Integer orgId) {
+        certificationDAO.refuse(orgId);
+    }
+
+    @Override
+    @Transactional
+    public void removeCertification(Integer orgId) {
+        certificationDAO.remove(orgId);
     }
 
     @Override
