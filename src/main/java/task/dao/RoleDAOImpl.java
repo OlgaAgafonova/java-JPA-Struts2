@@ -16,8 +16,10 @@ public class RoleDAOImpl implements RoleDAO {
     }
 
     @Override
-    public List getAllRoles() {
-        return getCurrentSession().createQuery("from Role ").list();
+    public List<Role> getAllRoles() {
+        return (List<Role>) getCurrentSession()
+                .createQuery("from Role ")
+                .list();
     }
 
     @Override

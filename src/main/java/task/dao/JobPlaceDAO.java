@@ -10,9 +10,9 @@ public interface JobPlaceDAO {
 
     JobPlace getJobPlaceById(Integer id);
 
-    List getJobPlaceByUserID(Integer userId);
+    List<JobPlace> getJobPlacesByUserID(Integer userId);
 
-    List getJobPlacesByOrganizationID(Integer orgId);
+    List<JobPlace> getJobPlacesByOrganizationID(Integer orgId);
 
     void deleteJobPlaceByUserID(Integer userId);
 }

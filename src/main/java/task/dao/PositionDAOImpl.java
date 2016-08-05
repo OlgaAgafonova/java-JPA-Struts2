@@ -19,12 +19,15 @@ public class PositionDAOImpl implements PositionDAO {
 
     @Override
     public Position getPositionById(Integer id) {
-        return (Position) getCurrentSession().get(Position.class, id);
+        return (Position) getCurrentSession()
+                .get(Position.class, id);
     }
 
     @Override
     public List<Position> getAll() {
-        return getCurrentSession().createQuery("from Position ").list();
+        return (List<Position>)getCurrentSession()
+                .createQuery("from Position ")
+                .list();
     }
 
     @Override

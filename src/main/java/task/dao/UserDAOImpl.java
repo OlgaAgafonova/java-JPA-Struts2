@@ -20,23 +20,26 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public Long getCountOfUsers() {
-        return (Long)getCurrentSession()
+        return (Long) getCurrentSession()
                 .createCriteria(User.class)
                 .setProjection(Projections.rowCount())
                 .uniqueResult();
     }
 
     @Override
-    public List getUsers(Integer start, Integer maxRows) {
-        return getCurrentSession().createQuery("from User order by lastname")
+    public List<User> getUsers(Integer start, Integer maxRows) {
+        return (List<User>) getCurrentSession()
+                .createQuery("from User order by lastname")
                 .setFirstResult(start)
                 .setMaxResults(maxRows)
                 .list();
     }
 
     @Override
-    public List getAll() {
-        return getCurrentSession().createQuery("from User").list();
+    public List<User> getAll() {
+        return (List<User>) getCurrentSession()
+                .createQuery("from User")
+                .list();
     }
 
     @Override

@@ -27,10 +27,10 @@ public class JobAction extends ActionSupport {
     private String type;
 
     private Manager manager;
-    private List users;
-    private List organizations;
-    private List positions;
-    private List jobPlacesOfUser;
+    private List<User> users;
+    private List<Organization> organizations;
+    private List<Position> positions;
+    private List<JobPlace> jobPlacesOfUser;
 
     public String index() {
         users = manager.getAllUsers();
@@ -167,9 +167,9 @@ public class JobAction extends ActionSupport {
     private JobPlace makeJobPlaceFromEdit() {
         JobPlace jobPlace = new JobPlace();
 
-        Organization organization = manager.getOrganizationByID(Integer.valueOf(this.id_org));
-        Position position = manager.getPositionByID(Integer.valueOf(this.id_pos));
-        User user = manager.getUserByID(Integer.valueOf(this.id_user));
+        Organization organization = manager.getOrganizationByID(this.id_org);
+        Position position = manager.getPositionByID(this.id_pos);
+        User user = manager.getUserByID(this.id_user);
 
         SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
         Date startDate = null, endDate = null;
@@ -189,7 +189,7 @@ public class JobAction extends ActionSupport {
             start = end;
             end = tmp2;
         }
-        jobPlace.setId(Integer.valueOf(id_job));
+        jobPlace.setId(id_job);
         jobPlace.setUser(user);
         jobPlace.setOrganization(organization);
         jobPlace.setPosition(position);
@@ -229,7 +229,7 @@ public class JobAction extends ActionSupport {
     }
 
     private boolean checkCrossingWithMainJobs(byte type, Date start, Date end, Integer id_user) {
-        return !(type == 1 && isCrossingWithMainJobs(start, end, id_user));
+        return !((type == 1) && isCrossingWithMainJobs(start, end, id_user));
     }
 
     private boolean checkDates(Date start, Date end) {

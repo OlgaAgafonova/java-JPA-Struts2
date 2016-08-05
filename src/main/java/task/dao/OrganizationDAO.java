@@ -10,9 +10,9 @@ public interface OrganizationDAO {
 
     Organization getOrganizationById(Integer id);
 
-    List getAll();
+    List<Organization> getAll();
 
-    List getOrganizations(Integer start, Integer maxRows);
+    List<Organization> getOrganizations(Integer start, Integer maxRows);
 
     Long getCountOfOrganization();
 

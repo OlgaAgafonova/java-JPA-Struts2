@@ -4,6 +4,7 @@ import org.springframework.transaction.annotation.Transactional;
 import task.dao.*;
 import task.entity.*;
 
+import java.io.File;
 import java.util.*;
 
 public class ManagerImpl implements Manager {
@@ -51,6 +52,12 @@ public class ManagerImpl implements Manager {
 
     @Override
     @Transactional
+    public void addDocument(Integer orgId, String filename, File file) {
+        certificationDAO.addDocument(orgId,filename,file);
+    }
+
+    @Override
+    @Transactional
     public Long getTotalCountOfUsers() {
         return userDAO.getCountOfUsers();
     }
@@ -63,13 +70,13 @@ public class ManagerImpl implements Manager {
 
     @Override
     @Transactional
-    public List getUsers(Integer start, Integer maxRows) {
+    public List<User> getUsers(Integer start, Integer maxRows) {
         return userDAO.getUsers(start, maxRows);
     }
 
     @Override
     @Transactional
-    public List getAllUsers() {
+    public List<User> getAllUsers() {
         return userDAO.getAll();
     }
 
@@ -81,13 +88,13 @@ public class ManagerImpl implements Manager {
 
     @Override
     @Transactional
-    public List getJobPlacesByOrganizationID(Integer orgId) {
+    public List<JobPlace> getJobPlacesByOrganizationID(Integer orgId) {
         return jobPlaceDAO.getJobPlacesByOrganizationID(orgId);
     }
 
     @Override
     @Transactional
-    public List getAllRoles() {
+    public List<Role> getAllRoles() {
         return roleDAO.getAllRoles();
     }
 
@@ -99,13 +106,13 @@ public class ManagerImpl implements Manager {
 
     @Override
     @Transactional
-    public List getAllOrganizations() {
+    public List<Organization> getAllOrganizations() {
         return organizationDAO.getAll();
     }
 
     @Override
     @Transactional
-    public List getOrganizations(Integer start, Integer maxRows) {
+    public List<Organization> getOrganizations(Integer start, Integer maxRows) {
         return organizationDAO.getOrganizations(start, maxRows);
     }
 
@@ -117,7 +124,7 @@ public class ManagerImpl implements Manager {
 
     @Override
     @Transactional
-    public List getAllPositions() {
+    public List<Position> getAllPositions() {
         return positionDAO.getAll();
     }
 
@@ -130,7 +137,7 @@ public class ManagerImpl implements Manager {
     @Override
     @Transactional
     public List<JobPlace> getJobPlacesByUserID(Integer userId) {
-        return (List<JobPlace>) jobPlaceDAO.getJobPlaceByUserID(userId);
+        return (List<JobPlace>) jobPlaceDAO.getJobPlacesByUserID(userId);
     }
 
     @Override
@@ -141,14 +148,14 @@ public class ManagerImpl implements Manager {
 
     @Override
     @Transactional
-    public List getCertificationsByOrganizationID(Integer orgId) {
+    public List<Certification> getCertificationsByOrganizationID(Integer orgId) {
         return certificationDAO.getCertificationsByOrganizationID(orgId);
     }
 
     @Override
     @Transactional
-    public Byte getCurrentCertificationStatusByOrganizationID(Integer orgId) {
-        return certificationDAO.getCurrentStatusByOrganizationID(orgId);
+    public Certification getCurrentCertificationByOrganizationID(Integer orgId) {
+        return certificationDAO.getCurrentCertificationByOrganizationID(orgId);
     }
 
     @Override

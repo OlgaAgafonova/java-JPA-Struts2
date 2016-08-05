@@ -26,8 +26,8 @@ public class UserRolesDAOImpl implements UserRolesDAO {
     public void deleteUserRoles(Integer userId) {
         List list = getCurrentSession().createQuery("from UserRoles where id_user = ?").setInteger(0, userId).list();
         UserRoles userRoles;
-        for (int i = 0; i < list.size(); i++) {
-            userRoles = (UserRoles) list.get(i);
+        for (Object aList : list) {
+            userRoles = (UserRoles) aList;
             deleteUserRoleByID(userRoles);
         }
     }

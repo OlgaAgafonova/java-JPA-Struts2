@@ -2,13 +2,16 @@ package task.dao;
 
 import task.entity.Certification;
 
+import java.io.File;
 import java.util.List;
 
 public interface CertificationDAO {
 
     void save(Certification certification);
 
-    Byte getCurrentStatusByOrganizationID(Integer orgId);
+    void addDocument(Integer orgId, String filename, File file);
 
-    List getCertificationsByOrganizationID(Integer orgId);
+    Certification getCurrentCertificationByOrganizationID(Integer orgId);
+
+    List<Certification> getCertificationsByOrganizationID(Integer orgId);
 }

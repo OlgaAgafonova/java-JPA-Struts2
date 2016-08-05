@@ -8,7 +8,7 @@ public interface RoleDAO {
 
     void save(Role role);
 
-    List getAllRoles();
+    List<Role> getAllRoles();
 
     Role getRoleById(Integer id);
 

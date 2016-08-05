@@ -21,17 +21,21 @@ public class OrganizationDAOImpl implements OrganizationDAO {
 
     @Override
     public Organization getOrganizationById(Integer id) {
-        return (Organization) getCurrentSession().get(Organization.class, id);
+        return (Organization) getCurrentSession()
+                .get(Organization.class, id);
     }
 
     @Override
-    public List getAll() {
-        return getCurrentSession().createQuery("from Organization ").list();
+    public List<Organization> getAll() {
+        return (List<Organization>) getCurrentSession()
+                .createQuery("from Organization ")
+                .list();
     }
 
     @Override
-    public List getOrganizations(Integer start, Integer maxRows) {
-        return getCurrentSession().createQuery("from Organization order by name")
+    public List<Organization> getOrganizations(Integer start, Integer maxRows) {
+        return (List<Organization>)getCurrentSession()
+                .createQuery("from Organization order by name")
                 .setFirstResult(start)
                 .setMaxResults(maxRows)
                 .list();
@@ -39,7 +43,7 @@ public class OrganizationDAOImpl implements OrganizationDAO {
 
     @Override
     public Long getCountOfOrganization() {
-        return (Long)getCurrentSession()
+        return (Long) getCurrentSession()
                 .createCriteria(Organization.class)
                 .setProjection(Projections.rowCount())
                 .uniqueResult();

@@ -1,6 +1,9 @@
 package task.entity;
 
+import org.hibernate.type.LobType;
+
 import javax.persistence.*;
+import java.sql.Blob;
 import java.util.Date;
 
 @Entity
@@ -21,6 +24,14 @@ public class Certification {
 
     @Column(name = "STATUS", columnDefinition = "TINYINT")
     private byte status;
+
+    @Column(name="DOCUMENT_NAME")
+    private String filename;
+
+    @Column(name="DOCUMENT", columnDefinition = "LONGBLOB")
+    @Basic(fetch = FetchType.LAZY)
+    @Lob
+    private Blob document;
 
     public Integer getId() {
         return id;
@@ -52,6 +63,22 @@ public class Certification {
 
     public void setStatus(byte status) {
         this.status = status;
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
+    }
+
+    public Blob getDocument() {
+        return document;
+    }
+
+    public void setDocument(Blob document) {
+        this.document = document;
     }
 
     @Override

@@ -8,9 +8,9 @@ public interface UserDAO {
 
     void save(User user);
 
-    List getUsers(Integer start, Integer maxRows);
+    List<User> getUsers(Integer start, Integer maxRows);
 
-    List getAll();
+    List<User> getAll();
 
     Long getCountOfUsers();
 

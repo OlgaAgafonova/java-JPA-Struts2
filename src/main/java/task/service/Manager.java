@@ -2,6 +2,7 @@ package task.service;
 
 import task.entity.*;
 
+import java.io.File;
 import java.util.List;
 
 public interface Manager {
@@ -14,39 +15,41 @@ public interface Manager {
 
     void save(Certification certification);
 
+    void addDocument(Integer orgId, String filename, File file);
+
     Long getTotalCountOfUsers();
 
     Long getTotalCountOfOrganizations();
 
-    List getUsers(Integer start, Integer maxRows);
+    List<User> getUsers(Integer start, Integer maxRows);
 
-    List getAllUsers();
+    List<User> getAllUsers();
 
     User getUserByID(Integer userId);
 
-    List getAllRoles();
+    List<Role> getAllRoles();
 
     Role getRoleByID(Integer roleId);
 
-    List getAllOrganizations();
+    List<Organization> getAllOrganizations();
 
-    List getOrganizations(Integer start, Integer maxRows);
+    List<Organization> getOrganizations(Integer start, Integer maxRows);
 
     Organization getOrganizationByID(Integer orgId);
 
-    List getAllPositions();
+    List<Position> getAllPositions();
 
     Position getPositionByID(Integer posId);
 
-    List getJobPlacesByUserID(Integer userId);
+    List<JobPlace> getJobPlacesByUserID(Integer userId);
 
-    List getJobPlacesByOrganizationID(Integer orgId);
+    List<JobPlace> getJobPlacesByOrganizationID(Integer orgId);
 
     JobPlace getJobPlaceByID(Integer jobPlaceId);
 
-    List getCertificationsByOrganizationID(Integer orgId);
+    List<Certification> getCertificationsByOrganizationID(Integer orgId);
 
-    Byte getCurrentCertificationStatusByOrganizationID(Integer orgId);
+    Certification getCurrentCertificationByOrganizationID(Integer orgId);
 
     void deleteUserByID(Integer userId);
 

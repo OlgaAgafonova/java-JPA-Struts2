@@ -7,6 +7,7 @@
     <constant name="struts.devMode" value="false"/>
     <constant name="struts.custom.i18n.resources" value="messages"/>
     <constant name="struts.enable.SlashesInActionNames" value="true"/>
+    <constant name="struts.multipart.maxSize" value="262144000"/>
 
     <!-- Action mappings are defined here -->
     <package name="default" namespace="" extends="struts-default">

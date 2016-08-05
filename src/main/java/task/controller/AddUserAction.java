@@ -16,7 +16,7 @@ public class AddUserAction extends ActionSupport {
     private String email;
     private String[] roles;
 
-    private List rolesList;
+    private List<Role> rolesList;
 
     private User user;
     private Manager manager;

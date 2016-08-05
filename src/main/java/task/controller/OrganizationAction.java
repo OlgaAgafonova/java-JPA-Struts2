@@ -4,6 +4,8 @@ import com.opensymphony.xwork2.ActionSupport;
 import org.apache.commons.io.FileUtils;
 import org.apache.struts2.ServletActionContext;
 import task.entity.Address;
+import task.entity.Certification;
+import task.entity.JobPlace;
 import task.entity.Organization;
 import task.service.Manager;
 import task.service.Utils;
@@ -22,12 +24,11 @@ public class OrganizationAction extends ActionSupport {
     private String street;
     private String house;
     private String zipcode;
+    private Byte currStatus;
 
     private Manager manager;
-    private List organizations;
-    private Byte currStatus;
+    private List<Organization> organizations;
     private File file;
-    private String contentType;
     private String filename;
 
     public String index() {
@@ -58,7 +59,7 @@ public class OrganizationAction extends ActionSupport {
 
     public String showEmployees() {
         if (id_org != null) {
-            List employees = manager.getJobPlacesByOrganizationID(id_org);
+            List<JobPlace> employees = manager.getJobPlacesByOrganizationID(id_org);
             Utils.toResponse(employees, "jsonEmployees");
         }
         return SUCCESS;
@@ -66,7 +67,7 @@ public class OrganizationAction extends ActionSupport {
 
     public String showCertifications() {
         if (id_org != null) {
-            List certifications = manager.getCertificationsByOrganizationID(id_org);
+            List<Certification> certifications = manager.getCertificationsByOrganizationID(id_org);
             Utils.toResponse(certifications, "jsonCertifications");
         }
         return SUCCESS;
@@ -74,7 +75,8 @@ public class OrganizationAction extends ActionSupport {
 
     public String getCurrentStatus() {
         if (id_org != null) {
-            currStatus = manager.getCurrentCertificationStatusByOrganizationID(id_org);
+            Certification certification = manager.getCurrentCertificationByOrganizationID(id_org);
+            currStatus = certification.getStatus();
         }
         return SUCCESS;
     }
@@ -101,21 +103,16 @@ public class OrganizationAction extends ActionSupport {
     }
 
     public String uploadDocuments() {
-
         String destPath = "F:\\Andersen\\task1\\Temp";
 
-        System.out.println("id_org = " + id_org);
-
         try {
-            System.out.println("Src File name: " + file);
-            System.out.println("Dst File name: " + filename);
-
             File destFile = new File(destPath, filename);
             FileUtils.copyFile(file, destFile);
+            manager.addDocument(id_org, destFile.getAbsolutePath(), destFile);
         } catch (IOException e) {
-            System.out.println(e.getMessage());
             return ERROR;
         }
+
         return SUCCESS;
     }
 
@@ -227,10 +224,6 @@ public class OrganizationAction extends ActionSupport {
 
     public void setUpload(File file) {
         this.file = file;
-    }
-
-    public void setUploadContentType(String contentType) {
-        this.contentType = contentType;
     }
 
     public void setUploadFileName(String filename) {

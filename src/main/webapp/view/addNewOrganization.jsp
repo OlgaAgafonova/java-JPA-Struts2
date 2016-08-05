@@ -54,8 +54,8 @@
         <s:form id="formAddOrg">
             <s:textfield id="id_org" name="id_org" type="hidden"/>
             <h3>Add or edit organization</h3>
-            <span id="ok" class="okMessage"></span>
-            <span id="error" class="errorMessage"></span>
+            <span id="add-ok" class="okMessage"></span>
+            <span id="add-error" class="errorMessage"></span>
 
             <table>
                 <tr>
@@ -116,28 +116,43 @@
 
     <div id="fragment-3">
         <div id="addDocuments" hidden="hidden">
+            <span id="upload-ok" class="okMessage"></span>
+            <span id="upload-error" class="errorMessage"></span>
             <s:form id="formUpload" action="upload" method="POST" enctype="multipart/form-data">
-                <s:file id="upload" name="upload" label="File" />
-                <s:submit/>
+                <s:file id="upload" name="upload" label="Select the document for certification" requiredLabel="true"/>
+                <s:submit
+                        class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
+                        value="Upload"/>
             </s:form>
         </div>
         <div id="giveCertification" hidden="hidden">
-            <button>Certify</button>
+            <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
+                Certify
+            </button>
+            <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
+                Refuse
+            </button>
         </div>
         <div id="removeCertification" hidden="hidden">
-            <button>Remove certification</button>
+            <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
+                Remove certification
+            </button>
         </div>
 
-        <table class="display" id="certificationsDataTable">
-            <thead>
-            <tr>
-                <th>Date</th>
-                <th>Status</th>
-            </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
+        <div>
+            <table class="display" id="certificationsDataTable">
+                <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Document</th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+
     </div>
 </div>
 
@@ -145,6 +160,7 @@
 <script>
     var orgId;
     var tabs;
+    var certificationTable;
 
     function FormToJson(form) {
         var array = $(form).serializeArray();
@@ -165,11 +181,14 @@
             data: json,
             traditional: true,
             success: function () {
-                $("#ok").text("Saved").show().fadeOut(4000);
+                $("#add-ok").text("Saved").show().fadeOut(4000);
                 tabs.tabs("enable", "#fragment-2");
             },
             error: function () {
-                $("#error").text("Please, fill in the form correctly.").show();
+                $("#add-error")
+                        .text("Some required information is missing or incomplete. " +
+                                "Please correct your entries and try again.")
+                        .show();
             }
         });
     }
@@ -215,7 +234,7 @@
     }
 
     function buildCertificationTable() {
-        $("#certificationsDataTable").DataTable({
+        certificationTable = $("#certificationsDataTable").DataTable({
             "sPaginationType": "full_numbers",
             "sAjaxSource": "/certifications?id_org=" + orgId,
             "bJQueryUI": true,
@@ -239,10 +258,22 @@
                             return 'is accredited';
                         }
                         case 2: {
-                            return 'is NOT accredited';
+                            return 'no accreditation';
+                        }
+                        case 3: {
+                            return 'is refused accreditation'
                         }
                     }
 
+                }, sDefaultContent: "n/a"
+                },
+                {
+                    "mData": "status", "render": function (data, type, full, meta) {
+                    if (+data === 0) {
+                        var index = full.filename.lastIndexOf("\\");
+                        return full.filename.substr(index + 1);
+                    }
+                    return "";
                 }, sDefaultContent: "n/a"
                 }
             ]
@@ -255,14 +286,26 @@
             type: 'post',
             url: "/certifications/current?id_org=" + orgId,
             success: function (data) {
-                if (data.currStatus == 0) {
-                    document.getElementById("giveCertification").removeAttribute("hidden");
-                }
-                if (data.currStatus == 1) {
-                    document.getElementById("removeCertification").removeAttribute("hidden");
-                }
-                if (data.currStatus == 2) {
-                    document.getElementById("addDocuments").removeAttribute("hidden");
+                switch (data.currStatus) {
+                    case 0: {
+                        $('#addDocuments').hide();
+                        $('#giveCertification').show();
+                        $('#removeCertification').hide();
+                        break;
+                    }
+                    case 1: {
+                        $('#addDocuments').hide();
+                        $('#giveCertification').hide();
+                        $('#removeCertification').show();
+                        break;
+                    }
+                    case 2:
+                    case 3: {
+                        $('#addDocuments').show();
+                        $('#giveCertification').hide();
+                        $('#removeCertification').hide();
+                        break;
+                    }
                 }
             },
             error: function () {
@@ -289,12 +332,18 @@
         $('#formUpload').ajaxForm({
             data: {"id_org": orgId},
             clearForm: true,
-            success: function (msg) {
-                console.log(msg);
-                alert("File has been uploaded successfully");
+            success: function () {
+                $("#upload-error").hide();
+                $("#upload-ok").text("The document is successfully loaded").show();
+
+                $('#addDocuments').hide();
+                $('#giveCertification').show();
+                $('#removeCertification').hide();
+
+                certificationTable.ajax.reload();
             },
-            error: function (msg) {
-                alert("Couldn't upload file");
+            error: function () {
+                $("#upload-error").text("Sorry. The document wasn't loaded.").show();
             }
         });
 

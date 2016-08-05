@@ -31,21 +31,21 @@ public class MainAction extends ActionSupport {
         Integer iDisplayStart = Integer.valueOf(request.getParameterMap().get("iDisplayStart")[0]);
         Integer iDisplayLength = Integer.valueOf(request.getParameterMap().get("iDisplayLength")[0]);
 
-        List users = manager.getUsers(iDisplayStart, iDisplayLength);
+        List<User> users = manager.getUsers(iDisplayStart, iDisplayLength);
         int totalSize = manager.getTotalCountOfUsers().intValue();
         Utils.toResponse(users, "jsonRoot", totalSize, totalSize);
         return SUCCESS;
     }
 
     public String getAllRoles() {
-        List roles = manager.getAllRoles();
+        List<Role> roles = manager.getAllRoles();
         Utils.toResponse(roles, "jsonAllRoles");
         return SUCCESS;
     }
 
     public String getRolesOfUser() {
         user = manager.getUserByID(id_user);
-        List<Object> rolesList = new ArrayList<>();
+        List<Role> rolesList = new ArrayList<>();
         rolesList.addAll(user.getRoles());
         Utils.toResponse(rolesList, "jsonUserRoles");
         return SUCCESS;
