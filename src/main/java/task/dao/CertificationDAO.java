@@ -16,6 +16,8 @@ public interface CertificationDAO {
 
     List<CertificationView> getCertificationsByOrganizationID(Integer orgId);
 
+    Certification getCertificationByID(Integer cerfId);
+
     void certify(Integer orgId);
 
     void refuse(Integer orgId);

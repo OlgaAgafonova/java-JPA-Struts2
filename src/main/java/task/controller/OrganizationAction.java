@@ -22,6 +22,7 @@ public class OrganizationAction extends ActionSupport {
     private String house;
     private String zipcode;
     private Byte currStatus;
+    private Integer id_cerf;
 
     private Manager manager;
     private List<Organization> organizations;
@@ -68,6 +69,11 @@ public class OrganizationAction extends ActionSupport {
             System.out.println(certifications);
             Utils.toResponse(certifications, "jsonCertifications");
         }
+        return SUCCESS;
+    }
+
+    public String deleteLastCertification() {
+        manager.deleteCertificationByID(id_cerf);
         return SUCCESS;
     }
 
@@ -201,6 +207,10 @@ public class OrganizationAction extends ActionSupport {
 
     public void setZipcode(String zipcode) {
         this.zipcode = zipcode;
+    }
+
+    public void setId_cerf(Integer id_cerf) {
+        this.id_cerf = id_cerf;
     }
 
     public List<Organization> getOrganizations() {

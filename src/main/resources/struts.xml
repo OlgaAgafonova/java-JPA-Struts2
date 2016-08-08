@@ -100,6 +100,9 @@
         <action name="delete/org" class="orgAction" method="delete">
             <result type="json"/>
         </action>
+        <action name="delete/certification" class="orgAction" method="deleteLastCertification">
+            <result type="json"/>
+        </action>
 
 
         <action name="add/user" class="addAction" method="addUser">

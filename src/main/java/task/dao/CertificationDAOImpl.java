@@ -59,6 +59,12 @@ public class CertificationDAOImpl implements CertificationDAO {
     }
 
     @Override
+    public Certification getCertificationByID(Integer id) {
+        return (Certification) getCurrentSession()
+                .get(Certification.class, id);
+    }
+
+    @Override
     public void certify(Integer orgId) {
         Certification certification = new Certification();
         certification.setIdOrg(orgId);
@@ -87,7 +93,10 @@ public class CertificationDAOImpl implements CertificationDAO {
 
     @Override
     public void deleteByID(Integer id) {
-        System.out.println("DELETE CERTIFICATION");
+        Certification certification = getCertificationByID(id);
+        if (certification != null) {
+            getCurrentSession().delete(certification);
+        }
     }
 
     private Session getCurrentSession() {

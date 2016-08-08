@@ -149,6 +149,7 @@
                     <th>Date</th>
                     <th>Status</th>
                     <th>Document</th>
+                    <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -192,6 +193,21 @@
                         .text("Some required information is missing or incomplete. " +
                                 "Please correct your entries and try again.")
                         .show();
+            }
+        });
+    }
+
+    function deleteCertification(id_cerf) {
+        jQuery.ajax({
+            type: 'post',
+            url: "/delete/certification",
+            dataType: 'json',
+            data: {"id_cerf": id_cerf},
+            success: function () {
+                certificationTable.ajax.reload();
+                buildCertificationPanel();
+            },
+            error: function () {
             }
         });
     }
@@ -279,8 +295,14 @@
                     return "";
                 }, sDefaultContent: "n/a"
                 },
-                {"mData": "isLast"}
-
+                {
+                    "mData": "isLast", "render": function (data, type, full, meta) {
+                    if (+data === 1) {
+                        return '<a href="#" onclick="deleteCertification(' + full.id + ')">Delete</a>';
+                    }
+                    return "";
+                }
+                }
             ]
         });
         buildCertificationPanel();
