@@ -14,9 +14,6 @@ public class Position {
     @Column(name = "NAME")
     private String name;
 
-    public Position() {
-    }
-
     public Integer getId() {
         return id;
     }

@@ -33,9 +33,9 @@
     </ul>
     <div id="fragment-1">
         <s:form action="register/user" method="GET">
-            <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
-                Add user
-            </button>
+            <input type="submit"
+                   value="Add user"
+                   class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"/>
         </s:form>
 
         <div id="container">
@@ -87,9 +87,9 @@
 
     <div id="fragment-2">
         <s:form action="register/organization" method="GET">
-            <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
-                Add organization
-            </button>
+            <input type="submit"
+                   value="Add organization"
+                   class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"/>
         </s:form>
 
         <table class="display" id="organizationsDataTable">

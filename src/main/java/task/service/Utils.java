@@ -3,6 +3,7 @@ package task.service;
 import com.opensymphony.xwork2.ActionContext;
 import task.controller.DataTableResponse;
 
+import java.util.Date;
 import java.util.List;
 
 public class Utils {
@@ -26,5 +27,14 @@ public class Utils {
         tableResponse.setError(error);
         tableResponse.setsEcho(0);
         ActionContext.getContext().put(name, tableResponse);
+    }
+
+    public static boolean checkDates(Date start, Date end) {
+        if (end == null) {
+            return true;
+        } else if (start.after(end)) {
+            return false;
+        }
+        return true;
     }
 }

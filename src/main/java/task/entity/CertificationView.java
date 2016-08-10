@@ -1,7 +1,7 @@
 package task.entity;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.sql.Date;
 
 @Entity
 @Table(name = "certification_view")
@@ -15,7 +15,6 @@ public class CertificationView {
     @Column(name = "ID_ORG")
     private Integer idOrg;
 
-    @Temporal(TemporalType.DATE)
     @Column(name = "DATE")
     private Date date;
 

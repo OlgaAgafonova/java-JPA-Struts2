@@ -12,7 +12,8 @@ import task.enums.CertificationStatus;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Blob;
-import java.util.Date;
+import java.sql.Date;
+import java.util.Calendar;
 import java.util.List;
 
 public class CertificationDAOImpl implements CertificationDAO {
@@ -34,7 +35,7 @@ public class CertificationDAOImpl implements CertificationDAO {
             Blob document = lobCreator.createBlob(bytes);
 
             certification.setIdOrg(orgId);
-            certification.setDate(new Date());
+            certification.setDate(new Date(Calendar.getInstance().getTimeInMillis()));
             certification.setFilename(filename);
             certification.setDocument(document);
             certification.setStatus(CertificationStatus.CONSIDERED.getValue());
@@ -68,7 +69,7 @@ public class CertificationDAOImpl implements CertificationDAO {
     public void certify(Integer orgId) {
         Certification certification = new Certification();
         certification.setIdOrg(orgId);
-        certification.setDate(new Date());
+        certification.setDate(new Date(Calendar.getInstance().getTimeInMillis()));
         certification.setStatus(CertificationStatus.CERTIFIED.getValue());
         save(certification);
     }
@@ -77,7 +78,7 @@ public class CertificationDAOImpl implements CertificationDAO {
     public void refuse(Integer orgId) {
         Certification certification = new Certification();
         certification.setIdOrg(orgId);
-        certification.setDate(new Date());
+        certification.setDate(new Date(Calendar.getInstance().getTimeInMillis()));
         certification.setStatus(CertificationStatus.REFUSED.getValue());
         save(certification);
     }
@@ -86,7 +87,7 @@ public class CertificationDAOImpl implements CertificationDAO {
     public void remove(Integer orgId) {
         Certification certification = new Certification();
         certification.setIdOrg(orgId);
-        certification.setDate(new Date());
+        certification.setDate(new Date(Calendar.getInstance().getTimeInMillis()));
         certification.setStatus(CertificationStatus.REMOVED.getValue());
         save(certification);
     }

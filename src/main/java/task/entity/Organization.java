@@ -18,9 +18,6 @@ public class Organization {
     @JoinColumn(name = "ID_ADDRESS")
     private Address address;
 
-    public Organization() {
-    }
-
     public Integer getId() {
         return id;
     }

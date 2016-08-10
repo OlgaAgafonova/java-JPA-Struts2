@@ -15,6 +15,8 @@ public interface Manager {
 
     void save(Certification certification);
 
+    void save(Form form);
+
     void addDocument(Integer orgId, String filename, File file);
 
     void addCertification(Integer orgId);
@@ -56,6 +58,8 @@ public interface Manager {
     List<CertificationView> getCertificationsByOrganizationID(Integer orgId);
 
     CertificationView getCurrentCertificationByOrganizationID(Integer orgId);
+
+    List<Form> getFormsByOrganizationID(Integer orgId);
 
     void deleteUserByID(Integer userId);
 

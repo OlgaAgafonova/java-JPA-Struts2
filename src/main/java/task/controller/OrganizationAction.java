@@ -9,7 +9,7 @@ import task.service.Utils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
-import java.io.IOException;
+import java.sql.Date;
 import java.util.List;
 
 public class OrganizationAction extends ActionSupport {
@@ -23,6 +23,10 @@ public class OrganizationAction extends ActionSupport {
     private String zipcode;
     private Byte currStatus;
     private Integer id_cerf;
+
+    private String formStart;
+    private String formEnd;
+    private Integer number;
 
     private Manager manager;
     private List<Organization> organizations;
@@ -66,9 +70,14 @@ public class OrganizationAction extends ActionSupport {
     public String showCertifications() {
         if (id_org != null) {
             List<CertificationView> certifications = manager.getCertificationsByOrganizationID(id_org);
-            System.out.println(certifications);
             Utils.toResponse(certifications, "jsonCertifications");
         }
+        return SUCCESS;
+    }
+
+    public String showForms() {
+        List<Form> forms = manager.getFormsByOrganizationID(id_org);
+        Utils.toResponse(forms, "jsonForms");
         return SUCCESS;
     }
 
@@ -106,6 +115,24 @@ public class OrganizationAction extends ActionSupport {
         return SUCCESS;
     }
 
+    public String addForm() {
+        Date startDate = Date.valueOf(formStart);
+        Date endDate = Date.valueOf(formEnd);
+        if (!Utils.checkDates(startDate, endDate)) {
+            Date tmp;
+            tmp = startDate;
+            startDate = endDate;
+            endDate = tmp;
+        }
+        Form form = new Form();
+        form.setNumber(number);
+        form.setStart(startDate);
+        form.setEnd(endDate);
+        form.setOrgId(id_org);
+        manager.save(form);
+        return SUCCESS;
+    }
+
     public String uploadDocuments() {
         String destPath = "F:\\Andersen\\task1\\Temp";
 
@@ -113,7 +140,7 @@ public class OrganizationAction extends ActionSupport {
             File destFile = new File(destPath, filename);
             FileUtils.copyFile(file, destFile);
             manager.addDocument(id_org, destFile.getAbsolutePath(), destFile);
-        } catch (IOException e) {
+        } catch (Exception e) {
             return ERROR;
         }
 
@@ -217,16 +244,8 @@ public class OrganizationAction extends ActionSupport {
         return organizations;
     }
 
-    public void setOrganizations(List<Organization> organizations) {
-        this.organizations = organizations;
-    }
-
     public Byte getCurrStatus() {
         return currStatus;
-    }
-
-    public void setCurrStatus(Byte currStatus) {
-        this.currStatus = currStatus;
     }
 
     public void setUpload(File file) {
@@ -235,6 +254,18 @@ public class OrganizationAction extends ActionSupport {
 
     public void setUploadFileName(String filename) {
         this.filename = filename;
+    }
+
+    public void setFormStart(String formStart) {
+        this.formStart = formStart;
+    }
+
+    public void setFormEnd(String formEnd) {
+        this.formEnd = formEnd;
+    }
+
+    public void setNumber(Integer number) {
+        this.number = number;
     }
 
     public void setManager(Manager manager) {

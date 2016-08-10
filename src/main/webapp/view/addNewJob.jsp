@@ -215,8 +215,8 @@
             disablePosition();
         }
 
-        $("#start").datepicker();
-        $("#end").datepicker();
+        $("#start").datepicker({dateFormat: 'yy-mm-dd'});
+        $("#end").datepicker({dateFormat: 'yy-mm-dd'});
 
         $("#formAddJob").submit(function (event) {
             event.preventDefault();

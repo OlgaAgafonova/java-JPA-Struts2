@@ -14,9 +14,6 @@ public class Role {
     @Column(name = "NAME")
     private String name;
 
-    public Role() {
-    }
-
     public Integer getId() {
         return id;
     }

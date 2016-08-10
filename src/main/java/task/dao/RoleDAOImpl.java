@@ -28,7 +28,7 @@ public class RoleDAOImpl implements RoleDAO {
     }
 
     @Override
-    public void deleteRoleByID(Integer id) {
+    public void deleteByID(Integer id) {
         Role role = getRoleById(id);
         if (role != null) {
             getCurrentSession().delete(role);

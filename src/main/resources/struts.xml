@@ -60,6 +60,11 @@
                 <param name="root">jsonCertifications</param>
             </result>
         </action>
+        <action name="forms" class="orgAction" method="showForms">
+            <result type="json">
+                <param name="root">jsonForms</param>
+            </result>
+        </action>
 
 
         <action name="edit/roles" class="mainAction" method="getAllRoles">
@@ -91,7 +96,7 @@
         <action name="upload" class="orgAction" method="uploadDocuments">
             <result name="input" type="json"/>
             <result name="success" type="json"/>
-            <result name="error" type="json"/>
+            <result name="error" />
         </action>
 
         <action name="delete/user" class="deleteAction" method="deleteUser">
@@ -121,6 +126,10 @@
             <result name="error" type="json">
                 <param name="root">jsonError</param>
             </result>
+        </action>
+        <action name="add/form" class="orgAction" method="addForm">
+            <result name="input" type="json"/>
+            <result name="success" type="json"/>
         </action>
 
     </package>

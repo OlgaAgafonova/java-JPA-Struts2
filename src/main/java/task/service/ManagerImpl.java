@@ -15,6 +15,7 @@ public class ManagerImpl implements Manager {
     private OrganizationDAO organizationDAO;
     private JobPlaceDAO jobPlaceDAO;
     private CertificationDAO certificationDAO;
+    private FormDAO formDAO;
 
     @Override
     @Transactional
@@ -48,6 +49,12 @@ public class ManagerImpl implements Manager {
     @Transactional
     public void save(Certification certification) {
         certificationDAO.save(certification);
+    }
+
+    @Override
+    @Transactional
+    public void save(Form form) {
+        formDAO.save(form);
     }
 
     @Override
@@ -178,6 +185,12 @@ public class ManagerImpl implements Manager {
 
     @Override
     @Transactional
+    public List<Form> getFormsByOrganizationID(Integer orgId) {
+        return formDAO.getFormsByOrganizationID(orgId);
+    }
+
+    @Override
+    @Transactional
     public void deleteUserByID(Integer userId) {
         userDAO.deleteUserByID(userId);
         userRolesDAO.deleteUserRoles(userId);
@@ -222,5 +235,9 @@ public class ManagerImpl implements Manager {
 
     public void setCertificationDAO(CertificationDAO certificationDAO) {
         this.certificationDAO = certificationDAO;
+    }
+
+    public void setFormDAO(FormDAO formDAO) {
+        this.formDAO = formDAO;
     }
 }

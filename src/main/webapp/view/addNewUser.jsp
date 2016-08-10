@@ -93,11 +93,10 @@
     </div>
 
     <div id="fragment-2">
-
-        <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
-                onclick="location.pathname = '/register/job?id_user=' + userId">
-            Add job
-        </button>
+        <input type="button"
+               value="Add job"
+               onclick="location.pathname = '/register/job?id_user=' + userId"
+               class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"/>
 
         <table class="display" id="jobDataTable">
             <thead>

@@ -1,7 +1,7 @@
 package task.entity;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.sql.Date;
 
 @Entity
 @Table(name = "JOB_PLACE")
@@ -12,11 +12,9 @@ public class JobPlace {
     @GeneratedValue
     private Integer id;
 
-    @Temporal(TemporalType.DATE)
     @Column(name = "START_DATE")
     private Date start;
 
-    @Temporal(TemporalType.DATE)
     @Column(name = "END_DATE")
     private Date end;
 
@@ -34,9 +32,6 @@ public class JobPlace {
 
     @Column(name = "TYPE", columnDefinition = "TINYINT", nullable = false)
     private byte type;
-
-    public JobPlace() {
-    }
 
     public Integer getId() {
         return id;

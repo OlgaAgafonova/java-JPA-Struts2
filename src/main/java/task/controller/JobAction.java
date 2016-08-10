@@ -8,9 +8,8 @@ import task.entity.User;
 import task.service.Manager;
 import task.service.Utils;
 
-import java.text.ParseException;
+import java.sql.Date;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 public class JobAction extends ActionSupport {
@@ -101,14 +100,8 @@ public class JobAction extends ActionSupport {
         Position position = manager.getPositionByID(Integer.valueOf(this.position));
         User user = manager.getUserByID(Integer.valueOf(this.user));
 
-        SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
-        Date startDate = null, endDate = null;
-        try {
-            startDate = format.parse(start);
-            endDate = format.parse(end);
-        } catch (ParseException ignored) {
-        }
-        if (!checkDates(startDate, endDate)) {
+        Date startDate = Date.valueOf(start), endDate = Date.valueOf(end);
+        if (!Utils.checkDates(startDate, endDate)) {
             Date tmp;
             tmp = startDate;
             startDate = endDate;
@@ -135,15 +128,9 @@ public class JobAction extends ActionSupport {
         Position position = manager.getPositionByID(Integer.valueOf(this.position));
         User user = manager.getUserByID(this.id_user);
 
-        SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
-        Date startDate = null, endDate = null;
-        try {
-            startDate = format.parse(start);
-            endDate = format.parse(end);
-        } catch (ParseException ignored) {
-        }
+        Date startDate = Date.valueOf(start), endDate = Date.valueOf(end);
 
-        if (!checkDates(startDate, endDate)) {
+        if (!Utils.checkDates(startDate, endDate)) {
             Date tmp;
             tmp = startDate;
             startDate = endDate;
@@ -171,15 +158,8 @@ public class JobAction extends ActionSupport {
         Position position = manager.getPositionByID(this.id_pos);
         User user = manager.getUserByID(this.id_user);
 
-        SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
-        Date startDate = null, endDate = null;
-        try {
-            startDate = format.parse(start);
-            endDate = format.parse(end);
-        } catch (ParseException ignored) {
-        }
-
-        if (!checkDates(startDate, endDate)) {
+        Date startDate = Date.valueOf(start), endDate = Date.valueOf(end);
+        if (!Utils.checkDates(startDate, endDate)) {
             Date tmp;
             tmp = startDate;
             startDate = endDate;
@@ -230,15 +210,6 @@ public class JobAction extends ActionSupport {
 
     private boolean checkCrossingWithMainJobs(byte type, Date start, Date end, Integer id_user) {
         return !((type == 1) && isCrossingWithMainJobs(start, end, id_user));
-    }
-
-    private boolean checkDates(Date start, Date end) {
-        if (end == null) {
-            return true;
-        } else if (start.after(end)) {
-            return false;
-        }
-        return true;
     }
 
     public Integer getId_user() {

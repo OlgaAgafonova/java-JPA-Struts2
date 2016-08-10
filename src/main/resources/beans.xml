@@ -45,6 +45,9 @@
     <bean id="certificationDAO" class="task.dao.CertificationDAOImpl">
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
+    <bean id="formDAO" class="task.dao.FormDAOImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
 
     <bean id="manager" class="task.service.ManagerImpl">
         <property name="userDAO" ref="userDAO"/>
@@ -54,6 +57,7 @@
         <property name="organizationDAO" ref="organisationDAO"/>
         <property name="jobPlaceDAO" ref="jobPlaceDAO"/>
         <property name="certificationDAO" ref="certificationDAO"/>
+        <property name="formDAO" ref="formDAO"/>
     </bean>
 
     <!-- Configure jdbc.properties -->

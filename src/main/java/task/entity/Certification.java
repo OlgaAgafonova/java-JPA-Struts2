@@ -1,10 +1,8 @@
 package task.entity;
 
-import org.hibernate.type.LobType;
-
 import javax.persistence.*;
 import java.sql.Blob;
-import java.util.Date;
+import java.sql.Date;
 
 @Entity
 @Table(name = "CERTIFICATION")
@@ -18,7 +16,6 @@ public class Certification {
     @Column(name = "ID_ORG")
     private Integer idOrg;
 
-    @Temporal(TemporalType.DATE)
     @Column(name = "DATE")
     private Date date;
 
