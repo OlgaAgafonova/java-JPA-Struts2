@@ -193,10 +193,16 @@
                             <input type="reset"
                                    class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
                                    value="Cancel"/>
+                            <input id="button-transfer"
+                                   type="button"
+                                   onclick="javascript: dialog.dialog('open');"
+                                   class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
+                                   value="Transfer"/>
                         </td>
                     </tr>
                 </table>
             </form>
+
         </div>
 
         <input id="open-close"
@@ -215,15 +221,34 @@
                 </thead>
             </table>
         </div>
+
+        <div id="transferFormDialog" title="Transfer form">
+            Click "Select" to to transfer the form.
+            <div>
+                <table class="display" id="transferTable">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Address</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
 
 
 <script>
     var orgId;
+    var formId;
     var tabs;
-    var certificationTable;
+    var certificationTable = {};
     var formsTable;
+    var transferTable;
+    var dialog = {};
 
     function FormToJson(form) {
         var array = $(form).serializeArray();
@@ -312,7 +337,6 @@
             ]
         });
     }
-
     function buildCertificationTable() {
         certificationTable = $("#certificationsDataTable").DataTable({
             "sPaginationType": "full_numbers",
@@ -368,7 +392,6 @@
         });
         buildCertificationPanel();
     }
-
     function buildCertificationPanel() {
         jQuery.ajax({
             type: 'post',
@@ -400,7 +423,6 @@
             }
         });
     }
-
     function buildFormsTable() {
         formsTable = $("#formsTable").DataTable({
             "sPaginationType": "full_numbers",
@@ -435,8 +457,59 @@
             ]
         });
     }
+    function buildDialog() {
+        dialog = $('#transferFormDialog').dialog({
+            buttons: [{text: "SELECT", click: transferForm},
+                {
+                    text: "CANCEL", click: function () {
+                    $(this).dialog("close");
+                }
+                }],
+            modal: true,
+            autoOpen: false
+        });
+    }
+    function buildTransferTable() {
+        transferTable = $("#transferTable").DataTable({
+            "sPaginationType": "full_numbers",
+            "sAjaxSource": "/org?id_org=" + orgId,
+            "serverSide": true,
+            "processing": true,
+            "bJQueryUI": true,
+            "bAutoWidth": false,
+            "oLanguage": {
+                "sSearch": "Search in all columns:"
+            },
+            "aoColumns": [
+                {
+                    "mData": "name", sDefaultContent: "n/a"
+                },
+                {
+                    "mData": "address", "render": function (data, type, full, meta) {
+                    var strAddress = data.country + "<br>";
+                    strAddress += data.city + "<br>";
+                    strAddress += data.street + ", ";
+                    strAddress += data.house + "<br>";
+                    strAddress += data.zipCode;
+                    return strAddress;
+                }, sDefaultContent: "n/a"
+                }
+            ]
+        });
+
+        $('#transferTable tbody').on('click', 'tr', function () {
+            if ($(this).hasClass('selected')) {
+                $(this).removeClass('selected');
+            }
+            else {
+                transferTable.$('tr.selected').removeClass('selected');
+                $(this).addClass('selected');
+            }
+        });
+    }
 
     function editForm(end, number, id_org, start) {
+        $("#button-transfer").show();
         var div = document.getElementById('addEditForm');
         var button = document.getElementById('open-close');
         div.style.display = 'block';
@@ -446,6 +519,26 @@
         document.getElementById("dateStart").value = start;
         document.getElementById("dateEnd").value = end;
         document.getElementById("number").value = number;
+        formId = number;
+    }
+    function transferForm() {
+        var rowData = transferTable.row('.selected').data();
+
+        jQuery.ajax({
+            type: 'post',
+            url: "/forms/transfer",
+            dataType: 'json',
+            data: {"orgId": rowData.id, "formId": formId},
+            traditional: true,
+            success: function () {
+                formsTable.ajax.reload();
+            },
+            error: function () {
+            }
+        });
+
+        console.log(rowData);
+        dialog.dialog("close");
     }
 
     function certify() {
@@ -460,7 +553,6 @@
             }
         });
     }
-
     function refuse() {
         jQuery.ajax({
             type: 'post',
@@ -473,7 +565,6 @@
             }
         });
     }
-
     function remove() {
         jQuery.ajax({
             type: 'post',
@@ -512,6 +603,9 @@
         buildEmployeesTable();
         buildCertificationTable();
         buildFormsTable();
+        buildTransferTable();
+        buildDialog();
+
 
         $("#dateStart").datepicker({dateFormat: 'yy-mm-dd'});
         $("#dateEnd").datepicker({dateFormat: 'yy-mm-dd'});
@@ -540,10 +634,10 @@
         });
         $('#addEditForm').ajaxForm({
             data: {"id_org": orgId},
-            clearForm: true,
             success: function () {
                 $("#add-form-error").hide();
                 $("#add-form-ok").text("Saved").show().fadeOut(4000);
+                $("#button-transfer").show();
                 formsTable.ajax.reload();
             },
             error: function () {
@@ -555,9 +649,11 @@
         });
 
         document.getElementById('open-close').onclick = function () {
+            $("#button-transfer").hide();
             openbox('addEditForm', this);
             return false;
         };
+
     });
 </script>
 </body>

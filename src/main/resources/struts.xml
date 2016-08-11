@@ -98,6 +98,11 @@
             <result name="success" type="json"/>
             <result name="error" />
         </action>
+        <action name="forms/transfer" class="orgAction" method="transferForm">
+            <result name="input" type="json"/>
+            <result name="success" type="json"/>
+            <result name="error" />
+        </action>
 
         <action name="delete/user" class="deleteAction" method="deleteUser">
             <result type="json"/>

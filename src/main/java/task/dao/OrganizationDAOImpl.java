@@ -34,8 +34,18 @@ public class OrganizationDAOImpl implements OrganizationDAO {
 
     @Override
     public List<Organization> getOrganizations(Integer start, Integer maxRows) {
-        return (List<Organization>)getCurrentSession()
+        return (List<Organization>) getCurrentSession()
                 .createQuery("from Organization order by name")
+                .setFirstResult(start)
+                .setMaxResults(maxRows)
+                .list();
+    }
+
+    @Override
+    public List<Organization> getOrganizationsWithoutID(Integer orgId, Integer start, Integer maxRows) {
+        return (List<Organization>) getCurrentSession()
+                .createQuery("from Organization where id!=? order by name")
+                .setInteger(0, orgId)
                 .setFirstResult(start)
                 .setMaxResults(maxRows)
                 .list();

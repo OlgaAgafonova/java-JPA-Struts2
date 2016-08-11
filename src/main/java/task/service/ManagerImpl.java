@@ -125,6 +125,12 @@ public class ManagerImpl implements Manager {
 
     @Override
     @Transactional
+    public List<Organization> getOrganizationsWithoutID(Integer orgId, Integer start, Integer maxRows) {
+        return organizationDAO.getOrganizationsWithoutID(orgId, start, maxRows);
+    }
+
+    @Override
+    @Transactional
     public Organization getOrganizationByID(Integer orgId) {
         return organizationDAO.getOrganizationById(orgId);
     }
@@ -187,6 +193,12 @@ public class ManagerImpl implements Manager {
     @Transactional
     public List<Form> getFormsByOrganizationID(Integer orgId) {
         return formDAO.getFormsByOrganizationID(orgId);
+    }
+
+    @Override
+    @Transactional
+    public Form getFormByID(Integer formId) {
+        return formDAO.getFormByID(formId);
     }
 
     @Override

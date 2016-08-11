@@ -43,6 +43,8 @@ public interface Manager {
 
     List<Organization> getOrganizations(Integer start, Integer maxRows);
 
+    List<Organization> getOrganizationsWithoutID(Integer orgId, Integer start, Integer maxRows);
+
     Organization getOrganizationByID(Integer orgId);
 
     List<Position> getAllPositions();
@@ -60,6 +62,8 @@ public interface Manager {
     CertificationView getCurrentCertificationByOrganizationID(Integer orgId);
 
     List<Form> getFormsByOrganizationID(Integer orgId);
+
+    Form getFormByID(Integer formId);
 
     void deleteUserByID(Integer userId);
 

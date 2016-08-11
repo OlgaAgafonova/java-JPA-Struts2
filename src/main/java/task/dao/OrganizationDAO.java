@@ -13,6 +13,7 @@ public interface OrganizationDAO {
     List<Organization> getAll();
 
     List<Organization> getOrganizations(Integer start, Integer maxRows);
+    List<Organization> getOrganizationsWithoutID(Integer orgId, Integer start, Integer maxRows);
 
     Long getCountOfOrganization();
 

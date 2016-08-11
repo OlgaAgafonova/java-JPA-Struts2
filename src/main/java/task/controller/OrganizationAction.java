@@ -52,9 +52,18 @@ public class OrganizationAction extends ActionSupport {
         HttpServletRequest request = ServletActionContext.getRequest();
         Integer iDisplayStart = Integer.valueOf(request.getParameterMap().get("iDisplayStart")[0]);
         Integer iDisplayLength = Integer.valueOf(request.getParameterMap().get("iDisplayLength")[0]);
+        int totalSize;
 
-        organizations = manager.getOrganizations(iDisplayStart, iDisplayLength);
-        int totalSize = manager.getTotalCountOfOrganizations().intValue();
+        String[] id_orgs = request.getParameterMap().get("id_org");
+        if (id_orgs != null) {
+            Integer orgId = Integer.valueOf(id_orgs[0]);
+            organizations = manager.getOrganizationsWithoutID(orgId, iDisplayStart, iDisplayLength);
+            totalSize = manager.getTotalCountOfOrganizations().intValue();
+            totalSize--;
+        } else {
+            organizations = manager.getOrganizations(iDisplayStart, iDisplayLength);
+            totalSize = manager.getTotalCountOfOrganizations().intValue();
+        }
         Utils.toResponse(organizations, "jsonOrg", totalSize, totalSize);
         return SUCCESS;
     }
@@ -129,6 +138,16 @@ public class OrganizationAction extends ActionSupport {
         form.setStart(startDate);
         form.setEnd(endDate);
         form.setOrgId(id_org);
+        manager.save(form);
+        return SUCCESS;
+    }
+
+    public String transferForm() {
+        HttpServletRequest request = ServletActionContext.getRequest();
+        Integer orgId = Integer.valueOf(request.getParameterMap().get("orgId")[0]);
+        Integer formId = Integer.valueOf(request.getParameterMap().get("formId")[0]);
+        Form form = manager.getFormByID(formId);
+        form.setOrgId(orgId);
         manager.save(form);
         return SUCCESS;
     }
