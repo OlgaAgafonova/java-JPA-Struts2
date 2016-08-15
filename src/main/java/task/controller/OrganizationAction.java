@@ -21,6 +21,7 @@ public class OrganizationAction extends ActionSupport {
     private String street;
     private String house;
     private String zipcode;
+    private String editStart;
     private Byte currStatus;
     private Integer id_cerf;
 
@@ -120,6 +121,8 @@ public class OrganizationAction extends ActionSupport {
         address.setHouse(house);
         address.setZipCode(zipcode);
         organization.setAddress(address);
+        organization.setEditStart(Date.valueOf(editStart));
+        System.out.println(organization);
         manager.save(organization);
         return SUCCESS;
     }
@@ -253,6 +256,14 @@ public class OrganizationAction extends ActionSupport {
 
     public void setZipcode(String zipcode) {
         this.zipcode = zipcode;
+    }
+
+    public String getEditStart() {
+        return editStart;
+    }
+
+    public void setEditStart(String editStart) {
+        this.editStart = editStart;
     }
 
     public void setId_cerf(Integer id_cerf) {

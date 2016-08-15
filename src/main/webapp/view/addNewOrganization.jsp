@@ -78,6 +78,10 @@
                 <tr>
                     <td><s:textfield key="label.zipcode" name="zipcode" requiredLabel="true"/></td>
                 </tr>
+                <tr>
+                    <td><s:textfield id="editStart" name="editStart" key="label.editStart" requiredLabel="true"
+                                     required="true"/></td>
+                </tr>
 
                 <tr>
                     <td>
@@ -269,6 +273,7 @@
             data: json,
             traditional: true,
             success: function () {
+                $("#add-error").hide();
                 $("#add-ok").text("Saved").show().fadeOut(4000);
                 tabs.tabs("enable", "#fragment-2");
                 tabs.tabs("enable", "#fragment-3");
@@ -609,6 +614,7 @@
 
         $("#dateStart").datepicker({dateFormat: 'yy-mm-dd'});
         $("#dateEnd").datepicker({dateFormat: 'yy-mm-dd'});
+        $("#editStart").datepicker({dateFormat: 'yy-mm-dd'});
 
         $("#formAddOrg").submit(function (event) {
             event.preventDefault();

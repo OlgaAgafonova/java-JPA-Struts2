@@ -1,13 +1,10 @@
 package task.entity;
 
 import javax.persistence.*;
-import java.io.Serializable;
-import java.sql.Date;
 
 @Entity
-@Table(name = "ORGANIZATION")
-public class Organization implements Serializable{
-
+@Table(name = "organization_view")
+public class OrganizationView {
     @Id
     @Column(name = "ID_ORGANIZATION")
     private Integer id;
@@ -18,13 +15,6 @@ public class Organization implements Serializable{
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "ID_ADDRESS")
     private Address address;
-
-    @Id
-    @Column(name = "ds")
-    private Date editStart;
-
-    @Column(name = "de")
-    private Date editEnd;
 
     public Integer getId() {
         return id;
@@ -50,30 +40,12 @@ public class Organization implements Serializable{
         this.address = address;
     }
 
-    public Date getEditStart() {
-        return editStart;
-    }
-
-    public void setEditStart(Date editStart) {
-        this.editStart = editStart;
-    }
-
-    public Date getEditEnd() {
-        return editEnd;
-    }
-
-    public void setEditEnd(Date editEnd) {
-        this.editEnd = editEnd;
-    }
-
     @Override
     public String toString() {
         return "Organization{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", address=" + address +
-                ", editStart=" + editStart +
-                ", editEnd=" + editEnd +
                 '}';
     }
 }

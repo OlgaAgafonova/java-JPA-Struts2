@@ -23,8 +23,8 @@ public class JobPlace {
     private User user;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "ID_ORGANIZATION")
-    private Organization organization;
+    @JoinColumn(name = "org_id", referencedColumnName = "id_organization")
+    private OrganizationView organization;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ID_POSITION")
@@ -65,11 +65,11 @@ public class JobPlace {
         this.user = user;
     }
 
-    public Organization getOrganization() {
+    public OrganizationView getOrganization() {
         return organization;
     }
 
-    public void setOrganization(Organization organization) {
+    public void setOrganization(OrganizationView organization) {
         this.organization = organization;
     }
 

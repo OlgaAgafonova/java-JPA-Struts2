@@ -8,11 +8,14 @@ public interface OrganizationDAO {
 
     void save(Organization organization);
 
+    void update(Organization organization);
+
     Organization getOrganizationById(Integer id);
 
     List<Organization> getAll();
 
     List<Organization> getOrganizations(Integer start, Integer maxRows);
+
     List<Organization> getOrganizationsWithoutID(Integer orgId, Integer start, Integer maxRows);
 
     Long getCountOfOrganization();

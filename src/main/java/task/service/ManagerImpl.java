@@ -36,6 +36,9 @@ public class ManagerImpl implements Manager {
     @Override
     @Transactional
     public void save(Organization organization) {
+        if (organization.getId() != null) {
+            organizationDAO.update(organization);
+        }
         organizationDAO.save(organization);
     }
 
@@ -137,6 +140,12 @@ public class ManagerImpl implements Manager {
 
     @Override
     @Transactional
+    public OrganizationView getOrganizationViewByID(Integer orgId) {
+        return null;
+    }
+
+    @Override
+    @Transactional
     public List<Position> getAllPositions() {
         return positionDAO.getAll();
     }
@@ -145,6 +154,12 @@ public class ManagerImpl implements Manager {
     @Transactional
     public Position getPositionByID(Integer posId) {
         return positionDAO.getPositionById(posId);
+    }
+
+    @Override
+    @Transactional
+    public List<JobPlace> getAllJobPlaces() {
+        return jobPlaceDAO.getAll();
     }
 
     @Override

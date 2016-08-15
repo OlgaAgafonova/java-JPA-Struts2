@@ -18,6 +18,11 @@ public class JobPlaceDAOImpl implements JobPlaceDAO {
     }
 
     @Override
+    public List<JobPlace> getAll() {
+        return (List<JobPlace>) getCurrentSession().createQuery("from JobPlace").list();
+    }
+
+    @Override
     public JobPlace getJobPlaceById(Integer id) {
         return (JobPlace) getCurrentSession().get(JobPlace.class, id);
     }

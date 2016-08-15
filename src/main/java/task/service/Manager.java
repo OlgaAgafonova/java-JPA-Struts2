@@ -47,9 +47,13 @@ public interface Manager {
 
     Organization getOrganizationByID(Integer orgId);
 
+    OrganizationView getOrganizationViewByID(Integer orgId);
+
     List<Position> getAllPositions();
 
     Position getPositionByID(Integer posId);
+
+    List<JobPlace> getAllJobPlaces();
 
     List<JobPlace> getJobPlacesByUserID(Integer userId);
 

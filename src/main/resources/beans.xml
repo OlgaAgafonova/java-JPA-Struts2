@@ -88,7 +88,7 @@
     </bean>
 
 
-    <tx:annotation-driven/>
+    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
     <!-- Run SQL queries in transactions -->
     <bean id="transactionManager"
           class="org.springframework.orm.hibernate3.HibernateTransactionManager">

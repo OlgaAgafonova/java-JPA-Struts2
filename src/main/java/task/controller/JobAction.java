@@ -1,10 +1,7 @@
 package task.controller;
 
 import com.opensymphony.xwork2.ActionSupport;
-import task.entity.JobPlace;
-import task.entity.Organization;
-import task.entity.Position;
-import task.entity.User;
+import task.entity.*;
 import task.service.Manager;
 import task.service.Utils;
 
@@ -96,7 +93,7 @@ public class JobAction extends ActionSupport {
 
     private JobPlace makeJobPlaceFromOrganization() {
         JobPlace jobPlace = new JobPlace();
-        Organization organization = manager.getOrganizationByID(this.id_org);
+        OrganizationView organization = manager.getOrganizationViewByID(this.id_org);
         Position position = manager.getPositionByID(Integer.valueOf(this.position));
         User user = manager.getUserByID(Integer.valueOf(this.user));
 
@@ -124,7 +121,7 @@ public class JobAction extends ActionSupport {
     private JobPlace makeJobPlaceFromUser() {
         JobPlace jobPlace = new JobPlace();
 
-        Organization organization = manager.getOrganizationByID(Integer.valueOf(this.organization));
+        OrganizationView organization = manager.getOrganizationViewByID(this.id_org);
         Position position = manager.getPositionByID(Integer.valueOf(this.position));
         User user = manager.getUserByID(this.id_user);
 
@@ -154,7 +151,7 @@ public class JobAction extends ActionSupport {
     private JobPlace makeJobPlaceFromEdit() {
         JobPlace jobPlace = new JobPlace();
 
-        Organization organization = manager.getOrganizationByID(this.id_org);
+        OrganizationView organization = manager.getOrganizationViewByID(this.id_org);
         Position position = manager.getPositionByID(this.id_pos);
         User user = manager.getUserByID(this.id_user);
 
