@@ -15,6 +15,7 @@
     <link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/1.10.12/css/jquery.dataTables.css">
     <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
     <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <script src="http://malsup.github.com/jquery.form.js"></script>
 
     <script src="http://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js" type="text/javascript"
             charset="utf8"></script>
@@ -86,11 +87,23 @@
     </div>
 
     <div id="fragment-2">
-        <s:form action="register/organization" method="GET">
-            <input type="submit"
-                   value="Add organization"
-                   class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"/>
-        </s:form>
+        <s:url id="fileDownload" action="org/xlsx"></s:url>
+        <div>
+            <table>
+                <tr>
+                    <td>
+                        <s:form action="register/organization" method="GET">
+                            <input type="submit"
+                                   value="Add organization"
+                                   class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"/>
+                        </s:form>
+                    </td>
+                    <td>
+                        Export to: <s:a href="%{fileDownload}">Excel</s:a>
+                    </td>
+                </tr>
+            </table>
+        </div>
 
         <table class="display" id="organizationsDataTable">
             <thead>
@@ -366,6 +379,14 @@
         });
 
         $("#tabs").tabs();
+
+        $('#export-excel').ajaxForm({
+            success: function () {
+            },
+            error: function () {
+
+            }
+        });
     });
 
 </script>

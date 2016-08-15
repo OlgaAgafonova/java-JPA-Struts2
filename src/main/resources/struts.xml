@@ -104,6 +104,7 @@
             <result name="error" />
         </action>
 
+
         <action name="delete/user" class="deleteAction" method="deleteUser">
             <result type="json"/>
         </action>
@@ -137,6 +138,15 @@
             <result name="success" type="json"/>
         </action>
 
+
+        <action name="org/xlsx" class="orgAction" method="createXLSX">
+            <result name="success" type="stream">
+                <param name="contentDisposition">attachment;filename=${fileNameExcel}</param>
+                <param name="contentType">application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</param>
+                <param name="inputName">fileInputStream</param>
+            </result>
+
+        </action>
     </package>
 
 </struts>

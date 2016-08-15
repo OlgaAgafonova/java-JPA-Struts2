@@ -47,7 +47,7 @@ public class OrganizationDAOImpl implements OrganizationDAO {
     @Override
     public List<Organization> getAll() {
         return (List<Organization>) getCurrentSession()
-                .createQuery("from Organization ")
+                .createQuery("from Organization where current_date() between editStart and editEnd")
                 .list();
     }
 

@@ -2,14 +2,20 @@ package task.controller;
 
 import com.opensymphony.xwork2.ActionSupport;
 import org.apache.commons.io.FileUtils;
+import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.xssf.usermodel.*;
 import org.apache.struts2.ServletActionContext;
 import task.entity.*;
 import task.service.Manager;
 import task.service.Utils;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
+import java.io.*;
 import java.sql.Date;
+import java.util.Calendar;
 import java.util.List;
 
 public class OrganizationAction extends ActionSupport {
@@ -33,6 +39,9 @@ public class OrganizationAction extends ActionSupport {
     private List<Organization> organizations;
     private File file;
     private String filename;
+
+    private InputStream fileInputStream;
+    private String fileNameExcel;
 
     public String index() {
         if (id_org != null) {
@@ -202,6 +211,104 @@ public class OrganizationAction extends ActionSupport {
         return string == null || string.trim().isEmpty();
     }
 
+    public String createXLSX() {
+        organizations = manager.getAllOrganizations();
+
+        XSSFWorkbook workbook = new XSSFWorkbook();
+        XSSFSheet spreadsheet = workbook.createSheet("Organizations");
+        XSSFRow header = spreadsheet.createRow(0);
+        XSSFRow row;
+
+        XSSFFont fontHeader = workbook.createFont();
+        fontHeader.setFontName(HSSFFont.FONT_ARIAL);
+        fontHeader.setFontHeightInPoints((short) 12);
+        fontHeader.setColor(HSSFColor.WHITE.index);
+        XSSFCellStyle headerStyle = workbook.createCellStyle();
+        headerStyle.setFont(fontHeader);
+        headerStyle.setFillForegroundColor(HSSFColor.DARK_RED.index);
+        headerStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
+
+        XSSFFont fontData = workbook.createFont();
+        fontData.setFontName(HSSFFont.FONT_ARIAL);
+        fontData.setFontHeightInPoints((short) 12);
+        XSSFCellStyle dataStyle = workbook.createCellStyle();
+        dataStyle.setFont(fontData);
+
+        Cell cell;
+        cell = header.createCell(0);
+        cell.setCellValue("ID");
+        cell.setCellStyle(headerStyle);
+        cell = header.createCell(1);
+        cell.setCellValue("NAME");
+        cell.setCellStyle(headerStyle);
+        cell = header.createCell(2);
+        cell.setCellValue("COUNTRY");
+        cell.setCellStyle(headerStyle);
+        cell = header.createCell(3);
+        cell.setCellValue("CITY");
+        cell.setCellStyle(headerStyle);
+        cell = header.createCell(4);
+        cell.setCellValue("STREET");
+        cell.setCellStyle(headerStyle);
+        cell = header.createCell(5);
+        cell.setCellValue("BUILDING");
+        cell.setCellStyle(headerStyle);
+        cell = header.createCell(6);
+        cell.setCellValue("ZIP CODE");
+        cell.setCellStyle(headerStyle);
+
+        for (int i = 0; i < organizations.size(); i++) {
+            Organization organization = organizations.get(i);
+            Address address = organization.getAddress();
+            row = spreadsheet.createRow(i + 1);
+            cell = row.createCell(0);
+            cell.setCellValue(organization.getId());
+            cell.setCellStyle(dataStyle);
+            cell = row.createCell(1);
+            cell.setCellValue(organization.getName());
+            cell.setCellStyle(dataStyle);
+            cell = row.createCell(2);
+            cell.setCellValue(address.getCountry());
+            cell.setCellStyle(dataStyle);
+            cell = row.createCell(3);
+            cell.setCellValue(address.getCity());
+            cell.setCellStyle(dataStyle);
+            cell = row.createCell(4);
+            cell.setCellValue(address.getStreet());
+            cell.setCellStyle(dataStyle);
+            cell = row.createCell(5);
+            cell.setCellValue(address.getHouse());
+            cell.setCellStyle(dataStyle);
+            cell = row.createCell(6);
+            cell.setCellValue(address.getZipCode());
+            cell.setCellStyle(dataStyle);
+        }
+
+        for (int i = 0; i < spreadsheet.getRow(0).getPhysicalNumberOfCells(); i++) {
+            spreadsheet.autoSizeColumn(i);
+        }
+
+        Calendar calendar = Calendar.getInstance();
+        String date = calendar.get(Calendar.YEAR) + "-"
+                + (calendar.get(Calendar.MONTH) + 1) + "-"
+                + calendar.get(Calendar.DATE);
+        String filename = "F:\\organizations_" + date + ".xlsx";
+        File result = new File(filename);
+        FileOutputStream out;
+
+        try {
+            out = new FileOutputStream(result);
+            workbook.write(out);
+            out.close();
+
+            fileNameExcel = result.getName();
+            fileInputStream = new FileInputStream(result);
+        } catch (IOException ignored) {
+        }
+
+        return SUCCESS;
+    }
+
     public Integer getId_org() {
         return id_org;
     }
@@ -296,6 +403,14 @@ public class OrganizationAction extends ActionSupport {
 
     public void setNumber(Integer number) {
         this.number = number;
+    }
+
+    public InputStream getFileInputStream() {
+        return fileInputStream;
+    }
+
+    public String getFileNameExcel() {
+        return fileNameExcel;
     }
 
     public void setManager(Manager manager) {

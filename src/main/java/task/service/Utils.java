@@ -21,7 +21,6 @@ public class Utils {
         ActionContext.getContext().put(name, tableResponse);
     }
 
-
     public static void toErrorResponse(String error, String name) {
         DataTableResponse tableResponse = new DataTableResponse();
         tableResponse.setError(error);
