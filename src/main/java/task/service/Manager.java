@@ -3,6 +3,7 @@ package task.service;
 import task.entity.*;
 
 import java.io.File;
+import java.sql.Date;
 import java.util.List;
 
 public interface Manager {
@@ -16,6 +17,8 @@ public interface Manager {
     void save(Certification certification);
 
     void save(Form form);
+
+    void update(Integer orgId, Date editStart);
 
     void addDocument(Integer orgId, String filename, File file);
 
@@ -43,17 +46,17 @@ public interface Manager {
 
     List<Organization> getOrganizations(Integer start, Integer maxRows);
 
-    List<Organization> getOrganizationsWithoutID(Integer orgId, Integer start, Integer maxRows);
+    List<Organization> getOrganizationsExceptByID(Integer orgId, Integer start, Integer maxRows);
 
     Organization getOrganizationByID(Integer orgId);
 
     OrganizationView getOrganizationViewByID(Integer orgId);
 
+    List<Organization> getOrganizationEditHistoryByID(Integer orgId);
+
     List<Position> getAllPositions();
 
     Position getPositionByID(Integer posId);
-
-    List<JobPlace> getAllJobPlaces();
 
     List<JobPlace> getJobPlacesByUserID(Integer userId);
 

@@ -27,7 +27,7 @@ public class AddUserAction extends ActionSupport {
 
     private InputStream fileInputStream;
     private String fileNameWord;
-    private String DESTINATION_PATH_TO_FILES = "F:\\Andersen\\task1\\Temp";
+    private final String DESTINATION_PATH_TO_FILES = "F:\\Andersen\\task1\\Temp";
 
     public String index() {
         rolesList = manager.getAllRoles();
@@ -185,16 +185,5 @@ public class AddUserAction extends ActionSupport {
 
     public void setManager(Manager manager) {
         this.manager = manager;
-    }
-
-    @Override
-    public String toString() {
-        return "AddUserAction{"
-                + "firstname='" + firstname + '\''
-                + ", lastname='" + lastname + '\''
-                + ", login='" + login + '\''
-                + ", email='" + email + '\''
-                + ", roles=" + Arrays.toString(roles)
-                + '}';
     }
 }

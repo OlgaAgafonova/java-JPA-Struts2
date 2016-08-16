@@ -5,7 +5,10 @@ import task.dao.*;
 import task.entity.*;
 
 import java.io.File;
-import java.util.*;
+import java.sql.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 public class ManagerImpl implements Manager {
     private UserDAO userDAO;
@@ -36,10 +39,13 @@ public class ManagerImpl implements Manager {
     @Override
     @Transactional
     public void save(Organization organization) {
-        if (organization.getId() != null) {
-            organizationDAO.update(organization);
-        }
         organizationDAO.save(organization);
+    }
+
+    @Override
+    @Transactional
+    public void update(Integer orgId, Date editStart) {
+        organizationDAO.update(orgId, editStart);
     }
 
     @Override
@@ -128,8 +134,8 @@ public class ManagerImpl implements Manager {
 
     @Override
     @Transactional
-    public List<Organization> getOrganizationsWithoutID(Integer orgId, Integer start, Integer maxRows) {
-        return organizationDAO.getOrganizationsWithoutID(orgId, start, maxRows);
+    public List<Organization> getOrganizationsExceptByID(Integer orgId, Integer start, Integer maxRows) {
+        return organizationDAO.getOrganizationsExceptByID(orgId, start, maxRows);
     }
 
     @Override
@@ -146,6 +152,12 @@ public class ManagerImpl implements Manager {
 
     @Override
     @Transactional
+    public List<Organization> getOrganizationEditHistoryByID(Integer orgId) {
+        return organizationDAO.getEditHistoryByID(orgId);
+    }
+
+    @Override
+    @Transactional
     public List<Position> getAllPositions() {
         return positionDAO.getAll();
     }
@@ -154,12 +166,6 @@ public class ManagerImpl implements Manager {
     @Transactional
     public Position getPositionByID(Integer posId) {
         return positionDAO.getPositionById(posId);
-    }
-
-    @Override
-    @Transactional
-    public List<JobPlace> getAllJobPlaces() {
-        return jobPlaceDAO.getAll();
     }
 
     @Override

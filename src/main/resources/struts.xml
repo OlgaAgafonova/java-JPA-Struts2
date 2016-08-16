@@ -65,6 +65,11 @@
                 <param name="root">jsonForms</param>
             </result>
         </action>
+        <action name="org/history" class="orgAction" method="showEditHistory">
+            <result type="json">
+                <param name="root">jsonOrgHistory</param>
+            </result>
+        </action>
 
 
         <action name="edit/roles" class="mainAction" method="getAllRoles">
@@ -96,12 +101,12 @@
         <action name="upload" class="orgAction" method="uploadDocuments">
             <result name="input" type="json"/>
             <result name="success" type="json"/>
-            <result name="error" />
+            <result name="error"/>
         </action>
         <action name="forms/transfer" class="orgAction" method="transferForm">
             <result name="input" type="json"/>
             <result name="success" type="json"/>
-            <result name="error" />
+            <result name="error"/>
         </action>
 
 
@@ -146,11 +151,11 @@
                 <param name="inputName">fileInputStream</param>
             </result>
         </action>
-
         <action name="user/docx" class="addAction" method="createDOCX">
             <result name="success" type="stream">
                 <param name="contentDisposition">attachment;filename=${fileNameWord}</param>
-                <param name="contentType">application/vnd.openxmlformats-officedocument.wordprocessingml.document</param>
+                <param name="contentType">application/vnd.openxmlformats-officedocument.wordprocessingml.document
+                </param>
                 <param name="inputName">fileInputStream</param>
             </result>
         </action>

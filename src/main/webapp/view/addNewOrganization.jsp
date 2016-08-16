@@ -53,9 +53,10 @@
     </ul>
 
     <div id="fragment-1">
+        <h3 id="header">Add organization</h3>
+
         <s:form id="formAddOrg">
             <s:textfield id="id_org" name="id_org" type="hidden"/>
-            <h3>Add or edit organization</h3>
             <span id="add-ok" class="okMessage"></span>
             <span id="add-error" class="errorMessage"></span>
 
@@ -91,10 +92,29 @@
                         <input type="reset"
                                class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
                                value="Cancel"/>
+                        <input type="button"
+                               onclick="javascript: dialogHistory.dialog('open');"
+                               class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
+                               value="History of editing"/>
                     </td>
                 </tr>
             </table>
         </s:form>
+
+        <div id="historyDialog" title="History of editing information of the organization">
+            <div>
+                <table class="display" id="historyTable">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Address</th>
+                        <th>Edit start</th>
+                        <th>Edit end</th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
     </div>
 
     <div id="fragment-2">
@@ -199,7 +219,7 @@
                                    value="Cancel"/>
                             <input id="button-transfer"
                                    type="button"
-                                   onclick="javascript: dialog.dialog('open');"
+                                   onclick="javascript: dialogTransfer.dialog('open');"
                                    class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
                                    value="Transfer"/>
                         </td>
@@ -249,10 +269,12 @@
     var orgId;
     var formId;
     var tabs;
-    var certificationTable = {};
+    var certificationTable;
     var formsTable;
     var transferTable;
-    var dialog = {};
+    var historyTable;
+    var dialogTransfer;
+    var dialogHistory;
 
     function FormToJson(form) {
         var array = $(form).serializeArray();
@@ -278,6 +300,7 @@
                 tabs.tabs("enable", "#fragment-2");
                 tabs.tabs("enable", "#fragment-3");
                 tabs.tabs("enable", "#fragment-4");
+                historyTable.ajax.reload();
             },
             error: function () {
                 $("#add-error")
@@ -462,8 +485,8 @@
             ]
         });
     }
-    function buildDialog() {
-        dialog = $('#transferFormDialog').dialog({
+    function buildDialogs() {
+        dialogTransfer = $('#transferFormDialog').dialog({
             buttons: [{text: "SELECT", click: transferForm},
                 {
                     text: "CANCEL", click: function () {
@@ -471,7 +494,22 @@
                 }
                 }],
             modal: true,
-            autoOpen: false
+            autoOpen: false,
+            width:'auto',
+            resizable: false
+        });
+
+        dialogHistory = $('#historyDialog').dialog({
+            buttons: [{
+                text: "CLOSE", click: function () {
+                    $(this).dialog("close");
+                }
+            }
+            ],
+            modal: true,
+            autoOpen: false,
+            width:'auto',
+            resizable: false
         });
     }
     function buildTransferTable() {
@@ -512,6 +550,42 @@
             }
         });
     }
+    function buildHistoryTable() {
+        historyTable = $("#historyTable").DataTable({
+            "sPaginationType": "full_numbers",
+            "sAjaxSource": "/org/history?id_org=" + orgId,
+            "bJQueryUI": true,
+            "bAutoWidth": false,
+            "oLanguage": {
+                "sSearch": "Search in all columns:"
+            },
+            "aoColumns": [
+                {
+                    "mData": "name", sDefaultContent: "n/a"
+                },
+                {
+                    "mData": "address", "render": function (data, type, full, meta) {
+                    var strAddress = data.country + "<br>";
+                    strAddress += data.city + "<br>";
+                    strAddress += data.street + ", ";
+                    strAddress += data.house + "<br>";
+                    strAddress += data.zipCode;
+                    return strAddress;
+                }, sDefaultContent: "n/a"
+                },
+                {
+                    "mData": "editStart", "render": function (data, type, full, meta) {
+                    return data.substr(0, 10);
+                }, sDefaultContent: "n/a"
+                },
+                {
+                    "mData": "editEnd", "render": function (data, type, full, meta) {
+                    return data.substr(0, 10);
+                }, sDefaultContent: "n/a"
+                }
+            ]
+        });
+    }
 
     function editForm(end, number, id_org, start) {
         $("#button-transfer").show();
@@ -542,8 +616,7 @@
             }
         });
 
-        console.log(rowData);
-        dialog.dialog("close");
+        dialogTransfer.dialog("close");
     }
 
     function certify() {
@@ -599,6 +672,7 @@
         orgId = document.getElementById("id_org").value;
         if (orgId != "") {
             tabs = $("#tabs").tabs();
+            document.getElementById("header").innerHTML = "Edit organization";
         } else {
             tabs = $("#tabs").tabs();
             tabs.tabs("disable", "#fragment-2");
@@ -609,7 +683,8 @@
         buildCertificationTable();
         buildFormsTable();
         buildTransferTable();
-        buildDialog();
+        buildHistoryTable();
+        buildDialogs();
 
 
         $("#dateStart").datepicker({dateFormat: 'yy-mm-dd'});

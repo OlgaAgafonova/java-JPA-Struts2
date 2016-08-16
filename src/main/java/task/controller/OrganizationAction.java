@@ -69,7 +69,7 @@ public class OrganizationAction extends ActionSupport {
         String[] id_orgs = request.getParameterMap().get("id_org");
         if (id_orgs != null) {
             Integer orgId = Integer.valueOf(id_orgs[0]);
-            organizations = manager.getOrganizationsWithoutID(orgId, iDisplayStart, iDisplayLength);
+            organizations = manager.getOrganizationsExceptByID(orgId, iDisplayStart, iDisplayLength);
             totalSize = manager.getTotalCountOfOrganizations().intValue();
             totalSize--;
         } else {
@@ -99,6 +99,12 @@ public class OrganizationAction extends ActionSupport {
     public String showForms() {
         List<Form> forms = manager.getFormsByOrganizationID(id_org);
         Utils.toResponse(forms, "jsonForms");
+        return SUCCESS;
+    }
+
+    public String showEditHistory() {
+        List<Organization> history = manager.getOrganizationEditHistoryByID(id_org);
+        Utils.toResponse(history, "jsonOrgHistory");
         return SUCCESS;
     }
 
@@ -133,7 +139,9 @@ public class OrganizationAction extends ActionSupport {
         address.setZipCode(zipcode);
         organization.setAddress(address);
         organization.setEditStart(Date.valueOf(editStart));
-        System.out.println(organization);
+        if (id_org != null) {
+            manager.update(id_org, Date.valueOf(editStart));
+        }
         manager.save(organization);
         return SUCCESS;
     }
