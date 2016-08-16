@@ -50,6 +50,12 @@
             <h3>Add or edit user</h3>
             <span id="ok" class="okMessage"></span>
             <span id="error" class="errorMessage"></span>
+
+            <s:url id="profileDownload" action="user/docx">
+                <s:param name="id_user">${id_user}</s:param>
+            </s:url>
+            Profile: <s:a href="%{profileDownload}">download</s:a>
+
             <table>
                 <tr>
                     <td><s:textfield key="label.firstname" name="firstname" requiredLabel="true" required="true"/></td>

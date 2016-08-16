@@ -145,7 +145,14 @@
                 <param name="contentType">application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</param>
                 <param name="inputName">fileInputStream</param>
             </result>
+        </action>
 
+        <action name="user/docx" class="addAction" method="createDOCX">
+            <result name="success" type="stream">
+                <param name="contentDisposition">attachment;filename=${fileNameWord}</param>
+                <param name="contentType">application/vnd.openxmlformats-officedocument.wordprocessingml.document</param>
+                <param name="inputName">fileInputStream</param>
+            </result>
         </action>
     </package>
 

@@ -43,6 +43,8 @@ public class OrganizationAction extends ActionSupport {
     private InputStream fileInputStream;
     private String fileNameExcel;
 
+    private String DESTINATION_PATH_TO_FILES = "F:\\Andersen\\task1\\Temp";
+
     public String index() {
         if (id_org != null) {
             Organization organization = manager.getOrganizationByID(id_org);
@@ -165,16 +167,13 @@ public class OrganizationAction extends ActionSupport {
     }
 
     public String uploadDocuments() {
-        String destPath = "F:\\Andersen\\task1\\Temp";
-
         try {
-            File destFile = new File(destPath, filename);
+            File destFile = new File(DESTINATION_PATH_TO_FILES, filename);
             FileUtils.copyFile(file, destFile);
             manager.addDocument(id_org, destFile.getAbsolutePath(), destFile);
         } catch (Exception e) {
             return ERROR;
         }
-
         return SUCCESS;
     }
 
@@ -292,13 +291,14 @@ public class OrganizationAction extends ActionSupport {
         String date = calendar.get(Calendar.YEAR) + "-"
                 + (calendar.get(Calendar.MONTH) + 1) + "-"
                 + calendar.get(Calendar.DATE);
-        String filename = "F:\\organizations_" + date + ".xlsx";
+        String filename = DESTINATION_PATH_TO_FILES + "\\reports\\organizations_" + date + ".xlsx";
         File result = new File(filename);
         FileOutputStream out;
 
         try {
             out = new FileOutputStream(result);
             workbook.write(out);
+            out.flush();
             out.close();
 
             fileNameExcel = result.getName();

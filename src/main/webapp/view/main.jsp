@@ -87,7 +87,7 @@
     </div>
 
     <div id="fragment-2">
-        <s:url id="fileDownload" action="org/xlsx"></s:url>
+        <s:url id="fileDownload" action="org/xlsx"/>
         <div>
             <table>
                 <tr>
